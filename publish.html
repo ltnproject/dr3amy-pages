@@ -208,7 +208,7 @@
 <main>
   <div class="intro">
     <h1>Publish a page</h1>
-    <p>Your GitHub repo is just storage — no GitHub Pages needed on your end. Publish here and it's served live at <span style="color:var(--ink)">dr3amy.creepers.pro/you/your-page/</span>, pulled straight from your repo.</p>
+    <p>Publish here and it's live at <span style="color:var(--ink)">dr3amy.creepers.pro/p/your-page/</span>, stored in your GitHub repo.</p>
   </div>
 
   <div class="panel">
@@ -226,7 +226,7 @@
       <div>
         <label for="slug">Path</label>
         <input type="text" id="slug" placeholder="my-page">
-        <div class="prefix">dr3amy.creepers.pro/<span id="ownerPreview">you</span>/<span id="slugPreview">my-page</span>/</div>
+        <div class="prefix">dr3amy.creepers.pro/p/<span id="slugPreview">my-page</span>/</div>
       </div>
     </div>
   </div>
@@ -467,7 +467,7 @@ document.getElementById("publishBtn").addEventListener("click", async () => {
     await publishToGitHub({ owner, repo, token, slug, html });
     // But the page is actually SERVED from dr3amy.creepers.pro, via the
     // Worker fetching this same file straight from GitHub.
-    const url = `https://dr3amy.creepers.pro/${owner}/${slug}/`;
+    const url = `https://dr3amy.creepers.pro/p/${slug}/`;
     status.className = "ok";
     status.innerHTML = `Stored in your repo, live at → <a class="result" href="${url}" target="_blank">${url}</a> (usually within a few seconds)`;
   } catch (err) {
