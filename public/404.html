@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found — Dr3amy Pages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560;1,9..144,420&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0c0a16;
+    --panel: #161225;
+    --line: #2a2440;
+    --ink: #f1eefc;
+    --dim: #9a92b8;
+    --violet: #a78bfa;
+    --pink: #ff8fb1;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --serif: 'Fraunces', Georgia, serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--night);
+    color: var(--ink);
+    font-family: ui-sans-serif, system-ui, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+  }
+  .sky {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(600px 400px at 20% 20%, rgba(167,139,250,0.18), transparent 60%),
+      radial-gradient(600px 400px at 80% 70%, rgba(255,143,177,0.12), transparent 60%);
+  }
+  main { position: relative; z-index: 1; max-width: 460px; }
+  .moon {
+    font-size: 2.6rem;
+    display: inline-block;
+    margin-bottom: 18px;
+    filter: drop-shadow(0 0 24px rgba(167,139,250,0.6));
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+  .code {
+    font-family: var(--mono);
+    color: var(--dim);
+    font-size: 0.85rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  h1 {
+    font-family: var(--serif);
+    font-weight: 540;
+    font-size: clamp(1.8rem, 6vw, 2.6rem);
+    margin: 0 0 14px;
+    line-height: 1.15;
+  }
+  h1 i { font-style: italic; color: var(--violet); }
+  p {
+    color: var(--dim);
+    line-height: 1.6;
+    margin: 0 0 30px;
+  }
+  a.btn {
+    font-family: var(--mono);
+    font-size: 0.88rem;
+    text-decoration: none;
+    color: #170f28;
+    background: linear-gradient(135deg, var(--violet), var(--pink));
+    padding: 13px 26px;
+    border-radius: 10px;
+    font-weight: 600;
+    display: inline-block;
+  }
+</style>
+</head>
+<body>
+<div class="sky"></div>
+<main>
+  <span class="moon">🌙</span>
+  <div class="code">404</div>
+  <h1>This page hasn't been <i>dreamt up</i> yet.</h1>
+  <p>Whatever you were looking for isn't published under this path — or the dream ended before it got here.</p>
+  <a class="btn" href="/">Back to Dr3amy Pages</a>
+</main>
+</body>
+</html>
