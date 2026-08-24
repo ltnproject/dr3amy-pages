@@ -382,6 +382,34 @@ function loadTemplate(name) {
 templateSelect.addEventListener("change", (e) => loadTemplate(e.target.value));
 loadTemplate("minimal");
 
+// Pre-fill from dashboard "Edit" link: ?slug=xxx
+(async () => {
+  const params = new URLSearchParams(location.search);
+  const editSlug = params.get("slug");
+  if (!editSlug) return;
+
+  const owner = localStorage.getItem("ghOwner");
+  const token = localStorage.getItem("ghToken");
+  if (!owner || !token) return;
+
+  slugInput.value = editSlug;
+  slugPreview.textContent = editSlug;
+  setStatus("Loading existing page…");
+
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${owner}/dr3amy-pages/contents/p/${editSlug}/index.html`,
+      { headers: { Authorization: `Bearer ${token}`, Accept: "application/vnd.github+json" } }
+    );
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    editor.value = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
+    setStatus(`Editing /p/${editSlug}/ — make changes and hit Publish to save.`);
+  } catch {
+    setStatus("Couldn't load existing content — starting fresh.", "err");
+  }
+})();
+
 dropZone.addEventListener("click", () => fileInput.click());
 dropZone.addEventListener("dragover", (e) => e.preventDefault());
 dropZone.addEventListener("drop", (e) => {
