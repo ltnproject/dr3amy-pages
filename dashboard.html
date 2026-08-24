@@ -1,0 +1,544 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Dr3amy Pages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #0c0a16;
+    --panel: #161225;
+    --panel-2: #1c1730;
+    --line: #2a2440;
+    --ink: #f1eefc;
+    --dim: #9a92b8;
+    --violet: #a78bfa;
+    --pink: #ff8fb1;
+    --good: #7fe0a8;
+    --bad: #ff8f8f;
+    --mono: 'IBM Plex Mono', ui-monospace, monospace;
+    --serif: 'Fraunces', Georgia, serif;
+    --sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--night);
+    color: var(--ink);
+    font-family: var(--sans);
+    min-height: 100vh;
+  }
+  .sky {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(600px 400px at 10% 0%, rgba(167,139,250,0.15), transparent 60%),
+      radial-gradient(600px 400px at 90% 20%, rgba(255,143,177,0.10), transparent 60%);
+    pointer-events: none;
+  }
+
+  /* ── LOGIN SCREEN ── */
+  #loginScreen {
+    position: relative; z-index: 1;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+  }
+  .login-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    padding: 36px 32px;
+    width: 100%; max-width: 400px;
+    text-align: center;
+  }
+  .login-card .moon { font-size: 2.2rem; margin-bottom: 16px; display: block; }
+  .login-card h1 {
+    font-family: var(--serif);
+    font-size: 1.6rem;
+    font-weight: 540;
+    margin-bottom: 6px;
+  }
+  .login-card h1 em { color: var(--violet); font-style: normal; }
+  .login-card p { color: var(--dim); font-size: 0.9rem; line-height: 1.55; margin-bottom: 28px; }
+  .login-card label { display: block; text-align: left; font-size: 0.8rem; color: var(--dim); margin-bottom: 6px; }
+  .login-card input {
+    width: 100%;
+    background: var(--night);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 12px 14px;
+    border-radius: 9px;
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    outline: none;
+    margin-bottom: 10px;
+    transition: border-color .15s;
+  }
+  .login-card input:focus { border-color: var(--violet); }
+  .login-card .hint { font-size: 0.76rem; color: var(--dim); margin-bottom: 20px; text-align: left; line-height: 1.5; }
+  .login-card .hint a { color: var(--violet); }
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--violet), var(--pink));
+    color: #170f28;
+    border: none;
+    padding: 13px;
+    border-radius: 9px;
+    font-family: var(--mono);
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+  }
+  #loginError { color: var(--bad); font-size: 0.82rem; margin-top: 12px; min-height: 18px; font-family: var(--mono); }
+
+  /* ── APP SHELL ── */
+  #app { display: none; position: relative; z-index: 1; }
+
+  nav {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+    max-width: 900px; margin: 0 auto;
+  }
+  .brand { font-family: var(--serif); font-size: 1.05rem; }
+  .brand em { color: var(--violet); font-style: normal; }
+  .nav-right { display: flex; align-items: center; gap: 14px; }
+  .avatar-pill {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 12px 6px 6px;
+    font-size: 0.82rem;
+  }
+  .avatar-pill img {
+    width: 24px; height: 24px; border-radius: 50%;
+  }
+  .avatar-pill span { color: var(--dim); }
+  button.signout {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--dim);
+    padding: 6px 12px;
+    border-radius: 7px;
+    cursor: pointer;
+  }
+  a.nav-publish {
+    font-family: var(--mono);
+    font-size: 0.82rem;
+    background: linear-gradient(135deg, var(--violet), var(--pink));
+    color: #170f28;
+    padding: 8px 16px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  main { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
+
+  .page-header { margin-bottom: 28px; }
+  .page-header h2 { font-family: var(--serif); font-size: 1.5rem; font-weight: 540; margin-bottom: 4px; }
+  .page-header p { color: var(--dim); font-size: 0.9rem; }
+
+  .stats { display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
+  .stat {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    padding: 16px 20px;
+    flex: 1; min-width: 120px;
+  }
+  .stat .val { font-family: var(--mono); font-size: 1.6rem; color: var(--violet); }
+  .stat .key { font-size: 0.78rem; color: var(--dim); margin-top: 2px; }
+
+  .pages-grid { display: grid; gap: 12px; }
+  .page-card {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 18px 20px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px; flex-wrap: wrap;
+  }
+  .page-card:hover { border-color: #3d3660; }
+  .page-info { flex: 1; min-width: 0; }
+  .page-slug {
+    font-family: var(--mono);
+    font-size: 0.9rem;
+    color: var(--ink);
+    margin-bottom: 4px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .page-url {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    color: var(--dim);
+  }
+  .page-actions { display: flex; gap: 8px; flex-shrink: 0; }
+  .btn-icon {
+    background: var(--panel-2);
+    border: 1px solid var(--line);
+    color: var(--ink);
+    padding: 7px 13px;
+    border-radius: 7px;
+    font-size: 0.8rem;
+    font-family: var(--mono);
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 5px;
+  }
+  .btn-icon:hover { border-color: var(--violet); color: var(--violet); }
+  .btn-delete { color: var(--dim); }
+  .btn-delete:hover { border-color: var(--bad); color: var(--bad); }
+
+  .empty {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--dim);
+  }
+  .empty .moon { font-size: 2.5rem; display: block; margin-bottom: 14px; opacity: 0.5; }
+  .empty p { margin-bottom: 20px; }
+  .empty a {
+    font-family: var(--mono);
+    font-size: 0.85rem;
+    background: linear-gradient(135deg, var(--violet), var(--pink));
+    color: #170f28;
+    padding: 11px 22px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  .loading {
+    text-align: center; padding: 60px 24px;
+    color: var(--dim); font-family: var(--mono); font-size: 0.85rem;
+  }
+  .loading::after {
+    content: "";
+    display: inline-block;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--violet);
+    margin-left: 8px;
+    animation: blink 1s ease-in-out infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink { 0%,100% { opacity: 0.2; } 50% { opacity: 1; } }
+
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
+    background: var(--panel);
+    border: 1px solid var(--line);
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-family: var(--mono);
+    font-size: 0.83rem;
+    z-index: 999;
+    opacity: 0; transition: opacity .2s;
+    pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  .toast.ok { border-color: var(--good); color: var(--good); }
+  .toast.err { border-color: var(--bad); color: var(--bad); }
+
+  /* confirm modal */
+  .modal-overlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: rgba(12,10,22,0.8);
+    display: flex; align-items: center; justify-content: center;
+    padding: 24px;
+    opacity: 0; pointer-events: none; transition: opacity .2s;
+  }
+  .modal-overlay.show { opacity: 1; pointer-events: all; }
+  .modal {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 28px;
+    max-width: 360px; width: 100%;
+    text-align: center;
+  }
+  .modal h3 { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 8px; }
+  .modal p { color: var(--dim); font-size: 0.88rem; margin-bottom: 22px; line-height: 1.5; }
+  .modal .modal-actions { display: flex; gap: 10px; }
+  .modal .modal-actions button { flex: 1; padding: 11px; border-radius: 8px; font-family: var(--mono); font-size: 0.85rem; cursor: pointer; border: none; }
+  .modal .modal-actions .cancel { background: var(--panel-2); border: 1px solid var(--line); color: var(--ink); }
+  .modal .modal-actions .confirm { background: var(--bad); color: #1a0a0a; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="sky"></div>
+
+<!-- LOGIN -->
+<div id="loginScreen">
+  <div class="login-card">
+    <span class="moon">🌙</span>
+    <h1>dr<em>3</em>amy pages</h1>
+    <p>Sign in with a GitHub token to manage your pages.</p>
+    <label for="loginOwner">GitHub username</label>
+    <input type="text" id="loginOwner" placeholder="your-username" autocomplete="username">
+    <label for="loginToken" style="margin-top:10px">Personal access token</label>
+    <input type="password" id="loginToken" placeholder="ghp_…">
+    <p class="hint">
+      Need a token? <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Generate one here</a> — scope it to your <b>dr3amy-pages</b> repo with <b>Contents: Read & write</b>.
+    </p>
+    <button class="btn-primary" id="loginBtn">Sign in →</button>
+    <div id="loginError"></div>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app">
+  <nav>
+    <div class="brand">dr<em>3</em>amy pages</div>
+    <div class="nav-right">
+      <div class="avatar-pill">
+        <img id="userAvatar" src="" alt="">
+        <span id="userName"></span>
+      </div>
+      <a class="nav-publish" href="/publish.html">+ New page</a>
+      <button class="signout" id="signoutBtn">Sign out</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="page-header">
+      <h2>Your pages</h2>
+      <p id="repoLink"></p>
+    </div>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="val" id="statCount">—</div>
+        <div class="key">pages published</div>
+      </div>
+      <div class="stat">
+        <div class="val" id="statRepo">—</div>
+        <div class="key">storage repo</div>
+      </div>
+    </div>
+
+    <div id="pagesList"><div class="loading">Loading your pages</div></div>
+  </main>
+</div>
+
+<!-- DELETE MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h3>Delete this page?</h3>
+    <p id="modalSlugText"></p>
+    <div class="modal-actions">
+      <button class="cancel" id="modalCancel">Cancel</button>
+      <button class="confirm" id="modalConfirm">Delete</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const GITHUB_API = "https://api.github.com";
+const REPO_NAME = "dr3amy-pages";
+const BASE_URL = "https://dr3amy.creepers.pro";
+
+let state = { token: null, owner: null, user: null };
+
+// ── AUTH ──
+function loadSaved() {
+  state.token = localStorage.getItem("ghToken");
+  state.owner = localStorage.getItem("ghOwner");
+}
+
+function saveAuth(owner, token) {
+  localStorage.setItem("ghToken", token);
+  localStorage.setItem("ghOwner", owner);
+  state.token = token;
+  state.owner = owner;
+}
+
+function clearAuth() {
+  localStorage.removeItem("ghToken");
+  localStorage.removeItem("ghOwner");
+  state = { token: null, owner: null, user: null };
+}
+
+async function ghGet(path) {
+  const res = await fetch(`${GITHUB_API}${path}`, {
+    headers: { Authorization: `Bearer ${state.token}`, Accept: "application/vnd.github+json" }
+  });
+  return res;
+}
+
+async function verifyToken() {
+  const res = await ghGet("/user");
+  if (!res.ok) throw new Error("Invalid token");
+  return res.json();
+}
+
+// ── LOGIN ──
+document.getElementById("loginBtn").addEventListener("click", async () => {
+  const owner = document.getElementById("loginOwner").value.trim();
+  const token = document.getElementById("loginToken").value.trim();
+  const err = document.getElementById("loginError");
+  if (!owner || !token) { err.textContent = "Enter both fields."; return; }
+  err.textContent = "Signing in…";
+  try {
+    state.token = token;
+    const user = await verifyToken();
+    saveAuth(owner, token);
+    state.user = user;
+    showApp();
+  } catch (e) {
+    err.textContent = "Token invalid or expired.";
+    state.token = null;
+  }
+});
+
+document.getElementById("signoutBtn").addEventListener("click", () => {
+  clearAuth();
+  document.getElementById("app").style.display = "none";
+  document.getElementById("loginScreen").style.display = "flex";
+  document.getElementById("loginError").textContent = "";
+});
+
+// ── APP ──
+async function showApp() {
+  document.getElementById("loginScreen").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  // user info
+  if (!state.user) state.user = await (await ghGet("/user")).json();
+  document.getElementById("userAvatar").src = state.user.avatar_url;
+  document.getElementById("userName").textContent = state.user.login;
+  document.getElementById("statRepo").textContent = REPO_NAME;
+  document.getElementById("repoLink").innerHTML =
+    `Storage repo: <a href="https://github.com/${state.owner}/${REPO_NAME}" target="_blank" style="color:var(--violet);font-family:var(--mono);font-size:0.85rem">${state.owner}/${REPO_NAME}</a>`;
+
+  loadPages();
+}
+
+async function loadPages() {
+  const list = document.getElementById("pagesList");
+  list.innerHTML = '<div class="loading">Loading your pages</div>';
+
+  try {
+    const res = await ghGet(`/repos/${state.owner}/${REPO_NAME}/contents/p`);
+
+    if (res.status === 404) {
+      document.getElementById("statCount").textContent = "0";
+      list.innerHTML = `<div class="empty">
+        <span class="moon">🌙</span>
+        <p>No pages yet. Publish your first one.</p>
+        <a href="/publish.html">Publish a page</a>
+      </div>`;
+      return;
+    }
+
+    const dirs = (await res.json()).filter(f => f.type === "dir");
+    document.getElementById("statCount").textContent = dirs.length;
+
+    if (dirs.length === 0) {
+      list.innerHTML = `<div class="empty">
+        <span class="moon">🌙</span>
+        <p>No pages yet. Publish your first one.</p>
+        <a href="/publish.html">Publish a page</a>
+      </div>`;
+      return;
+    }
+
+    list.innerHTML = `<div class="pages-grid">${dirs.map(dir => {
+      const slug = dir.name;
+      const url = `${BASE_URL}/p/${slug}/`;
+      return `<div class="page-card" id="card-${slug}">
+        <div class="page-info">
+          <div class="page-slug">/p/${slug}/</div>
+          <div class="page-url">${url}</div>
+        </div>
+        <div class="page-actions">
+          <a class="btn-icon" href="${url}" target="_blank">↗ View</a>
+          <a class="btn-icon" href="/publish.html?slug=${slug}">✎ Edit</a>
+          <button class="btn-icon btn-delete" onclick="confirmDelete('${slug}')">✕ Delete</button>
+        </div>
+      </div>`;
+    }).join("")}</div>`;
+
+  } catch (e) {
+    list.innerHTML = `<div class="empty"><p style="color:var(--bad)">Failed to load pages: ${e.message}</p></div>`;
+  }
+}
+
+// ── DELETE ──
+let pendingDelete = null;
+
+function confirmDelete(slug) {
+  pendingDelete = slug;
+  document.getElementById("modalSlugText").textContent = `This will permanently remove /p/${slug}/ from your repo.`;
+  document.getElementById("modalOverlay").classList.add("show");
+}
+
+document.getElementById("modalCancel").addEventListener("click", () => {
+  pendingDelete = null;
+  document.getElementById("modalOverlay").classList.remove("show");
+});
+
+document.getElementById("modalConfirm").addEventListener("click", async () => {
+  const slug = pendingDelete;
+  document.getElementById("modalOverlay").classList.remove("show");
+  pendingDelete = null;
+
+  try {
+    // get sha of index.html
+    const fileRes = await ghGet(`/repos/${state.owner}/${REPO_NAME}/contents/p/${slug}/index.html`);
+    if (!fileRes.ok) throw new Error("File not found");
+    const { sha } = await fileRes.json();
+
+    const res = await fetch(`${GITHUB_API}/repos/${state.owner}/${REPO_NAME}/contents/p/${slug}/index.html`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${state.token}`,
+        Accept: "application/vnd.github+json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: `Delete page: ${slug}`, sha }),
+    });
+
+    if (!res.ok) throw new Error("Delete failed");
+
+    // remove card from UI instantly
+    const card = document.getElementById(`card-${slug}`);
+    if (card) card.remove();
+    const remaining = document.querySelectorAll(".page-card").length;
+    document.getElementById("statCount").textContent = remaining;
+    if (remaining === 0) loadPages();
+
+    showToast("Page deleted", "ok");
+  } catch (e) {
+    showToast(e.message, "err");
+  }
+});
+
+// ── TOAST ──
+function showToast(msg, type = "ok") {
+  const t = document.getElementById("toast");
+  t.textContent = msg;
+  t.className = `toast show ${type}`;
+  setTimeout(() => { t.className = "toast"; }, 3000);
+}
+
+// ── INIT ──
+loadSaved();
+if (state.token && state.owner) {
+  showApp();
+} else {
+  document.getElementById("loginScreen").style.display = "flex";
+}
+
+// Pre-fill login from saved values
+if (state.owner) document.getElementById("loginOwner").value = state.owner;
+</script>
+</body>
+</html>
