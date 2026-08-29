@@ -6,279 +6,197 @@
 <title>Dashboard — Dr3amy Pages</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,340;0,9..144,560&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --night: #0c0a16;
-    --panel: #161225;
-    --panel-2: #1c1730;
-    --line: #2a2440;
-    --ink: #f1eefc;
-    --dim: #9a92b8;
-    --violet: #a78bfa;
-    --pink: #ff8fb1;
-    --good: #7fe0a8;
-    --bad: #ff8f8f;
-    --mono: 'IBM Plex Mono', ui-monospace, monospace;
-    --serif: 'Fraunces', Georgia, serif;
-    --sans: 'Inter', ui-sans-serif, system-ui, sans-serif;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
   body {
-    background: var(--night);
-    color: var(--ink);
-    font-family: var(--sans);
     min-height: 100vh;
+    background: #f0eef8;
+    color: #1a1628;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
   }
-  .sky {
-    position: fixed; inset: 0; z-index: 0;
-    background:
-      radial-gradient(600px 400px at 10% 0%, rgba(167,139,250,0.15), transparent 60%),
-      radial-gradient(600px 400px at 90% 20%, rgba(255,143,177,0.10), transparent 60%);
-    pointer-events: none;
+  .blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.5; animation: drift 14s ease-in-out infinite alternate; }
+  .blob-1 { width: 480px; height: 480px; background: #c4b5fd; top: -100px; left: -80px; }
+  .blob-2 { width: 380px; height: 380px; background: #fbcfe8; top: 5%; right: -60px; animation-delay: -4s; }
+  .blob-3 { width: 300px; height: 300px; background: #a5f3fc; bottom: 10%; left: 15%; animation-delay: -8s; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,20px) scale(1.06); } }
+
+  .glass {
+    background: rgba(255,255,255,0.5);
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    border: 1px solid rgba(255,255,255,0.7);
+    box-shadow: 0 4px 32px rgba(120,80,200,0.08), inset 0 1px 0 rgba(255,255,255,0.9);
   }
 
-  /* ── LOGIN SCREEN ── */
-  #loginScreen {
-    position: relative; z-index: 1;
-    min-height: 100vh;
-    display: flex; align-items: center; justify-content: center;
-    padding: 24px;
-  }
-  .login-card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 20px;
-    padding: 36px 32px;
-    width: 100%; max-width: 400px;
-    text-align: center;
-  }
+  header, main { position: relative; z-index: 1; }
+
+  /* ── LOGIN ── */
+  #loginScreen { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; position: relative; z-index: 1; }
+  .login-card { border-radius: 24px; padding: 40px 34px; width: 100%; max-width: 400px; text-align: center; }
   .login-card .moon { font-size: 2.2rem; margin-bottom: 16px; display: block; }
-  .login-card h1 {
-    font-family: var(--serif);
-    font-size: 1.6rem;
-    font-weight: 540;
-    margin-bottom: 6px;
-  }
-  .login-card h1 em { color: var(--violet); font-style: normal; }
-  .login-card p { color: var(--dim); font-size: 0.9rem; line-height: 1.55; margin-bottom: 28px; }
-  .login-card label { display: block; text-align: left; font-size: 0.8rem; color: var(--dim); margin-bottom: 6px; }
+  .login-card h1 { font-family: 'Fraunces', serif; font-size: 1.6rem; font-weight: 500; margin-bottom: 6px; color: #0f0a1e; }
+  .login-card h1 em { color: #7c3aed; font-style: normal; }
+  .login-card p { color: #4b3f72; font-size: 0.9rem; line-height: 1.55; margin-bottom: 26px; }
+  .login-card label { display: block; text-align: left; font-size: 0.8rem; color: #6d28d9; margin-bottom: 6px; font-weight: 500; }
   .login-card input {
-    width: 100%;
-    background: var(--night);
-    border: 1px solid var(--line);
-    color: var(--ink);
-    padding: 12px 14px;
-    border-radius: 9px;
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    outline: none;
-    margin-bottom: 10px;
-    transition: border-color .15s;
+    width: 100%; background: rgba(255,255,255,0.6); border: 1px solid rgba(167,139,250,0.35);
+    color: #1a1628; padding: 12px 14px; border-radius: 12px;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; outline: none; margin-bottom: 10px;
   }
-  .login-card input:focus { border-color: var(--violet); }
-  .login-card .hint { font-size: 0.76rem; color: var(--dim); margin-bottom: 20px; text-align: left; line-height: 1.5; }
-  .login-card .hint a { color: var(--violet); }
+  .login-card input:focus { border-color: #a855f7; }
+  .login-card .hint { font-size: 0.76rem; color: #7c69a8; margin-bottom: 20px; text-align: left; line-height: 1.5; }
+  .login-card .hint a { color: #7c3aed; }
   .btn-primary {
-    width: 100%;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-    color: #170f28;
-    border: none;
-    padding: 13px;
-    border-radius: 9px;
-    font-family: var(--mono);
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
+    width: 100%; color: #fff; border: none; padding: 13px; border-radius: 12px;
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 0.9rem; cursor: pointer;
+    background: linear-gradient(135deg, #6d28d9, #a855f7, #ec4899);
+    box-shadow: 0 4px 20px rgba(124,58,237,0.35);
   }
-  #loginError { color: var(--bad); font-size: 0.82rem; margin-top: 12px; min-height: 18px; font-family: var(--mono); }
+  #loginError { color: #dc2626; font-size: 0.82rem; margin-top: 12px; min-height: 18px; font-family: 'IBM Plex Mono', monospace; }
 
   /* ── APP SHELL ── */
-  #app { display: none; position: relative; z-index: 1; }
-
+  #app { display: none; }
   nav {
     display: flex; align-items: center; justify-content: space-between;
-    padding: 20px 24px;
-    border-bottom: 1px solid var(--line);
-    max-width: 900px; margin: 0 auto;
+    padding: 20px 24px; max-width: 980px; margin: 0 auto;
   }
-  .brand { font-family: var(--serif); font-size: 1.05rem; }
-  .brand em { color: var(--violet); font-style: normal; }
-  .nav-right { display: flex; align-items: center; gap: 14px; }
-  .avatar-pill {
-    display: flex; align-items: center; gap: 8px;
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 999px;
-    padding: 6px 12px 6px 6px;
-    font-size: 0.82rem;
-  }
-  .avatar-pill img {
-    width: 24px; height: 24px; border-radius: 50%;
-  }
-  .avatar-pill span { color: var(--dim); }
+  .brand { font-family: 'Fraunces', serif; font-size: 1.1rem; color: #0f0a1e; }
+  .brand em { color: #7c3aed; font-style: normal; }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .avatar-pill { display: flex; align-items: center; gap: 8px; border-radius: 999px; padding: 6px 14px 6px 6px; font-size: 0.82rem; }
+  .avatar-pill img { width: 24px; height: 24px; border-radius: 50%; }
+  .avatar-pill span { color: #4b3f72; }
   button.signout {
-    font-family: var(--mono);
-    font-size: 0.78rem;
-    background: transparent;
-    border: 1px solid var(--line);
-    color: var(--dim);
-    padding: 6px 12px;
-    border-radius: 7px;
-    cursor: pointer;
-  }
-  a.nav-publish {
-    font-family: var(--mono);
-    font-size: 0.82rem;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-    color: #170f28;
-    padding: 8px 16px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.78rem; background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(167,139,250,0.3); color: #6d28d9; padding: 7px 13px; border-radius: 999px; cursor: pointer;
   }
 
-  main { max-width: 900px; margin: 0 auto; padding: 32px 24px 80px; }
+  main { max-width: 980px; margin: 0 auto; padding: 24px 24px 100px; }
 
-  .page-header { margin-bottom: 28px; }
-  .page-header h2 { font-family: var(--serif); font-size: 1.5rem; font-weight: 540; margin-bottom: 4px; }
-  .page-header p { color: var(--dim); font-size: 0.9rem; }
-
-  .stats { display: flex; gap: 14px; margin-bottom: 28px; flex-wrap: wrap; }
-  .stat {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 12px;
-    padding: 16px 20px;
-    flex: 1; min-width: 120px;
+  /* tabs */
+  .tabs { display: flex; gap: 8px; margin-bottom: 28px; }
+  .tab {
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; font-weight: 500;
+    padding: 10px 20px; border-radius: 999px; cursor: pointer; border: 1px solid transparent;
+    color: #6d28d9; background: rgba(255,255,255,0.35);
   }
-  .stat .val { font-family: var(--mono); font-size: 1.6rem; color: var(--violet); }
-  .stat .key { font-size: 0.78rem; color: var(--dim); margin-top: 2px; }
+  .tab.active { background: linear-gradient(135deg, #6d28d9, #a855f7); color: #fff; box-shadow: 0 2px 14px rgba(124,58,237,0.35); }
+
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* ── PAGES VIEW ── */
+  .stats { display: flex; gap: 14px; margin-bottom: 24px; flex-wrap: wrap; }
+  .stat { border-radius: 16px; padding: 16px 22px; flex: 1; min-width: 130px; }
+  .stat .val { font-family: 'IBM Plex Mono', monospace; font-size: 1.7rem; color: #7c3aed; font-weight: 600; }
+  .stat .key { font-size: 0.78rem; color: #6d28d9; margin-top: 2px; }
 
   .pages-grid { display: grid; gap: 12px; }
-  .page-card {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 18px 20px;
-    display: flex; align-items: center; justify-content: space-between;
-    gap: 16px; flex-wrap: wrap;
-  }
-  .page-card:hover { border-color: #3d3660; }
+  .page-card { border-radius: 16px; padding: 18px 20px; display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
   .page-info { flex: 1; min-width: 0; }
-  .page-slug {
-    font-family: var(--mono);
-    font-size: 0.9rem;
-    color: var(--ink);
-    margin-bottom: 4px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-  .page-url {
-    font-family: var(--mono);
-    font-size: 0.75rem;
-    color: var(--dim);
-  }
+  .page-slug { font-family: 'IBM Plex Mono', monospace; font-size: 0.9rem; color: #1a1628; margin-bottom: 4px; }
+  .page-url { font-family: 'IBM Plex Mono', monospace; font-size: 0.75rem; color: #7c69a8; }
   .page-actions { display: flex; gap: 8px; flex-shrink: 0; }
   .btn-icon {
-    background: var(--panel-2);
-    border: 1px solid var(--line);
-    color: var(--ink);
-    padding: 7px 13px;
-    border-radius: 7px;
-    font-size: 0.8rem;
-    font-family: var(--mono);
-    cursor: pointer;
-    text-decoration: none;
-    display: inline-flex; align-items: center; gap: 5px;
+    background: rgba(255,255,255,0.55); border: 1px solid rgba(167,139,250,0.3); color: #5b21b6;
+    padding: 7px 13px; border-radius: 9px; font-size: 0.8rem; font-family: 'IBM Plex Mono', monospace;
+    cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 5px;
   }
-  .btn-icon:hover { border-color: var(--violet); color: var(--violet); }
-  .btn-delete { color: var(--dim); }
-  .btn-delete:hover { border-color: var(--bad); color: var(--bad); }
+  .btn-icon:hover { background: rgba(255,255,255,0.85); }
+  .btn-delete:hover { border-color: #dc2626; color: #dc2626; }
 
-  .empty {
-    text-align: center;
-    padding: 60px 24px;
-    color: var(--dim);
-  }
-  .empty .moon { font-size: 2.5rem; display: block; margin-bottom: 14px; opacity: 0.5; }
-  .empty p { margin-bottom: 20px; }
+  .empty { text-align: center; padding: 60px 24px; color: #6d28d9; border-radius: 20px; }
+  .empty .moon { font-size: 2.5rem; display: block; margin-bottom: 14px; opacity: 0.6; }
+  .empty p { margin-bottom: 20px; color: #4b3f72; }
   .empty a {
-    font-family: var(--mono);
-    font-size: 0.85rem;
-    background: linear-gradient(135deg, var(--violet), var(--pink));
-    color: #170f28;
-    padding: 11px 22px;
-    border-radius: 8px;
-    text-decoration: none;
-    font-weight: 600;
+    font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; color: #fff;
+    background: linear-gradient(135deg, #6d28d9, #a855f7); padding: 11px 22px; border-radius: 999px;
+    text-decoration: none; font-weight: 600; display: inline-block;
   }
+  .loading { text-align: center; padding: 60px 24px; color: #6d28d9; font-family: 'IBM Plex Mono', monospace; font-size: 0.85rem; }
 
-  .loading {
-    text-align: center; padding: 60px 24px;
-    color: var(--dim); font-family: var(--mono); font-size: 0.85rem;
+  /* ── NEW/EDIT VIEW ── */
+  .panel { border-radius: 18px; padding: 22px; margin-bottom: 16px; }
+  .panel-title { font-family: 'IBM Plex Mono', monospace; font-size: 0.72rem; letter-spacing: 0.08em; text-transform: uppercase; color: #7c3aed; margin-bottom: 16px; font-weight: 600; }
+  label { display: block; font-size: 0.82rem; color: #5b21b6; margin-bottom: 6px; font-weight: 500; }
+  input[type=text], select {
+    width: 100%; background: rgba(255,255,255,0.6); border: 1px solid rgba(167,139,250,0.3);
+    color: #1a1628; padding: 11px 13px; border-radius: 10px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.87rem; outline: none;
   }
-  .loading::after {
-    content: "";
-    display: inline-block;
-    width: 6px; height: 6px;
-    border-radius: 50%;
-    background: var(--violet);
-    margin-left: 8px;
-    animation: blink 1s ease-in-out infinite;
-    vertical-align: middle;
+  input[type=text]:focus, select:focus, textarea:focus { border-color: #a855f7; }
+  .row { display: flex; gap: 14px; flex-wrap: wrap; }
+  .row > div { flex: 1; min-width: 200px; }
+  .prefix { font-family: 'IBM Plex Mono', monospace; font-size: 0.8rem; color: #7c69a8; margin-top: 6px; }
+  textarea {
+    width: 100%; min-height: 300px; background: rgba(255,255,255,0.5); border: 1px solid rgba(167,139,250,0.3);
+    color: #1a1628; padding: 16px; border-radius: 12px; font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.82rem; line-height: 1.55; resize: vertical; outline: none;
   }
-  @keyframes blink { 0%,100% { opacity: 0.2; } 50% { opacity: 1; } }
+  .templates-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+  .template-choice {
+    border-radius: 12px; padding: 14px 12px; cursor: pointer; text-align: center;
+    background: rgba(255,255,255,0.4); border: 1px solid rgba(167,139,250,0.25);
+    font-size: 0.82rem; color: #4b3f72; transition: all .15s ease;
+  }
+  .template-choice .emoji { font-size: 1.3rem; display: block; margin-bottom: 6px; }
+  .template-choice:hover { background: rgba(255,255,255,0.7); }
+  .template-choice.selected { background: linear-gradient(135deg, rgba(124,58,237,0.15), rgba(236,72,153,0.15)); border-color: #a855f7; color: #5b21b6; font-weight: 600; }
+  .file-drop {
+    border: 1.5px dashed rgba(167,139,250,0.4); border-radius: 12px; padding: 20px; text-align: center;
+    color: #7c69a8; font-size: 0.85rem; cursor: pointer;
+  }
+  .file-drop:hover { border-color: #a855f7; color: #5b21b6; }
+  button {
+    font-family: 'IBM Plex Mono', monospace; font-weight: 600; font-size: 0.88rem; border: none;
+    padding: 12px 24px; border-radius: 12px; cursor: pointer;
+  }
+  button.primary { background: linear-gradient(135deg, #6d28d9, #a855f7, #ec4899); color: #fff; box-shadow: 0 4px 20px rgba(124,58,237,0.35); }
+  button.primary:disabled { opacity: 0.45; }
+  button.ghost { background: rgba(255,255,255,0.5); color: #5b21b6; border: 1px solid rgba(167,139,250,0.3); }
+  .actions-row { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 16px; }
+  #status { font-family: 'IBM Plex Mono', monospace; font-size: 0.84rem; min-height: 20px; margin-top: 14px; }
+  #status.ok { color: #059669; }
+  #status.err { color: #dc2626; }
+  a.result { color: #7c3aed; word-break: break-all; }
 
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: var(--panel);
-    border: 1px solid var(--line);
-    padding: 12px 20px;
-    border-radius: 10px;
-    font-family: var(--mono);
-    font-size: 0.83rem;
-    z-index: 999;
-    opacity: 0; transition: opacity .2s;
-    pointer-events: none;
-  }
-  .toast.show { opacity: 1; }
-  .toast.ok { border-color: var(--good); color: var(--good); }
-  .toast.err { border-color: var(--bad); color: var(--bad); }
-
-  /* confirm modal */
+  /* modal + toast */
   .modal-overlay {
-    position: fixed; inset: 0; z-index: 100;
-    background: rgba(12,10,22,0.8);
-    display: flex; align-items: center; justify-content: center;
-    padding: 24px;
+    position: fixed; inset: 0; z-index: 100; background: rgba(15,10,30,0.4); backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; padding: 24px;
     opacity: 0; pointer-events: none; transition: opacity .2s;
   }
   .modal-overlay.show { opacity: 1; pointer-events: all; }
-  .modal {
-    background: var(--panel);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 28px;
-    max-width: 360px; width: 100%;
-    text-align: center;
-  }
-  .modal h3 { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 8px; }
-  .modal p { color: var(--dim); font-size: 0.88rem; margin-bottom: 22px; line-height: 1.5; }
+  .modal { border-radius: 20px; padding: 30px; max-width: 360px; width: 100%; text-align: center; }
+  .modal h3 { font-family: 'Fraunces', serif; font-size: 1.2rem; margin-bottom: 8px; color: #0f0a1e; }
+  .modal p { color: #4b3f72; font-size: 0.88rem; margin-bottom: 22px; line-height: 1.5; }
   .modal .modal-actions { display: flex; gap: 10px; }
-  .modal .modal-actions button { flex: 1; padding: 11px; border-radius: 8px; font-family: var(--mono); font-size: 0.85rem; cursor: pointer; border: none; }
-  .modal .modal-actions .cancel { background: var(--panel-2); border: 1px solid var(--line); color: var(--ink); }
-  .modal .modal-actions .confirm { background: var(--bad); color: #1a0a0a; font-weight: 600; }
+  .modal .modal-actions button { flex: 1; padding: 11px; border-radius: 10px; }
+  .modal .cancel { background: rgba(255,255,255,0.6); color: #1a1628; }
+  .modal .confirm { background: #dc2626; color: #fff; }
+  .toast {
+    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 999;
+    padding: 12px 22px; border-radius: 999px; font-family: 'IBM Plex Mono', monospace; font-size: 0.83rem;
+    opacity: 0; transition: opacity .2s; pointer-events: none;
+  }
+  .toast.show { opacity: 1; }
+  .toast.ok { color: #059669; }
+  .toast.err { color: #dc2626; }
 </style>
 </head>
 <body>
-<div class="sky"></div>
+
+<div class="blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
 
 <!-- LOGIN -->
 <div id="loginScreen">
-  <div class="login-card">
+  <div class="login-card glass">
     <span class="moon">🌙</span>
     <h1>dr<em>3</em>amy pages</h1>
-    <p>Sign in with a GitHub token to manage your pages.</p>
+    <p>Sign in with a GitHub token to publish and manage your pages.</p>
     <label for="loginOwner">GitHub username</label>
     <input type="text" id="loginOwner" placeholder="your-username" autocomplete="username">
     <label for="loginToken" style="margin-top:10px">Personal access token</label>
@@ -286,7 +204,7 @@
     <p class="hint">
       Need a token? <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Generate one here</a> — scope it to your <b>dr3amy-pages</b> repo with <b>Contents: Read & write</b>.
     </p>
-    <button class="btn-primary" id="loginBtn">Sign in →</button>
+    <button class="btn-primary" id="loginBtn">Get started →</button>
     <div id="loginError"></div>
   </div>
 </div>
@@ -294,41 +212,66 @@
 <!-- APP -->
 <div id="app">
   <nav>
-    <div class="brand">dr<em>3</em>amy pages</div>
+    <a class="brand" href="/">dr<em>3</em>amy pages</a>
     <div class="nav-right">
-      <div class="avatar-pill">
-        <img id="userAvatar" src="" alt="">
-        <span id="userName"></span>
-      </div>
-      <a class="nav-publish" href="/publish.html">+ New page</a>
+      <div class="avatar-pill glass"><img id="userAvatar" src="" alt=""><span id="userName"></span></div>
       <button class="signout" id="signoutBtn">Sign out</button>
     </div>
   </nav>
 
   <main>
-    <div class="page-header">
-      <h2>Your pages</h2>
-      <p id="repoLink"></p>
+    <div class="tabs">
+      <div class="tab active" id="tabPages" onclick="switchTab('pages')">My Pages</div>
+      <div class="tab" id="tabNew" onclick="switchTab('new')">+ New Page</div>
     </div>
 
-    <div class="stats">
-      <div class="stat">
-        <div class="val" id="statCount">—</div>
-        <div class="key">pages published</div>
+    <!-- PAGES VIEW -->
+    <div class="view active" id="viewPages">
+      <div class="stats">
+        <div class="stat glass"><div class="val" id="statCount">—</div><div class="key">pages published</div></div>
+        <div class="stat glass"><div class="val" id="statRepo" style="font-size:1rem">—</div><div class="key">storage repo</div></div>
       </div>
-      <div class="stat">
-        <div class="val" id="statRepo">—</div>
-        <div class="key">storage repo</div>
-      </div>
+      <div id="pagesList"><div class="loading">Loading your pages…</div></div>
     </div>
 
-    <div id="pagesList"><div class="loading">Loading your pages</div></div>
+    <!-- NEW/EDIT VIEW -->
+    <div class="view" id="viewNew">
+      <div class="panel glass">
+        <p class="panel-title">Start from</p>
+        <div class="templates-grid" id="templateGrid"></div>
+      </div>
+
+      <div class="panel glass" id="uploadPanel" style="display:none">
+        <p class="panel-title">Upload</p>
+        <div class="file-drop" id="dropZone">Tap to choose a .html file, or drag it here</div>
+        <input type="file" id="fileInput" accept=".html,text/html" style="display:none">
+      </div>
+
+      <div class="panel glass">
+        <p class="panel-title">Path</p>
+        <input type="text" id="slug" placeholder="my-page">
+        <div class="prefix">dr3amy.creepers.pro/p/<span id="slugPreview">my-page</span>/</div>
+      </div>
+
+      <div class="panel glass">
+        <p class="panel-title">HTML</p>
+        <textarea id="editor" spellcheck="false"></textarea>
+      </div>
+
+      <div class="panel glass">
+        <div class="actions-row" style="margin-top:0">
+          <button class="primary" id="publishBtn">Publish</button>
+          <button class="ghost" id="previewBtn" type="button">Preview</button>
+          <button class="ghost" id="cancelEditBtn" type="button" style="display:none">Cancel edit</button>
+        </div>
+        <p id="status"></p>
+      </div>
+    </div>
   </main>
 </div>
 
-<!-- DELETE MODAL -->
 <div class="modal-overlay" id="modalOverlay">
-  <div class="modal">
+  <div class="modal glass">
     <h3>Delete this page?</h3>
     <p id="modalSlugText"></p>
     <div class="modal-actions">
@@ -338,7 +281,7 @@
   </div>
 </div>
 
-<div class="toast" id="toast"></div>
+<div class="toast glass" id="toast"></div>
 
 <script>
 const GITHUB_API = "https://api.github.com";
@@ -346,40 +289,283 @@ const REPO_NAME = "dr3amy-pages";
 const BASE_URL = "https://dr3amy.creepers.pro";
 
 let state = { token: null, owner: null, user: null };
+let editingSlug = null;
+
+// ── TEMPLATES ──
+const templates = {
+  minimal: {
+    label: "Minimal", emoji: "◻️",
+    html: `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Untitled Page</title>
+<style>
+  body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    background:#0b0b0e; color:#f3f1ea; font-family:ui-sans-serif,system-ui,sans-serif; }
+  main { max-width:640px; padding:48px 24px; text-align:center; }
+  h1 { font-size:clamp(2rem,6vw,3.2rem); margin:0 0 12px; }
+  p { font-size:1.1rem; opacity:.7; line-height:1.6; }
+</style>
+</head>
+<body>
+  <main>
+    <h1>Your title here</h1>
+    <p>Replace this text, then publish.</p>
+  </main>
+</body>
+</html>`
+  },
+  links: {
+    label: "Link-in-bio", emoji: "🔗",
+    html: `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Links</title>
+<style>
+  body { margin:0; min-height:100vh; background:linear-gradient(180deg,#1a1220,#0b0b0e);
+    color:#f3f1ea; font-family:ui-sans-serif,system-ui,sans-serif; display:flex; justify-content:center; padding:64px 20px; }
+  .card { width:100%; max-width:420px; text-align:center; }
+  .avatar { width:88px; height:88px; border-radius:50%; background:#d97757; margin:0 auto 16px; }
+  h1 { font-size:1.4rem; margin:0 0 4px; }
+  .bio { opacity:.7; margin:0 0 32px; font-size:.95rem; }
+  .link { display:block; padding:16px 20px; margin-bottom:12px; border-radius:14px;
+    background:rgba(255,255,255,.06); color:inherit; text-decoration:none; font-weight:500;
+    border:1px solid rgba(255,255,255,.08); }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="avatar"></div>
+    <h1>@yourname</h1>
+    <p class="bio">One line about you</p>
+    <a class="link" href="#">Website</a>
+    <a class="link" href="#">Instagram</a>
+    <a class="link" href="#">Twitter / X</a>
+  </div>
+</body>
+</html>`
+  },
+  portfolio: {
+    label: "Portfolio", emoji: "🖼️",
+    html: `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portfolio</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin:0; background:#0e0d12; color:#f3f1ea; font-family:ui-sans-serif,system-ui,sans-serif; padding:60px 24px; }
+  header { max-width:760px; margin:0 auto 60px; }
+  h1 { font-size:2.4rem; margin:0 0 10px; }
+  header p { opacity:.65; font-size:1.05rem; max-width:520px; line-height:1.6; }
+  .grid { max-width:760px; margin:0 auto; display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:20px; }
+  .work { background:rgba(255,255,255,.04); border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:22px; }
+  .work h3 { margin:0 0 8px; font-size:1.05rem; }
+  .work p { margin:0; opacity:.6; font-size:.9rem; line-height:1.5; }
+  .tag { display:inline-block; font-size:.72rem; opacity:.5; margin-top:12px; }
+</style>
+</head>
+<body>
+  <header>
+    <h1>Your Name</h1>
+    <p>What you do, in one honest sentence. Add a line about what you're looking for or proud of.</p>
+  </header>
+  <div class="grid">
+    <div class="work"><h3>Project one</h3><p>A short description of what it is and your role in it.</p><span class="tag">2026</span></div>
+    <div class="work"><h3>Project two</h3><p>A short description of what it is and your role in it.</p><span class="tag">2025</span></div>
+    <div class="work"><h3>Project three</h3><p>A short description of what it is and your role in it.</p><span class="tag">2025</span></div>
+  </div>
+</body>
+</html>`
+  },
+  resume: {
+    label: "Résumé", emoji: "📄",
+    html: `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Résumé</title>
+<style>
+  body { margin:0; background:#f7f5f2; color:#221f1a; font-family:Georgia,serif; padding:60px 24px; }
+  .sheet { max-width:640px; margin:0 auto; }
+  h1 { font-size:2rem; margin:0 0 4px; }
+  .role { opacity:.6; font-size:1rem; margin-bottom:26px; }
+  section { margin-bottom:28px; }
+  h2 { font-size:.8rem; text-transform:uppercase; letter-spacing:.08em; opacity:.5; margin-bottom:14px; font-family:ui-sans-serif,sans-serif; }
+  .entry { margin-bottom:16px; }
+  .entry .top { display:flex; justify-content:space-between; font-weight:bold; }
+  .entry p { margin:4px 0 0; opacity:.75; line-height:1.5; font-size:.95rem; }
+</style>
+</head>
+<body>
+  <div class="sheet">
+    <h1>Your Name</h1>
+    <div class="role">Your Title — City, Country</div>
+    <section>
+      <h2>Experience</h2>
+      <div class="entry">
+        <div class="top"><span>Company Name</span><span>2023 — Present</span></div>
+        <p>What you did and the impact it had, in one or two lines.</p>
+      </div>
+      <div class="entry">
+        <div class="top"><span>Previous Company</span><span>2021 — 2023</span></div>
+        <p>What you did and the impact it had, in one or two lines.</p>
+      </div>
+    </section>
+    <section>
+      <h2>Skills</h2>
+      <p>List a handful of things you're good at, comma separated.</p>
+    </section>
+  </div>
+</body>
+</html>`
+  },
+  event: {
+    label: "Event", emoji: "🎉",
+    html: `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>You're Invited</title>
+<style>
+  body { margin:0; min-height:100vh; background:radial-gradient(circle at 50% 0%, #241a33, #0b0a12);
+    color:#f3f1ea; font-family:ui-sans-serif,system-ui,sans-serif; display:flex; align-items:center; justify-content:center; padding:40px 20px; }
+  .card { max-width:420px; text-align:center; background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1); border-radius:20px; padding:44px 30px; }
+  .eyebrow { font-size:.78rem; opacity:.55; letter-spacing:.12em; text-transform:uppercase; margin-bottom:14px; }
+  h1 { font-size:1.9rem; margin:0 0 18px; }
+  .detail { margin:10px 0; opacity:.75; font-size:.95rem; }
+  a.rsvp { display:inline-block; margin-top:26px; background:#d97757; color:#1a0f0a; text-decoration:none; font-weight:600; padding:13px 28px; border-radius:10px; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <div class="eyebrow">You're invited to</div>
+    <h1>Event Name</h1>
+    <div class="detail">📅 Saturday, some date, 7:00 PM</div>
+    <div class="detail">📍 Venue or address</div>
+    <div class="detail">Add a short line about what to expect or bring.</div>
+    <a class="rsvp" href="#">RSVP</a>
+  </div>
+</body>
+</html>`
+  },
+  soon: {
+    label: "Coming Soon", emoji: "⏳",
+    html: `<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Coming Soon</title>
+<style>
+  body { margin:0; min-height:100vh; background:#0b0b0e; color:#f3f1ea; font-family:ui-sans-serif,system-ui,sans-serif;
+    display:flex; align-items:center; justify-content:center; text-align:center; padding:24px; }
+  h1 { font-size:clamp(2rem,6vw,3rem); margin-bottom:14px; }
+  p { opacity:.6; max-width:420px; margin:0 auto 30px; line-height:1.6; }
+  form { display:flex; gap:8px; max-width:340px; margin:0 auto; }
+  input { flex:1; padding:12px 14px; border-radius:9px; border:1px solid rgba(255,255,255,.15); background:rgba(255,255,255,.05); color:#fff; }
+  button { padding:12px 20px; border-radius:9px; border:none; background:#d97757; color:#1a0f0a; font-weight:600; }
+</style>
+</head>
+<body>
+  <div>
+    <h1>Something's coming.</h1>
+    <p>We're building this right now. Leave your email and be the first to know when it's live.</p>
+    <form onsubmit="return false"><input type="email" placeholder="you@email.com"><button>Notify me</button></form>
+  </div>
+</body>
+</html>`
+  },
+  blank: {
+    label: "Blank", emoji: "＋",
+    html: `<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><title>Page</title></head>
+<body>
+
+</body>
+</html>`
+  },
+};
+
+const templateGrid = document.getElementById("templateGrid");
+Object.entries(templates).forEach(([key, t]) => {
+  const el = document.createElement("div");
+  el.className = "template-choice";
+  el.dataset.key = key;
+  el.innerHTML = `<span class="emoji">${t.emoji}</span>${t.label}`;
+  el.addEventListener("click", () => selectTemplate(key));
+  templateGrid.appendChild(el);
+});
+const uploadChoice = document.createElement("div");
+uploadChoice.className = "template-choice";
+uploadChoice.dataset.key = "upload";
+uploadChoice.innerHTML = `<span class="emoji">📤</span>Upload file`;
+uploadChoice.addEventListener("click", () => selectTemplate("upload"));
+templateGrid.appendChild(uploadChoice);
+
+const editor = document.getElementById("editor");
+const uploadPanel = document.getElementById("uploadPanel");
+
+function selectTemplate(key) {
+  document.querySelectorAll(".template-choice").forEach(el => el.classList.toggle("selected", el.dataset.key === key));
+  uploadPanel.style.display = key === "upload" ? "block" : "none";
+  if (key !== "upload" && templates[key]) editor.value = templates[key].html;
+}
+selectTemplate("minimal");
+
+const dropZone = document.getElementById("dropZone");
+const fileInput = document.getElementById("fileInput");
+dropZone.addEventListener("click", () => fileInput.click());
+dropZone.addEventListener("dragover", (e) => e.preventDefault());
+dropZone.addEventListener("drop", (e) => { e.preventDefault(); handleFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener("change", () => handleFile(fileInput.files[0]));
+function handleFile(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => { editor.value = reader.result; };
+  reader.readAsText(file);
+}
+
+// ── TABS ──
+function switchTab(name) {
+  document.getElementById("tabPages").classList.toggle("active", name === "pages");
+  document.getElementById("tabNew").classList.toggle("active", name === "new");
+  document.getElementById("viewPages").classList.toggle("active", name === "pages");
+  document.getElementById("viewNew").classList.toggle("active", name === "new");
+  if (name === "pages") loadPages();
+}
 
 // ── AUTH ──
 function loadSaved() {
   state.token = localStorage.getItem("ghToken");
   state.owner = localStorage.getItem("ghOwner");
 }
-
 function saveAuth(owner, token) {
   localStorage.setItem("ghToken", token);
   localStorage.setItem("ghOwner", owner);
-  state.token = token;
-  state.owner = owner;
+  state.token = token; state.owner = owner;
 }
-
 function clearAuth() {
-  localStorage.removeItem("ghToken");
-  localStorage.removeItem("ghOwner");
+  localStorage.removeItem("ghToken"); localStorage.removeItem("ghOwner");
   state = { token: null, owner: null, user: null };
 }
-
 async function ghGet(path) {
-  const res = await fetch(`${GITHUB_API}${path}`, {
-    headers: { Authorization: `Bearer ${state.token}`, Accept: "application/vnd.github+json" }
-  });
-  return res;
+  return fetch(`${GITHUB_API}${path}`, { headers: { Authorization: `Bearer ${state.token}`, Accept: "application/vnd.github+json" } });
 }
-
 async function verifyToken() {
   const res = await ghGet("/user");
   if (!res.ok) throw new Error("Invalid token");
   return res.json();
 }
 
-// ── LOGIN ──
 document.getElementById("loginBtn").addEventListener("click", async () => {
   const owner = document.getElementById("loginOwner").value.trim();
   const token = document.getElementById("loginToken").value.trim();
@@ -392,10 +578,7 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
     saveAuth(owner, token);
     state.user = user;
     showApp();
-  } catch (e) {
-    err.textContent = "Token invalid or expired.";
-    state.token = null;
-  }
+  } catch { err.textContent = "Token invalid or expired."; state.token = null; }
 });
 
 document.getElementById("signoutBtn").addEventListener("click", () => {
@@ -405,139 +588,179 @@ document.getElementById("signoutBtn").addEventListener("click", () => {
   document.getElementById("loginError").textContent = "";
 });
 
-// ── APP ──
 async function showApp() {
   document.getElementById("loginScreen").style.display = "none";
   document.getElementById("app").style.display = "block";
-
-  // user info
   if (!state.user) state.user = await (await ghGet("/user")).json();
   document.getElementById("userAvatar").src = state.user.avatar_url;
   document.getElementById("userName").textContent = state.user.login;
   document.getElementById("statRepo").textContent = REPO_NAME;
-  document.getElementById("repoLink").innerHTML =
-    `Storage repo: <a href="https://github.com/${state.owner}/${REPO_NAME}" target="_blank" style="color:var(--violet);font-family:var(--mono);font-size:0.85rem">${state.owner}/${REPO_NAME}</a>`;
-
   loadPages();
 }
 
+// ── PAGES LIST ──
 async function loadPages() {
   const list = document.getElementById("pagesList");
-  list.innerHTML = '<div class="loading">Loading your pages</div>';
-
+  list.innerHTML = '<div class="loading">Loading your pages…</div>';
   try {
     const res = await ghGet(`/repos/${state.owner}/${REPO_NAME}/contents/p`);
-
-    if (res.status === 404) {
-      document.getElementById("statCount").textContent = "0";
-      list.innerHTML = `<div class="empty">
-        <span class="moon">🌙</span>
-        <p>No pages yet. Publish your first one.</p>
-        <a href="/publish.html">Publish a page</a>
-      </div>`;
-      return;
-    }
-
+    if (res.status === 404) { renderEmpty(); document.getElementById("statCount").textContent = "0"; return; }
     const dirs = (await res.json()).filter(f => f.type === "dir");
     document.getElementById("statCount").textContent = dirs.length;
-
-    if (dirs.length === 0) {
-      list.innerHTML = `<div class="empty">
-        <span class="moon">🌙</span>
-        <p>No pages yet. Publish your first one.</p>
-        <a href="/publish.html">Publish a page</a>
-      </div>`;
-      return;
-    }
-
+    if (dirs.length === 0) { renderEmpty(); return; }
     list.innerHTML = `<div class="pages-grid">${dirs.map(dir => {
       const slug = dir.name;
       const url = `${BASE_URL}/p/${slug}/`;
-      return `<div class="page-card" id="card-${slug}">
-        <div class="page-info">
-          <div class="page-slug">/p/${slug}/</div>
-          <div class="page-url">${url}</div>
-        </div>
+      return `<div class="page-card glass" id="card-${slug}">
+        <div class="page-info"><div class="page-slug">/p/${slug}/</div><div class="page-url">${url}</div></div>
         <div class="page-actions">
           <a class="btn-icon" href="${url}" target="_blank">↗ View</a>
-          <a class="btn-icon" href="/publish.html?slug=${slug}">✎ Edit</a>
+          <button class="btn-icon" onclick="editPage('${slug}')">✎ Edit</button>
           <button class="btn-icon btn-delete" onclick="confirmDelete('${slug}')">✕ Delete</button>
         </div>
       </div>`;
     }).join("")}</div>`;
-
   } catch (e) {
-    list.innerHTML = `<div class="empty"><p style="color:var(--bad)">Failed to load pages: ${e.message}</p></div>`;
+    list.innerHTML = `<div class="empty glass"><p style="color:#dc2626">Failed to load: ${e.message}</p></div>`;
   }
 }
+function renderEmpty() {
+  document.getElementById("pagesList").innerHTML = `<div class="empty glass">
+    <span class="moon">🌙</span><p>No pages yet. Publish your first one.</p>
+    <a href="#" onclick="switchTab('new'); return false;">+ New page</a>
+  </div>`;
+}
+
+// ── EDIT ──
+async function editPage(slug) {
+  switchTab("new");
+  editingSlug = slug;
+  document.getElementById("slug").value = slug;
+  document.getElementById("slugPreview").textContent = slug;
+  document.getElementById("cancelEditBtn").style.display = "inline-block";
+  setStatus("Loading existing page…");
+  try {
+    const res = await ghGet(`/repos/${state.owner}/${REPO_NAME}/contents/p/${slug}/index.html`);
+    if (!res.ok) throw new Error();
+    const data = await res.json();
+    editor.value = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
+    document.querySelectorAll(".template-choice").forEach(el => el.classList.remove("selected"));
+    setStatus(`Editing /p/${slug}/ — make changes and hit Publish to save.`);
+  } catch {
+    setStatus("Couldn't load existing content.", "err");
+  }
+}
+document.getElementById("cancelEditBtn").addEventListener("click", () => {
+  editingSlug = null;
+  document.getElementById("cancelEditBtn").style.display = "none";
+  document.getElementById("slug").value = "";
+  document.getElementById("slugPreview").textContent = "my-page";
+  selectTemplate("minimal");
+  setStatus("");
+});
 
 // ── DELETE ──
 let pendingDelete = null;
-
 function confirmDelete(slug) {
   pendingDelete = slug;
   document.getElementById("modalSlugText").textContent = `This will permanently remove /p/${slug}/ from your repo.`;
   document.getElementById("modalOverlay").classList.add("show");
 }
-
 document.getElementById("modalCancel").addEventListener("click", () => {
   pendingDelete = null;
   document.getElementById("modalOverlay").classList.remove("show");
 });
-
 document.getElementById("modalConfirm").addEventListener("click", async () => {
   const slug = pendingDelete;
   document.getElementById("modalOverlay").classList.remove("show");
   pendingDelete = null;
-
   try {
-    // get sha of index.html
     const fileRes = await ghGet(`/repos/${state.owner}/${REPO_NAME}/contents/p/${slug}/index.html`);
     if (!fileRes.ok) throw new Error("File not found");
     const { sha } = await fileRes.json();
-
     const res = await fetch(`${GITHUB_API}/repos/${state.owner}/${REPO_NAME}/contents/p/${slug}/index.html`, {
       method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${state.token}`,
-        Accept: "application/vnd.github+json",
-        "Content-Type": "application/json",
-      },
+      headers: { Authorization: `Bearer ${state.token}`, Accept: "application/vnd.github+json", "Content-Type": "application/json" },
       body: JSON.stringify({ message: `Delete page: ${slug}`, sha }),
     });
-
     if (!res.ok) throw new Error("Delete failed");
-
-    // remove card from UI instantly
     const card = document.getElementById(`card-${slug}`);
     if (card) card.remove();
     const remaining = document.querySelectorAll(".page-card").length;
     document.getElementById("statCount").textContent = remaining;
-    if (remaining === 0) loadPages();
-
+    if (remaining === 0) renderEmpty();
     showToast("Page deleted", "ok");
-  } catch (e) {
-    showToast(e.message, "err");
-  }
+  } catch (e) { showToast(e.message, "err"); }
 });
 
-// ── TOAST ──
+// ── PUBLISH ──
+function slugify(input) {
+  return (input || "").toLowerCase().trim().replace(/[^a-z0-9-\/]+/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "").slice(0, 80);
+}
+const slugInput = document.getElementById("slug");
+const slugPreview = document.getElementById("slugPreview");
+slugInput.addEventListener("input", () => { slugPreview.textContent = slugify(slugInput.value) || "my-page"; });
+
+document.getElementById("previewBtn").addEventListener("click", () => {
+  const w = window.open();
+  w.document.write(editor.value);
+  w.document.close();
+});
+
+function toBase64Unicode(str) {
+  const bytes = new TextEncoder().encode(str);
+  let binary = ""; bytes.forEach((b) => (binary += String.fromCharCode(b)));
+  return btoa(binary);
+}
+
+async function publishToGitHub({ slug, html }) {
+  const path = `p/${slug}/index.html`;
+  const apiUrl = `${GITHUB_API}/repos/${state.owner}/${REPO_NAME}/contents/${path}`;
+  const headers = { Authorization: `Bearer ${state.token}`, Accept: "application/vnd.github+json" };
+  let sha;
+  const existing = await fetch(apiUrl, { headers });
+  if (existing.status === 200) sha = (await existing.json()).sha;
+  else if (existing.status !== 404) throw new Error((await existing.json().catch(()=>({}))).message || `Lookup failed (${existing.status})`);
+  const res = await fetch(apiUrl, {
+    method: "PUT",
+    headers: { ...headers, "Content-Type": "application/json" },
+    body: JSON.stringify({ message: sha ? `Update page: ${slug}` : `Publish page: ${slug}`, content: toBase64Unicode(html), branch: "main", ...(sha ? { sha } : {}) }),
+  });
+  if (!res.ok) throw new Error((await res.json().catch(()=>({}))).message || `Publish failed (${res.status})`);
+  return res.json();
+}
+
+document.getElementById("publishBtn").addEventListener("click", async () => {
+  const rawSlug = slugInput.value.trim();
+  const html = editor.value;
+  if (!rawSlug) return setStatus("Enter a path first.", "err");
+  if (!html.trim()) return setStatus("Nothing to publish.", "err");
+  const slug = slugify(rawSlug);
+  setStatus("Publishing…");
+  try {
+    await publishToGitHub({ slug, html });
+    const url = `${BASE_URL}/p/${slug}/`;
+    status.className = "ok";
+    status.innerHTML = `Published → <a class="result" href="${url}" target="_blank">${url}</a> (live in ~30–60s)`;
+    editingSlug = null;
+    document.getElementById("cancelEditBtn").style.display = "none";
+  } catch (err) { setStatus(err.message, "err"); }
+});
+
+function setStatus(msg, cls = "") {
+  const status = document.getElementById("status");
+  status.textContent = msg; status.className = cls;
+}
 function showToast(msg, type = "ok") {
   const t = document.getElementById("toast");
-  t.textContent = msg;
-  t.className = `toast show ${type}`;
+  t.textContent = msg; t.className = `toast show ${type}`;
   setTimeout(() => { t.className = "toast"; }, 3000);
 }
 
 // ── INIT ──
 loadSaved();
-if (state.token && state.owner) {
-  showApp();
-} else {
-  document.getElementById("loginScreen").style.display = "flex";
-}
-
-// Pre-fill login from saved values
+if (state.token && state.owner) showApp();
+else document.getElementById("loginScreen").style.display = "flex";
 if (state.owner) document.getElementById("loginOwner").value = state.owner;
 </script>
 </body>
