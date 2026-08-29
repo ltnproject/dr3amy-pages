@@ -196,15 +196,31 @@
   <div class="login-card glass">
     <span class="moon">🌙</span>
     <h1>dr<em>3</em>amy pages</h1>
-    <p>Sign in with a GitHub token to publish and manage your pages.</p>
-    <label for="loginOwner">GitHub username</label>
-    <input type="text" id="loginOwner" placeholder="your-username" autocomplete="username">
-    <label for="loginToken" style="margin-top:10px">Personal access token</label>
-    <input type="password" id="loginToken" placeholder="ghp_…">
-    <p class="hint">
-      Need a token? <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Generate one here</a> — scope it to your <b>dr3amy-pages</b> repo with <b>Contents: Read & write</b>.
-    </p>
-    <button class="btn-primary" id="loginBtn">Get started →</button>
+    <p>Sign in with GitHub to publish and manage your pages.</p>
+
+    <a href="/auth/github" class="btn-primary" id="githubSigninBtn" style="display:flex;align-items:center;justify-content:center;gap:9px;text-decoration:none;margin-bottom:16px">
+      <svg width="18" height="18" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+      Sign in with GitHub
+    </a>
+
+    <div style="display:flex;align-items:center;gap:10px;margin:6px 0 16px;color:#a599c9;font-size:0.78rem">
+      <div style="flex:1;height:1px;background:rgba(167,139,250,0.25)"></div>
+      or use a token
+      <div style="flex:1;height:1px;background:rgba(167,139,250,0.25)"></div>
+    </div>
+
+    <details id="tokenFallback">
+      <summary style="cursor:pointer;color:#7c3aed;font-size:0.85rem;font-weight:500;margin-bottom:14px">Sign in with a personal access token instead</summary>
+      <label for="loginOwner">GitHub username</label>
+      <input type="text" id="loginOwner" placeholder="your-username" autocomplete="username">
+      <label for="loginToken" style="margin-top:10px">Personal access token</label>
+      <input type="password" id="loginToken" placeholder="ghp_…">
+      <p class="hint">
+        Need a token? <a href="https://github.com/settings/personal-access-tokens/new" target="_blank">Generate one here</a> — scope it to your <b>dr3amy-pages</b> repo with <b>Contents: Read & write</b>.
+      </p>
+      <button class="btn-primary" id="loginBtn">Sign in with token</button>
+    </details>
+
     <div id="loginError"></div>
   </div>
 </div>
@@ -582,6 +598,34 @@ document.getElementById("loginBtn").addEventListener("click", async () => {
   } catch { err.textContent = "Token invalid or expired."; state.token = null; }
 });
 
+// ── Handle redirect back from /auth/callback (real GitHub OAuth) ──
+async function handleOAuthRedirect() {
+  const params = new URLSearchParams(location.search);
+  const oauthToken = params.get("gh_token");
+  const oauthLogin = params.get("gh_login");
+  const authError = params.get("auth_error");
+
+  if (authError) {
+    document.getElementById("loginError").textContent = `GitHub sign-in failed: ${authError}`;
+    history.replaceState({}, "", location.pathname);
+    return false;
+  }
+
+  if (oauthToken && oauthLogin) {
+    saveAuth(oauthLogin, oauthToken);
+    history.replaceState({}, "", location.pathname); // scrub token out of the URL bar/history
+    try {
+      state.user = await verifyToken();
+      showApp();
+      return true;
+    } catch {
+      document.getElementById("loginError").textContent = "Signed in, but token verification failed — try again.";
+      clearAuth();
+    }
+  }
+  return false;
+}
+
 document.getElementById("signoutBtn").addEventListener("click", () => {
   clearAuth();
   document.getElementById("app").style.display = "none";
@@ -809,10 +853,15 @@ function showToast(msg, type = "ok") {
 }
 
 // ── INIT ──
-loadSaved();
-if (state.token && state.owner) showApp();
-else document.getElementById("loginScreen").style.display = "flex";
-if (state.owner) document.getElementById("loginOwner").value = state.owner;
+(async () => {
+  const handled = await handleOAuthRedirect();
+  if (handled) return;
+
+  loadSaved();
+  if (state.token && state.owner) showApp();
+  else document.getElementById("loginScreen").style.display = "flex";
+  if (state.owner) document.getElementById("loginOwner").value = state.owner;
+})();
 </script>
 </body>
 </html>
