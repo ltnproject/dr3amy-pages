@@ -2,11 +2,13 @@ name = "dr3amy-pages"
 main = "worker.js"
 compatibility_date = "2024-11-01"
 
+# GitHub OAuth Client ID
+# Replace this with your actual GitHub OAuth App Client ID.
+[vars]
+GITHUB_CLIENT_ID = "Ov23li8Mtz1aLdn2Sh1C"
+
+# Static site assets
 [assets]
 directory = "./public"
 binding = "ASSETS"
 not_found_handling = "404-page"
-
-# After first deploy, attach the custom domain from the dashboard:
-# Workers & Pages → dr3amy-pages → Settings → Domains & Routes → Add "dr3amy.creepers.pro"
-# (or add a route/custom domain via `wrangler deploy` + dashboard, DNS must point at Cloudflare)
