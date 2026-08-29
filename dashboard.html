@@ -265,6 +265,7 @@
           <button class="ghost" id="cancelEditBtn" type="button" style="display:none">Cancel edit</button>
         </div>
         <p id="status"></p>
+        <pre id="debugBox" style="display:none; margin-top:10px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.05); font-family:'IBM Plex Mono',monospace; font-size:0.72rem; color:#4b3f72; white-space:pre-wrap; word-break:break-all; max-height:200px; overflow:auto;"></pre>
       </div>
     </div>
   </main>
@@ -717,34 +718,84 @@ async function publishToGitHub({ slug, html }) {
   const path = `p/${slug}/index.html`;
   const apiUrl = `${GITHUB_API}/repos/${state.owner}/${REPO_NAME}/contents/${path}`;
   const headers = { Authorization: `Bearer ${state.token}`, Accept: "application/vnd.github+json" };
+
+  debugLog(`owner: ${state.owner} | repo: ${REPO_NAME} | slug: ${slug}`);
+  debugLog(`token present: ${!!state.token} | prefix: ${state.token ? state.token.slice(0,7)+"…" : "(none)"}`);
+  debugLog(`PUT target: ${apiUrl}`);
+
   let sha;
   const existing = await fetch(apiUrl, { headers });
-  if (existing.status === 200) sha = (await existing.json()).sha;
-  else if (existing.status !== 404) throw new Error((await existing.json().catch(()=>({}))).message || `Lookup failed (${existing.status})`);
+  debugLog(`lookup existing file → ${existing.status}`);
+
+  if (existing.status === 200) {
+    const data = await existing.json();
+    sha = data.sha;
+    debugLog(`file exists, sha: ${sha}`);
+  } else if (existing.status === 404) {
+    debugLog("no existing file, will create new");
+  } else {
+    const errBody = await existing.json().catch(() => ({}));
+    debugLog(`lookup FAILED ${existing.status}: ${JSON.stringify(errBody)}`);
+    throw new Error(`Lookup failed (${existing.status}): ${errBody.message || "unknown error"}`);
+  }
+
+  const putBody = {
+    message: sha ? `Update page: ${slug}` : `Publish page: ${slug}`,
+    content: toBase64Unicode(html),
+    branch: "main",
+    ...(sha ? { sha } : {}),
+  };
+
   const res = await fetch(apiUrl, {
     method: "PUT",
     headers: { ...headers, "Content-Type": "application/json" },
-    body: JSON.stringify({ message: sha ? `Update page: ${slug}` : `Publish page: ${slug}`, content: toBase64Unicode(html), branch: "main", ...(sha ? { sha } : {}) }),
+    body: JSON.stringify(putBody),
   });
-  if (!res.ok) throw new Error((await res.json().catch(()=>({}))).message || `Publish failed (${res.status})`);
-  return res.json();
+
+  const resBody = await res.json().catch(() => ({}));
+  debugLog(`PUT response → ${res.status}: ${JSON.stringify(resBody).slice(0, 300)}`);
+
+  if (!res.ok) {
+    debugLog(`FAILED ${res.status}: ${resBody.message || "no message"}`);
+    throw new Error(`(${res.status}) ${resBody.message || "Publish failed"}`);
+  }
+
+  debugLog(`success ✓ ${resBody.content?.html_url || resBody.commit?.sha || ""}`);
+  return resBody;
+}
+
+function debugLog(msg) {
+  console.log("[publish]", msg);
+  const box = document.getElementById("debugBox");
+  box.style.display = "block";
+  box.textContent += (box.textContent ? "\n" : "") + msg;
 }
 
 document.getElementById("publishBtn").addEventListener("click", async () => {
   const rawSlug = slugInput.value.trim();
   const html = editor.value;
+  document.getElementById("debugBox").textContent = "";
+  document.getElementById("debugBox").style.display = "none";
+
   if (!rawSlug) return setStatus("Enter a path first.", "err");
   if (!html.trim()) return setStatus("Nothing to publish.", "err");
+  if (!state.token || !state.owner) {
+    debugLog(`missing auth — owner: ${state.owner}, hasToken: ${!!state.token}`);
+    return setStatus("Not signed in — sign out and sign back in.", "err");
+  }
   const slug = slugify(rawSlug);
   setStatus("Publishing…");
   try {
     await publishToGitHub({ slug, html });
     const url = `${BASE_URL}/p/${slug}/`;
-    status.className = "ok";
-    status.innerHTML = `Published → <a class="result" href="${url}" target="_blank">${url}</a> (live in ~30–60s)`;
+    setStatus("", "ok");
+    document.getElementById("status").innerHTML = `Published → <a class="result" href="${url}" target="_blank">${url}</a> (live in ~30–60s)`;
     editingSlug = null;
     document.getElementById("cancelEditBtn").style.display = "none";
-  } catch (err) { setStatus(err.message, "err"); }
+  } catch (err) {
+    debugLog(`ERROR CAUGHT: ${err.message}`);
+    setStatus(`⚠️ ${err.message}`, "err");
+  }
 });
 
 function setStatus(msg, cls = "") {
