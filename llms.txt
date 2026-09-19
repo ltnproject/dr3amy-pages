@@ -1,0 +1,41 @@
+# Dr3amy Pages
+
+> Dr3amy Pages — static, small, yours.
+
+Dr3amy Pages is a browser-based static HTML publishing platform.
+Users can create pages from templates or custom HTML and publish
+them using their own GitHub repositories.
+
+## Website
+
+https://dr3amy.creepers.pro/
+
+## Features
+
+- Create and publish static HTML pages
+- Start with built-in templates
+- Edit HTML directly in the browser
+- Store published pages in GitHub repositories
+- Access published pages through public URLs
+
+## How It Works
+
+1. Open the Dr3amy Pages dashboard.
+2. Connect a GitHub repository.
+3. Create a page using a template or custom HTML.
+4. Publish the page.
+5. Access the published page through its public URL.
+
+## Main Pages
+
+- [Homepage](https://dr3amy.creepers.pro/)
+- [Dashboard](https://dr3amy.creepers.pro/dashboard.html)
+- [Publish](https://dr3amy.creepers.pro/public/publish.html)
+
+## Project
+
+- [GitHub Repository](https://github.com/ltnproject/dr3amy-pages)
+
+## Brand
+
+Dr3amy Pages — static, small, yours.
