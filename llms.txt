@@ -1,41 +1,28 @@
 # Dr3amy Pages
 
-> Dr3amy Pages — static, small, yours.
+> Dr3amy Pages is a static-page publishing platform that lets users publish web pages using GitHub-backed storage, without managing their own web server.
 
-Dr3amy Pages is a browser-based static HTML publishing platform.
-Users can create pages from templates or custom HTML and publish
-them using their own GitHub repositories.
+## About
 
-## Website
+Dr3amy Pages is a project developed under the ltnproject organization.
 
-https://dr3amy.creepers.pro/
+The service is designed to make publishing and hosting static web pages simple. Users can create and publish pages through the Dr3amy Pages web interface.
 
-## Features
+The public website is https://dr3amy.creepers.pro/.
 
-- Create and publish static HTML pages
-- Start with built-in templates
-- Edit HTML directly in the browser
-- Store published pages in GitHub repositories
-- Access published pages through public URLs
-
-## How It Works
-
-1. Open the Dr3amy Pages dashboard.
-2. Connect a GitHub repository.
-3. Create a page using a template or custom HTML.
-4. Publish the page.
-5. Access the published page through its public URL.
+Dr3amy Pages is a static-page publishing service. It should not be described as a general-purpose backend, database, or dynamic server unless those capabilities are separately documented.
 
 ## Main Pages
 
-- [Homepage](https://dr3amy.creepers.pro/)
-- [Dashboard](https://dr3amy.creepers.pro/dashboard.html)
-- [Publish](https://dr3amy.creepers.pro/public/publish.html)
+- [Dr3amy Pages Homepage](https://dr3amy.creepers.pro/): Main landing page explaining the service.
+- [Dashboard](https://dr3amy.creepers.pro/dashboard.html): Dashboard interface.
+- [Publishing Interface](https://dr3amy.creepers.pro/public/publish.html): Interface for publishing pages.
 
-## Project
+## Project and Source Code
 
-- [GitHub Repository](https://github.com/ltnproject/dr3amy-pages)
+- [GitHub Repository](https://github.com/ltnproject/dr3amy-pages): Source code and project files for Dr3amy Pages.
+- [README](https://github.com/ltnproject/dr3amy-pages/blob/main/README.md): Project overview and setup information.
 
-## Brand
+## Optional
 
-Dr3amy Pages — static, small, yours.
+- [Sitemap](https://dr3amy.creepers.pro/sitemap.xml): Sitemap for discovering public website URLs.
