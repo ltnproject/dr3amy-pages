@@ -82,3 +82,8 @@ All of this can be done from a browser on any device — no terminal or local se
 | 6 | Tap **Preview** to check it |
 | 7 | Tap **Publish** |
 | 8 | Live at `dr3amy.creepers.pro/p/<slug>/` in ~30–60s |
+
+## Contacting the owner 📝
+
+Mail: rachatapanapitakkun@gmail.com / rachata.p@ekburapa.ac.th
+SMS: 082 145 6099 (TH)
