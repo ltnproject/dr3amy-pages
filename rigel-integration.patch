@@ -1,0 +1,49 @@
+diff --git a/dashboard.html b/dashboard.html
+index 65151a7..172b589 100644
+--- a/dashboard.html
++++ b/dashboard.html
+@@ -641,6 +641,26 @@ async function showApp() {
+   document.getElementById("userName").textContent = state.user.login;
+   document.getElementById("statRepo").textContent = REPO_NAME;
+   loadPages();
++  applyRigelHandoff();
++}
++
++// ── RIGEL HAND-OFF (from the floating assistant) ──
++// "#new" opens the + New Page tab; a draft saved by Rigel fills the editor.
++function applyRigelHandoff() {
++  let draft = null;
++  try {
++    draft = JSON.parse(sessionStorage.getItem("rigel:draft") || "null");
++    sessionStorage.removeItem("rigel:draft");
++  } catch { draft = null; }
++  if (!draft && location.hash !== "#new") return;
++  switchTab("new");
++  if (draft && typeof draft.html === "string") {
++    editor.value = draft.html;
++    if (typeof draft.slug === "string" && draft.slug) {
++      slugInput.value = slugify(draft.slug);
++      slugPreview.textContent = slugify(slugInput.value) || "my-page";
++    }
++  }
+ }
+ 
+ // ── PAGES LIST ──
+@@ -863,5 +883,6 @@ function showToast(msg, type = "ok") {
+   if (state.owner) document.getElementById("loginOwner").value = state.owner;
+ })();
+ </script>
++<script src="/rigel-widget.js" defer></script>
+ </body>
+ </html>
+diff --git a/index.html b/index.html
+index 385e52e..513c20e 100644
+--- a/index.html
++++ b/index.html
+@@ -337,5 +337,6 @@
+   </div>
+ </footer>
+ 
++<script src="/rigel-widget.js" defer></script>
+ </body>
+ </html>
