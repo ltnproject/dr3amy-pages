@@ -7,9 +7,6 @@
  * chat "island". Everything lives in a Shadow DOM so it can't clash
  * with page styles.
  *
- * SETUP: set RIGEL_API below to your Rigel Space URL (no trailing slash).
- * The Space must allow this site's origin (ALLOWED_ORIGINS in app.py).
- *
  * Features
  *  - Chat with Rigel (knows the site; can point you to pages)
  *  - "Export to website": publishes Rigel's HTML to the signed-in user's
@@ -26,7 +23,7 @@
   window.__rigelWidget = true;
 
   // ── config ──────────────────────────────────────────────
-  const RIGEL_API = "https://YOUR-RIGEL-SPACE.hf.space"; // <-- set me
+  const RIGEL_API = "https://ltnproj-rigel-api.hf.space";
   const MODEL_LABEL = "Rigel 1o-mini";
   const MAX_SENT_TURNS = 16;
   const MAX_INPUT_CHARS = 4000;
