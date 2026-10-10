@@ -66,7 +66,43 @@ This license does not grant permission to use the **Dr3amy Pages** name, logos, 
 
 Use of the project name solely for factual attribution is permitted.
 
-### 8. Patent Grant
+### 8. AI Features and Generated Content
+
+Dr3amy Pages may include AI-powered features that assist users in generating websites, writing and modifying code, debugging, improving designs, navigating the platform, generating QR codes, and performing other supported tasks.
+
+#### 8.1. AI-Generated Content
+
+Users may use, modify, publish, and distribute content generated through AI features, subject to applicable laws, third-party rights, and the terms of any external AI provider.
+
+AI-generated content is not guaranteed to be original, accurate, secure, or free of third-party intellectual property claims. Users are responsible for reviewing and verifying generated content before using or publishing it.
+
+#### 8.2. Ownership and Attribution
+
+The Dr3amy Pages project and its original source code remain subject to this license and its attribution requirements.
+
+Using Dr3amy Pages AI features does not automatically make every generated website, code snippet, or other output a derivative work of the Dr3amy Pages source code. Whether attribution is required depends on the material used and the applicable circumstances.
+
+This license does not transfer ownership of third-party AI models, APIs, libraries, or services.
+
+#### 8.3. AI Limitations and Liability
+
+AI features and generated content are provided on an "AS IS" basis, without guarantees of accuracy, availability, security, or suitability.
+
+To the extent permitted by applicable law, the original developers and contributors are not liable for losses, damages, or claims arising from reliance on AI-generated content or its use, modification, or publication.
+
+Users are responsible for reviewing generated content, protecting their credentials, and ensuring that their use of AI features complies with applicable laws and third-party service terms.
+
+#### 8.4. External AI Services
+
+AI functionality may depend on third-party models, APIs, or services that have their own licenses, privacy policies, and terms of use.
+
+This license does not override or replace those terms. Third-party providers retain their respective rights to their models and services.
+
+#### 8.5. No AI Provider Endorsement
+
+Unless explicitly authorized, the use of AI models or services through Dr3amy Pages does not imply endorsement, sponsorship, or official affiliation between Dr3amy Pages and the relevant AI provider.
+
+### 9. Patent Grant
 
 Each contributor to the Software grants you a perpetual, worldwide, non-exclusive, royalty-free patent license to make, have made, use, offer to sell, sell, import, and otherwise transfer the Software, but only for patent claims that such contributor can license and that are necessarily infringed by their contribution to the Software, either alone or in combination with the Software as provided by that contributor.
 
@@ -74,15 +110,15 @@ This patent grant does not apply to claims arising solely from modifications or 
 
 If you initiate patent litigation against any contributor or person claiming patent rights in connection with the Software, alleging that the Software or a contribution to the Software constitutes patent infringement, the patent rights granted to you under this license for the Software may terminate as of the date such litigation is filed.
 
-### 9. No Additional Restrictions
+### 10. No Additional Restrictions
 
 You may not impose additional restrictions on the rights granted by this license when redistributing the Software, except for restrictions necessary to protect your own separate intellectual property or branding that are not part of the Software.
 
-### 10. Disclaimer of Warranty
+### 11. Disclaimer of Warranty
 
 THE SOFTWARE IS PROVIDED **“AS IS”**, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, TITLE, AND NON-INFRINGEMENT.
 
-IN NO EVENT SHALL THE AUTHORS, COPYRIGHT HOLDERS, OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+IN NO EVENT SHALL THE AUTHORS, COPYRIGHT HOLDERS, OR CONTRIBUTORS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM, OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE, SUBJECT TO APPLICABLE LAW.
 
 ## Required Attribution
 
