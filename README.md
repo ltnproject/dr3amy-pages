@@ -58,5 +58,4 @@ Dr3amy Pages uses the **Dr3amy Pages Attribution License**. See [LICENSE](LICENS
 ## 📬 Contact
 
 - Email: [dr3amymc@drk.qzz.io](mailto:dr3amymc@drk.qzz.io)
-- School email: rachata.p@ekburapa.ac.th
 - SMS (Thailand): 082 145 6099
