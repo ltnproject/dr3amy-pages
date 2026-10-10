@@ -1,89 +1,62 @@
-# Dr3amy Pages — User Guide
+# Dr3amy Pages
 
 [![License](https://img.shields.io/badge/license-Dr3amy%20Pages%20Attribution-blue.svg)](LICENSE)
 
 **small, static, yours ✨**
 
-Dr3amy Pages lets you publish a static HTML page to a live URL in seconds ⚡. There's no server and no deploy step 🚫🖥️ — the app writes your HTML straight into a GitHub repo 🐙, and that repo is served at `dr3amy.creepers.pro` 🌐.
+Create, customize, and publish static websites in seconds. Dr3amy Pages stores your pages in your own GitHub repository and serves them at [dr3amy.creepers.pro](https://dr3amy.creepers.pro). No server setup required.
 
-## 1. Sign in 🔑
+## 🚀 Getting Started
 
-You need a GitHub account to publish, since pages are stored in your own repo.
+1. **Sign in** with GitHub OAuth or a personal access token with Contents read/write permission for your `dr3amy-pages` repository.
+2. **Create a page** using a premade template, uploading an HTML file, or starting from scratch.
+3. **Choose a URL** by setting your page slug.
+4. **Preview and publish** your page when it's ready.
 
-**Option A — Sign in with GitHub**
-Tap **Sign in with GitHub** and authorize the app through GitHub's normal OAuth login.
+Your website will be available at:
 
-**Option B — Sign in with a personal access token**
-1. Tap **Sign in with a personal access token instead**.
-2. Enter your **GitHub username**.
-3. Generate a token (link provided in-app) scoped to a repo named `dr3amy-pages`, with **Contents: Read & write** permission.
-4. Paste the token (`ghp_...`) and tap **Sign in with token**.
+`https://dr3amy.creepers.pro/p/<slug>/`
 
-> If the `dr3amy-pages` repo doesn't exist yet on your GitHub account, create it first: Public, no README/.gitignore/license needed — the app will write files into it directly.
+Publishing usually takes 30–60 seconds.
 
-## 2. Your dashboard 🗂️
+## 🎨 Templates
 
-Once signed in you land on **My Pages**, which shows:
-- How many pages you've published (0 to start)
-- The name of your storage repo (`dr3amy-pages`)
-- A list of your published pages (empty until you publish your first one)
+Start with a ready-made design instead of building everything from scratch:
 
-Tap **+ New Page** at any time to start another page.
+- **Minimal** — a simple, clean webpage.
+- **Link-in-bio** — share your links in one place.
+- **Portfolio** — showcase your work.
+- **Résumé** — present your experience and skills.
+- **Event** — announce an event.
+- **Coming Soon** — tease an upcoming launch.
+- **Blank** — build your own design.
+- **Upload HTML** — bring your existing website.
 
-## 3. Create a new page 📝
+Every template can be customized before publishing.
 
-On the **New Page** screen:
+## 🤖 AI Assistant
 
-1. **Pick a starting point:**
-   - **Minimal** — a bare centered HTML page (default)
-   - **Link-in-bio** — links list layout
-   - **Portfolio** — image/gallery layout
-   - **Résumé** — document-style layout
-   - **Event** — event announcement layout
-   - **Coming Soon** — "Something's coming" page with an email capture form
-   - **Blank** — empty editor
-   - **Upload file** — drag or tap to upload your own `.html` file
+Your AI assistant helps you build and manage websites:
 
-2. **Set the path:** type a slug (e.g. `my-page`). This becomes your live URL:
-   `dr3amy.creepers.pro/p/<your-slug>/`
+- **Generate** complete websites from natural-language prompts.
+- **Code** with HTML, CSS, JavaScript, and more.
+- **Upgrade** existing websites with new features, layouts, animations, and improvements.
+- **Debug** code and fix errors.
+- **Navigate** the platform with guided assistance.
+- **Generate QR codes** and redirect you to sign in when authentication is required.
 
-3. **Edit the HTML:** the editor shows the full HTML for the selected template, ready to edit directly in the browser — no local tools needed.
+After generating a website, choose **Publish** to make it live or **Edit** to refine the code first.
 
-## 4. Preview and publish 🚀
+## 🛠️ Manage Your Pages
 
-- Tap **Preview** to see how the page will render before it goes live.
-- Tap **Publish** to write it to your GitHub repo.
+Use your dashboard to view, edit, republish, or delete your published pages. Changes are saved to your GitHub repository.
 
-Behind the scenes, publishing:
-- Sends a `PUT` request to `https://api.github.com/repos/<you>/dr3amy-pages/contents/p/<slug>/index.html`
-- Creates (or updates, if the slug already exists) `index.html` at that path in your repo
-- Returns a success confirmation with a link to the file on GitHub
+## 📄 License
 
-Your page goes live at `https://dr3amy.creepers.pro/p/<slug>/` within about **30–60 seconds** 🎉.
+Dr3amy Pages uses the **Dr3amy Pages Attribution License**. See [LICENSE](LICENSE) for the full terms.
 
-## 5. Manage your pages 🛠️
+## 📬 Contact
 
-Back on the **My Pages** tab, every published page is listed. From there you can:
-- **View** — open the live URL
-- **Edit** — reopen the HTML editor and re-publish changes
-- **Delete** — remove the page from your repo
-
-All of this can be done from a browser on any device — no terminal or local setup required.
-
-## Quick reference ⚡
-
-| Step | Action |
-|---|---|
-| 1 | Sign in with GitHub or a personal access token |
-| 2 | Tap **+ New Page** |
-| 3 | Choose a template or upload your own HTML |
-| 4 | Set the path/slug |
-| 5 | Edit the HTML in-browser |
-| 6 | Tap **Preview** to check it |
-| 7 | Tap **Publish** |
-| 8 | Live at `dr3amy.creepers.pro/p/<slug>/` in ~30–60s |
-
-## Contacting the owner 📝
-
-Mail: rachatapanapitakkun@gmail.com / rachata.p@ekburapa.ac.th
-SMS: 082 145 6099 (TH)
+- Email: [dr3amymc@drk.qzz.io](mailto:dr3amymc@drk.qzz.io)
+- School email: rachata.p@ekburapa.ac.th
+- SMS (Thailand): 082 145 6099
