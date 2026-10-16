@@ -1,0 +1,291 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f5f2">
+  <meta name="description" content="เครื่องคำนวณคะแนน T-score อย่างง่าย คำนวณคะแนนจากคะแนนที่ได้และคะแนนเต็ม">
+  <title>เครื่องคำนวณ T-Score</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f5f5f2; --card: #fff; --ink: #17201f; --muted: #77817d;
+      --green: #176b55; --green-dark: #105641; --lime: #d8f276; --red: #b23a34;
+      --shadow: 0 24px 70px rgba(25, 44, 37, .09);
+      font-family: Inter, "Noto Sans Thai", Tahoma, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0; min-height: 100vh;
+      background: radial-gradient(ellipse at 87% 8%, rgba(216,242,118,.28), transparent 25rem), var(--paper);
+      color: var(--ink); display: grid; place-items: center; padding: 48px 20px;
+    }
+    .shell { width: min(100%, 960px); }
+    .topline { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin: 0 4px 20px; }
+    .brand { display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 750; letter-spacing: .035em; }
+    .brand-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 10px; background: var(--green); color: white; font-size: 15px; }
+    .top-actions { display: flex; align-items: center; gap: 14px; }
+    .tag { color: var(--muted); font-size: 12px; font-weight: 700; }
+    .language-switch { display: inline-flex; flex: 0 0 auto; gap: 3px; padding: 3px; border: 1px solid #dce4dd; border-radius: 12px; background: rgba(255,255,255,.8); }
+    .language-option { min-width: 43px; min-height: 34px; border: 0; border-radius: 9px; padding: 0 10px; background: transparent; color: #68736e; font: inherit; font-size: 12px; font-weight: 750; cursor: pointer; }
+    .language-option[aria-pressed="true"] { background: var(--green); color: white; box-shadow: 0 2px 5px rgba(23,107,85,.2); }
+    .language-option:not([aria-pressed="true"]):hover { background: #edf3ef; color: var(--green); }
+    .card { display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; border: 1px solid rgba(28,51,44,.07); border-radius: 25px; background: var(--card); box-shadow: var(--shadow); }
+    .left { padding: clamp(28px, 5vw, 52px); }
+    .eyebrow { display: inline-flex; align-items: center; gap: 8px; color: var(--green); font-size: 11px; font-weight: 800; }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; background: var(--lime); border-radius: 50%; }
+    h1 { margin: 18px 0 12px; font-size: clamp(34px, 4.6vw, 49px); line-height: 1.15; letter-spacing: -.035em; }
+    .intro { max-width: 390px; margin: 0 0 34px; color: #68736e; font-size: 15px; line-height: 1.75; }
+    .field { margin-top: 18px; }
+    label { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 13px; font-weight: 700; }
+    .field-hint { color: #98a09c; font-size: 11px; font-weight: 500; text-align: right; }
+    .input-wrap { position: relative; }
+    input[type="number"] { width: 100%; height: 54px; border: 1px solid #dfe5e0; border-radius: 12px; background: #fbfcfa; color: var(--ink); font: inherit; font-size: 16px; font-weight: 600; padding: 0 46px 0 15px; outline: none; transition: border .18s, box-shadow .18s, background .18s; }
+    input[type="number"]:focus { background: white; border-color: var(--green); box-shadow: 0 0 0 4px rgba(23,107,85,.11); }
+    input::placeholder { color: #aab2ad; font-weight: 450; }
+    .unit { position: absolute; right: 15px; top: 50%; transform: translateY(-50%); color: #97a19b; font-size: 12px; font-weight: 650; pointer-events: none; }
+    .error { min-height: 21px; padding-top: 5px; color: var(--red); font-size: 12px; }
+    .actions { display: flex; align-items: center; gap: 14px; margin-top: 13px; }
+    button { border: 0; cursor: pointer; font: inherit; }
+    .calculate { min-height: 50px; flex: 1; border-radius: 12px; padding: 0 20px; background: var(--green); color: white; font-size: 14px; font-weight: 750; transition: background .15s, transform .15s; }
+    .calculate:hover { background: var(--green-dark); transform: translateY(-1px); }
+    .calculate:focus-visible, .reset:focus-visible, .language-option:focus-visible, .cookie-button:focus-visible { outline: 3px solid rgba(23,107,85,.28); outline-offset: 3px; }
+    .reset { background: transparent; color: #68736e; font-size: 13px; font-weight: 650; padding: 12px 2px; }
+    .reset:hover { color: var(--ink); }
+    .right { display: flex; flex-direction: column; justify-content: space-between; min-height: 570px; padding: clamp(28px, 4vw, 42px); background: #eff5ef; }
+    .result-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; color: #60736a; font-size: 12px; font-weight: 700; }
+    .live-badge { display: inline-flex; gap: 7px; align-items: center; white-space: nowrap; border-radius: 100px; background: #fff; padding: 7px 10px; color: #648073; font-size: 10px; }
+    .live-dot { width: 6px; height: 6px; border-radius: 50%; background: #8dbc4c; }
+    .score-panel { margin: auto 0; padding: 34px 0 25px; }
+    .result-label { color: #64756d; font-size: 13px; font-weight: 650; }
+    .score-line { display: flex; align-items: baseline; gap: 10px; margin-top: 8px; }
+    .score { color: var(--green); font-size: clamp(82px, 12vw, 126px); line-height: .98; letter-spacing: -.085em; font-weight: 760; font-variant-numeric: tabular-nums; }
+    .score-placeholder { color: #aebdb4; }
+    .score-unit { color: #8b9991; font-size: 14px; font-weight: 700; }
+    .result-note { margin: 15px 0 0; color: #748078; font-size: 13px; line-height: 1.7; }
+    .metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    .metric { min-height: 91px; padding: 15px; border: 1px solid rgba(39,77,59,.09); border-radius: 14px; background: rgba(255,255,255,.77); }
+    .metric-label { color: #76847b; font-size: 11px; font-weight: 650; }
+    .metric-value { display: block; margin-top: 8px; color: #243a30; font-size: 20px; font-weight: 750; letter-spacing: -.025em; font-variant-numeric: tabular-nums; }
+    .formula { margin-top: 21px; padding-top: 16px; border-top: 1px solid rgba(39,77,59,.12); color: #718078; font-size: 11px; line-height: 1.75; }
+    .formula strong { color: #344d40; }
+    .footnote { margin: 18px 4px 0; color: #8b938e; font-size: 11px; line-height: 1.7; text-align: center; }
+    .cookie-notice { position: fixed; z-index: 5; right: 22px; bottom: 22px; display: flex; align-items: center; gap: 20px; width: min(560px, calc(100vw - 32px)); padding: 18px 20px; border: 1px solid #e4e9e4; border-radius: 16px; background: white; box-shadow: 0 14px 50px rgba(25,44,37,.17); }
+    .cookie-copy { flex: 1; }
+    .cookie-title { margin: 0 0 5px; font-size: 13px; font-weight: 750; }
+    .cookie-text { margin: 0; color: #68736e; font-size: 12px; line-height: 1.65; }
+    .cookie-button { flex: 0 0 auto; min-height: 40px; border-radius: 10px; padding: 0 16px; background: var(--green); color: white; font-size: 12px; font-weight: 750; }
+    .cookie-button:hover { background: var(--green-dark); }
+    [hidden] { display: none !important; }
+    @media (max-width: 680px) {
+      body { padding: 24px 14px 100px; place-items: start center; }
+      .topline { gap: 8px; margin-bottom: 14px; }
+      .top-actions { margin-left: auto; gap: 0; }
+      .tag { display: none; }
+      .card { grid-template-columns: 1fr; border-radius: 20px; }
+      .left { padding: 30px 24px 22px; }
+      .intro { margin-bottom: 24px; }
+      .right { min-height: 400px; padding: 25px 24px; }
+      .score-panel { padding: 30px 0 22px; }
+      .score { font-size: 94px; }
+      .cookie-notice { right: 12px; bottom: 12px; width: calc(100vw - 24px); gap: 12px; padding: 15px; }
+      .cookie-button { padding: 0 12px; }
+    }
+    @media (max-width: 390px) {
+      .brand { gap: 7px; font-size: 11px; }
+      .brand-mark { width: 28px; height: 28px; }
+      .language-option { min-width: 39px; padding: 0 8px; }
+      .cookie-notice { align-items: flex-start; flex-direction: column; }
+      .cookie-button { align-self: flex-end; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <div class="topline">
+      <div class="brand"><span class="brand-mark" aria-hidden="true">T</span> SCORE STUDIO</div>
+      <div class="top-actions">
+        <div class="tag" data-i18n="tag">เครื่องมือแปลงคะแนนอย่างรวดเร็ว</div>
+        <div class="language-switch" id="language-switch" role="group" aria-label="เลือกภาษา">
+          <button class="language-option" type="button" data-language="th" lang="th" aria-pressed="true">ไทย</button>
+          <button class="language-option" type="button" data-language="en" lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </div>
+
+    <section class="card" aria-label="เครื่องคำนวณ T-score" data-i18n-aria="calculatorAria">
+      <div class="left">
+        <div class="eyebrow" data-i18n="eyebrow">แปลงคะแนนได้ง่าย ๆ</div>
+        <h1 data-i18n="heading">รู้ผลคะแนน<br>ได้ในพริบตา</h1>
+        <p class="intro" data-i18n="intro">กรอกคะแนนที่ได้และคะแนนเต็ม เพื่อดูเปอร์เซ็นต์และคะแนน T-score โดยประมาณได้ทันที</p>
+
+        <form id="score-form" novalidate>
+          <div class="field">
+            <label for="earned"><span data-i18n="earnedLabel">คะแนนที่ได้</span><span class="field-hint" data-i18n="earnedHint">คะแนนที่คุณทำได้</span></label>
+            <div class="input-wrap"><input id="earned" name="earned" type="number" inputmode="decimal" min="0" step="any" placeholder="เช่น 78" aria-describedby="form-error"><span class="unit" data-i18n="pointsUnit">คะแนน</span></div>
+          </div>
+          <div class="field">
+            <label for="maximum"><span data-i18n="maximumLabel">คะแนนเต็ม</span><span class="field-hint" data-i18n="maximumHint">คะแนนสูงสุดที่เป็นไปได้</span></label>
+            <div class="input-wrap"><input id="maximum" name="maximum" type="number" inputmode="decimal" min="0" step="any" placeholder="เช่น 100" aria-describedby="form-error"><span class="unit" data-i18n="pointsUnit">คะแนน</span></div>
+          </div>
+          <div class="error" id="form-error" role="alert" aria-live="polite"></div>
+          <div class="actions">
+            <button class="calculate" type="submit"><span data-i18n="calculate">คำนวณคะแนน</span> <span aria-hidden="true">→</span></button>
+            <button class="reset" type="button" id="reset" data-i18n="reset">ล้างค่า</button>
+          </div>
+        </form>
+      </div>
+
+      <aside class="right" aria-live="polite" aria-atomic="true">
+        <div class="result-top"><span data-i18n="yourResult">ผลลัพธ์ของคุณ</span><span class="live-badge"><span class="live-dot"></span><span id="badge-text">พร้อมคำนวณ</span></span></div>
+        <div class="score-panel">
+          <div class="result-label" data-i18n="resultLabel">คะแนน T-score โดยประมาณ</div>
+          <div class="score-line"><output class="score score-placeholder" id="t-score">—</output><span class="score-unit">/ 80</span></div>
+          <p class="result-note" id="result-note">กรอกคะแนนที่ได้และคะแนนเต็มเพื่อดูผลลัพธ์</p>
+        </div>
+        <div>
+          <div class="metrics">
+            <div class="metric"><span class="metric-label" data-i18n="percentageLabel">เปอร์เซ็นต์</span><output class="metric-value" id="percentage">—</output></div>
+            <div class="metric"><span class="metric-label" data-i18n="pointsEarnedLabel">คะแนนที่ได้</span><output class="metric-value" id="points">—</output></div>
+          </div>
+          <div class="formula"><strong data-i18n="howItWorks">วิธีคำนวณ:</strong> <span data-i18n="formula">คะแนน T โดยประมาณ = 20 + 60 × (คะแนนที่ได้ ÷ คะแนนเต็ม) แปลงสัดส่วน 0–100% เป็นมาตราส่วน 20–80</span></div>
+        </div>
+      </aside>
+    </section>
+    <p class="footnote" data-i18n="footnote">นี่คือคะแนนที่แปลงเป็นมาตราส่วนอย่างง่าย ไม่ใช่ T-score ทางสถิติ การคำนวณ T-score มาตรฐานจริงต้องใช้ค่าเฉลี่ยและส่วนเบี่ยงเบนมาตรฐานของกลุ่ม</p>
+  </main>
+
+  <section class="cookie-notice" id="cookie-notice" role="dialog" aria-labelledby="cookie-title" aria-describedby="cookie-text" hidden>
+    <div class="cookie-copy">
+      <p class="cookie-title" id="cookie-title" data-i18n="cookieTitle">การจัดเก็บข้อมูลบนอุปกรณ์</p>
+      <p class="cookie-text" id="cookie-text" data-i18n="cookieText">เว็บไซต์นี้ใช้พื้นที่จัดเก็บในเบราว์เซอร์เพื่อจำภาษาที่เลือกและการปิดข้อความนี้ ไม่มีคุกกี้ติดตามหรือโฆษณา</p>
+    </div>
+    <button class="cookie-button" id="cookie-accept" type="button" data-i18n="cookieButton">รับทราบ</button>
+  </section>
+
+  <script>
+    (() => {
+      const translations = {
+        th: {
+          pageTitle: 'เครื่องคำนวณ T-Score', calculatorAria: 'เครื่องคำนวณ T-score', tag: 'เครื่องมือแปลงคะแนนอย่างรวดเร็ว',
+          eyebrow: 'แปลงคะแนนได้ง่าย ๆ', heading: 'รู้ผลคะแนน<br>ได้ในพริบตา', intro: 'กรอกคะแนนที่ได้และคะแนนเต็ม เพื่อดูเปอร์เซ็นต์และคะแนน T-score โดยประมาณได้ทันที',
+          earnedLabel: 'คะแนนที่ได้', earnedHint: 'คะแนนที่คุณทำได้', maximumLabel: 'คะแนนเต็ม', maximumHint: 'คะแนนสูงสุดที่เป็นไปได้', pointsUnit: 'คะแนน',
+          calculate: 'คำนวณคะแนน', reset: 'ล้างค่า', yourResult: 'ผลลัพธ์ของคุณ', ready: 'พร้อมคำนวณ', calculated: 'คำนวณแล้ว', resultLabel: 'คะแนน T-score โดยประมาณ',
+          initialNote: 'กรอกคะแนนที่ได้และคะแนนเต็มเพื่อดูผลลัพธ์', percentageLabel: 'เปอร์เซ็นต์', pointsEarnedLabel: 'คะแนนที่ได้', howItWorks: 'วิธีคำนวณ:',
+          formula: 'คะแนน T โดยประมาณ = 20 + 60 × (คะแนนที่ได้ ÷ คะแนนเต็ม) แปลงสัดส่วน 0–100% เป็นมาตราส่วน 20–80',
+          footnote: 'นี่คือคะแนนที่แปลงเป็นมาตราส่วนอย่างง่าย ไม่ใช่ T-score ทางสถิติ การคำนวณ T-score มาตรฐานจริงต้องใช้ค่าเฉลี่ยและส่วนเบี่ยงเบนมาตรฐานของกลุ่ม',
+          cookieTitle: 'การจัดเก็บข้อมูลบนอุปกรณ์', cookieText: 'เว็บไซต์นี้ใช้พื้นที่จัดเก็บในเบราว์เซอร์เพื่อจำภาษาที่เลือกและการปิดข้อความนี้ ไม่มีคุกกี้ติดตามหรือโฆษณา', cookieButton: 'รับทราบ',
+          errRequired: 'กรุณากรอกคะแนนที่ได้และคะแนนเต็ม', errNumber: 'กรุณากรอกตัวเลขให้ถูกต้อง', errMaximum: 'คะแนนเต็มต้องมากกว่าศูนย์', errNegative: 'คะแนนต้องไม่ติดลบ', errTooHigh: 'คะแนนที่ได้ต้องไม่เกินคะแนนเต็ม',
+          resultSentence: (p) => `${p}% ของคะแนนทั้งหมด แปลงเป็นมาตราส่วน 20–80`, earnedPlaceholder: 'เช่น 78', maximumPlaceholder: 'เช่น 100', languageGroupAria: 'เลือกภาษา'
+        },
+        en: {
+          pageTitle: 'T-Score Calculator', calculatorAria: 'T-score calculator', tag: 'Quick score converter',
+          eyebrow: 'Simple score conversion', heading: 'Know your<br>score at a glance.', intro: 'Enter the points you earned and the maximum score to instantly see your percentage and an estimated T-score.',
+          earnedLabel: 'Score you got', earnedHint: 'Your earned points', maximumLabel: 'Full score', maximumHint: 'Maximum possible points', pointsUnit: 'pts',
+          calculate: 'Calculate score', reset: 'Reset', yourResult: 'YOUR RESULT', ready: 'Ready', calculated: 'Calculated', resultLabel: 'Estimated T-score',
+          initialNote: 'Enter your score and full score to see your result.', percentageLabel: 'Percentage', pointsEarnedLabel: 'Points earned', howItWorks: 'How it works:',
+          formula: 'Estimated T = 20 + 60 × (score earned ÷ full score). This maps 0–100% onto a 20–80 scale.',
+          footnote: 'This is a simple scaled estimate, not a statistical T-score. A true standardized T-score requires the group mean and standard deviation.',
+          cookieTitle: 'Browser storage notice', cookieText: 'This site uses browser storage to remember your language and that you dismissed this notice. No tracking or advertising cookies are used.', cookieButton: 'Got it',
+          errRequired: 'Enter both your score and the full score.', errNumber: 'Please enter valid numbers.', errMaximum: 'Full score must be greater than zero.', errNegative: 'Score cannot be negative.', errTooHigh: 'Your score cannot be higher than the full score.',
+          resultSentence: (p) => `${p}% of the available points, mapped to the 20–80 scale.`, earnedPlaceholder: 'e.g. 78', maximumPlaceholder: 'e.g. 100', languageGroupAria: 'Choose language'
+        }
+      };
+      const safeGet = (key) => { try { return localStorage.getItem(key); } catch (_) { return null; } };
+      const safeSet = (key, value) => { try { localStorage.setItem(key, value); } catch (_) {} };
+      let language = safeGet('scoreStudioLanguage') === 'en' ? 'en' : 'th';
+      const form = document.getElementById('score-form');
+      const earnedInput = document.getElementById('earned');
+      const maximumInput = document.getElementById('maximum');
+      const error = document.getElementById('form-error');
+      const scoreOutput = document.getElementById('t-score');
+      const percentOutput = document.getElementById('percentage');
+      const pointsOutput = document.getElementById('points');
+      const note = document.getElementById('result-note');
+      const badgeText = document.getElementById('badge-text');
+      const languageSwitch = document.getElementById('language-switch');
+      const cookieNotice = document.getElementById('cookie-notice');
+
+      const format = (n, digits = 1) => Number(n.toFixed(digits)).toLocaleString(language === 'th' ? 'th-TH' : 'en-US', { maximumFractionDigits: digits });
+
+      function setLanguage(next) {
+        language = next;
+        const t = translations[language];
+        document.documentElement.lang = language;
+        document.title = t.pageTitle;
+        document.querySelectorAll('[data-i18n]').forEach((node) => {
+          const key = node.dataset.i18n;
+          if (t[key] !== undefined && typeof t[key] !== 'function') {
+            if (key === 'heading') node.innerHTML = t[key];
+            else node.textContent = t[key];
+          }
+        });
+        document.querySelectorAll('[data-i18n-aria]').forEach((node) => { node.setAttribute('aria-label', t[node.dataset.i18nAria]); });
+        earnedInput.placeholder = t.earnedPlaceholder;
+        maximumInput.placeholder = t.maximumPlaceholder;
+        languageSwitch.setAttribute('aria-label', t.languageGroupAria);
+        languageSwitch.querySelectorAll('[data-language]').forEach((button) => {
+          button.setAttribute('aria-pressed', String(button.dataset.language === language));
+        });
+        error.textContent = '';
+        if (!scoreOutput.classList.contains('score-placeholder')) {
+          const percentage = Number(earnedInput.value) / Number(maximumInput.value) * 100;
+          note.textContent = t.resultSentence(format(percentage, 1));
+        } else note.textContent = t.initialNote;
+        if (badgeText.textContent === translations.th.ready || badgeText.textContent === translations.en.ready || badgeText.textContent === translations.th.calculated || badgeText.textContent === translations.en.calculated) {
+          badgeText.textContent = scoreOutput.classList.contains('score-placeholder') ? t.ready : t.calculated;
+        }
+        safeSet('scoreStudioLanguage', language);
+      }
+
+      languageSwitch.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-language]');
+        if (button) setLanguage(button.dataset.language);
+      });
+      form.addEventListener('submit', (event) => {
+        event.preventDefault();
+        const t = translations[language];
+        const earned = Number(earnedInput.value);
+        const maximum = Number(maximumInput.value);
+        let message = '';
+        if (earnedInput.value.trim() === '' || maximumInput.value.trim() === '') message = t.errRequired;
+        else if (!Number.isFinite(earned) || !Number.isFinite(maximum)) message = t.errNumber;
+        else if (maximum <= 0) message = t.errMaximum;
+        else if (earned < 0) message = t.errNegative;
+        else if (earned > maximum) message = t.errTooHigh;
+        if (message) { error.textContent = message; (earnedInput.value.trim() === '' ? earnedInput : maximumInput).focus(); return; }
+
+        error.textContent = '';
+        const ratio = earned / maximum;
+        const percentage = ratio * 100;
+        scoreOutput.textContent = format(20 + 60 * ratio, 1);
+        scoreOutput.classList.remove('score-placeholder');
+        percentOutput.textContent = `${format(percentage, 1)}%`;
+        pointsOutput.textContent = `${format(earned, 2)} / ${format(maximum, 2)}`;
+        note.textContent = t.resultSentence(format(percentage, 1));
+        badgeText.textContent = t.calculated;
+      });
+
+      document.getElementById('reset').addEventListener('click', () => {
+        form.reset();
+        error.textContent = '';
+        scoreOutput.textContent = '—';
+        scoreOutput.classList.add('score-placeholder');
+        percentOutput.textContent = '—';
+        pointsOutput.textContent = '—';
+        note.textContent = translations[language].initialNote;
+        badgeText.textContent = translations[language].ready;
+        earnedInput.focus();
+      });
+
+      document.getElementById('cookie-accept').addEventListener('click', () => {
+        safeSet('scoreStudioCookieNoticeSeen', 'yes');
+        cookieNotice.hidden = true;
+      });
+      cookieNotice.hidden = safeGet('scoreStudioCookieNoticeSeen') === 'yes';
+      setLanguage(language);
+    })();
+  </script>
+</body>
+</html>
