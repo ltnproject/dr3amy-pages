@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>YXT Device Center</title>
+<style>
+  :root{
+    --bg-0:#f4f6fb; --bg-1:#ffffff; --ink:#15181f; --ink-dim:#6b7280;
+    --accent:#3b6cf6; --accent-2:#7c5cff; --ok:#1fae6a; --warn:#e0922e;
+    --card:#ffffff; --card-border:rgba(20,22,30,.08); --shadow:0 10px 30px rgba(20,22,40,.08);
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg-0:#0c0e14; --bg-1:#13161f; --ink:#eef1fa; --ink-dim:#9aa2b1;
+      --card:#171a24; --card-border:rgba(255,255,255,.08); --shadow:0 10px 30px rgba(0,0,0,.45);
+      color-scheme: dark;
+    }
+  }
+  html[data-theme="dark"]{
+    --bg-0:#0c0e14; --bg-1:#13161f; --ink:#eef1fa; --ink-dim:#9aa2b1;
+    --card:#171a24; --card-border:rgba(255,255,255,.08); --shadow:0 10px 30px rgba(0,0,0,.45);
+  }
+  html[data-theme="light"]{
+    --bg-0:#f4f6fb; --bg-1:#ffffff; --ink:#15181f; --ink-dim:#6b7280;
+    --card:#ffffff; --card-border:rgba(20,22,30,.08); --shadow:0 10px 30px rgba(20,22,40,.08);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100dvh; font-family:"HarmonyOS Sans SC",-apple-system,Segoe UI,Roboto,sans-serif;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, color-mix(in srgb, var(--accent) 16%, transparent), transparent),
+      radial-gradient(900px 500px at 110% 10%, color-mix(in srgb, var(--accent-2) 14%, transparent), transparent),
+      var(--bg-0);
+    color:var(--ink);
+    display:flex; align-items:center; justify-content:center;
+    padding:2rem 1rem calc(2rem + env(safe-area-inset-bottom,0px));
+  }
+  .wrap{ width:100%; max-width:780px; }
+  .badge-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem; }
+  .brand{ display:flex; align-items:center; gap:.6rem; font-weight:700; letter-spacing:.02em; }
+  .brand .dot{ width:10px; height:10px; border-radius:3px; background:linear-gradient(135deg,var(--accent),var(--accent-2)); }
+  .theme-toggle{
+    border:1px solid var(--card-border); background:var(--card); color:var(--ink);
+    padding:.45rem .8rem; border-radius:999px; font-size:.8rem; cursor:pointer;
+  }
+  .panel{
+    background:var(--card); border:1px solid var(--card-border); border-radius:1.5rem;
+    box-shadow:var(--shadow); padding:2.5rem 2rem; text-align:center; position:relative; overflow:hidden;
+  }
+  .panel::before{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(180deg, color-mix(in srgb, var(--accent) 6%, transparent), transparent 40%);
+  }
+  h1{ font-size:1.35rem; margin:0 0 .4rem; }
+  .sub{ color:var(--ink-dim); font-size:.92rem; margin:0 0 2rem; line-height:1.6; }
+  .sub b{ background:linear-gradient(90deg,var(--accent),var(--accent-2)); -webkit-background-clip:text; background-clip:text; color:transparent; }
+
+  .find-btn{
+    appearance:none; border:none; cursor:pointer; color:#fff;
+    background:linear-gradient(135deg,var(--accent),var(--accent-2));
+    padding:.95rem 2.2rem; border-radius:999px; font-size:1rem; font-weight:600;
+    display:inline-flex; align-items:center; gap:.6rem; box-shadow:0 8px 20px color-mix(in srgb, var(--accent) 45%, transparent);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .find-btn:hover{ transform:translateY(-2px); box-shadow:0 12px 26px color-mix(in srgb, var(--accent) 55%, transparent); }
+  .find-btn:active{ transform:translateY(0); }
+  .find-btn svg{ width:1.1em; height:1.1em; }
+
+  .unknown-btn{
+    margin-top:1rem; appearance:none; cursor:pointer; border-radius:999px; padding:.7rem 1.4rem;
+    border:1px solid color-mix(in srgb, var(--warn) 50%, var(--card-border)); background:transparent; color:var(--warn); font-weight:600; font-size:.88rem;
+  }
+
+  .devices{ margin-top:2rem; display:grid; gap:1rem; grid-template-columns:repeat(auto-fit,minmax(170px,1fr)); }
+  .device-card{
+    position:relative; border-radius:1.1rem; padding:1.3rem 1rem 1rem; cursor:pointer;
+    background:var(--bg-0); border:1px solid var(--card-border); transition:transform .15s ease, box-shadow .15s ease;
+    display:flex; flex-direction:column; align-items:center; gap:.6rem;
+  }
+  .device-card:hover{ transform:translateY(-4px); box-shadow:var(--shadow); }
+  .device-card .glyph{
+    width:3.4rem; height:3.4rem; border-radius:.9rem;
+    display:flex; align-items:center; justify-content:center;
+    background:linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--accent-2) 18%, transparent));
+  }
+  .device-card .glyph svg{ width:1.8rem; height:1.8rem; color:var(--accent); }
+  .device-card .name{ font-size:.85rem; font-weight:600; text-align:center; }
+  .conn-dot{ position:absolute; top:.6rem; left:.6rem; width:.65rem; height:.65rem; border-radius:50%; }
+  .conn-usb{ background:var(--warn); }
+  .conn-wireless{ background:var(--ok); }
+
+  .preview-entry{ display:flex; align-items:center; gap:.6rem; }
+  .preview-btn{
+    border:1px solid var(--card-border); background:var(--card); color:var(--ink);
+    padding:.4rem .9rem; border-radius:999px; font-size:.8rem; cursor:pointer; display:flex; align-items:center; gap:.4rem;
+  }
+  .help-dot{ color:var(--ink-dim); cursor:help; font-size:1rem; }
+
+  .loading-wrap{ display:flex; flex-direction:column; align-items:center; gap:1rem; }
+  .spinner{
+    width:2.4rem; height:2.4rem; border-radius:50%;
+    border:3px solid color-mix(in srgb, var(--accent) 25%, transparent); border-top-color:var(--accent);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  footer{ text-align:center; margin-top:1.5rem; font-size:.72rem; color:var(--ink-dim); }
+  footer a{ color:inherit; }
+
+  [hidden]{ display:none !important; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="badge-row">
+    <div class="brand"><span class="dot"></span> YXT Device Center</div>
+    <button class="theme-toggle" id="themeBtn">Theme</button>
+  </div>
+
+  <div class="panel">
+    <!-- Preview-mode entry (kept for parity with original feature; shown only if enabled via same condition as source) -->
+    <div class="preview-entry" id="previewEntry" hidden style="position:absolute; top:1.25rem; right:1.25rem;">
+      <button class="preview-btn" id="previewMouseBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="2" width="12" height="20" rx="6"/><line x1="12" y1="2" x2="12" y2="10"/></svg>
+        Preview mode
+      </button>
+      <span class="help-dot" title="Try the configurator without a connected device">?</span>
+    </div>
+
+    <!-- Loading state (mirrors original isLoadingPage branch) -->
+    <div class="loading-wrap" id="loadingState" hidden>
+      <div class="spinner"></div>
+      <h1 style="margin:0">Looking for your device…</h1>
+      <p class="sub" style="margin:0">Keep it plugged in while we connect.</p>
+    </div>
+
+    <!-- Default / find-device state -->
+    <div id="findState">
+      <h1>Connect your YXT device</h1>
+      <p class="sub">Click below and select your device from the browser prompt.<br/>Works best in <b>Chrome · Edge · Opera</b></p>
+      <button class="find-btn" id="findBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Find device
+      </button>
+
+      <div class="devices" id="deviceList"></div>
+
+      <div>
+        <button class="unknown-btn" id="unknownBtn" hidden>Unrecognized device? Click here</button>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <a href="https://beian.miit.gov.cn" target="_blank" rel="noopener">粤ICP备2025402399号 | Copyright © 2025 YXT . All Rights Reserved</a>
+  </footer>
+</div>
+
+<script>
+/* =========================================================================
+   BUSINESS LOGIC — copied verbatim in spirit from the original bundle.
+   Device PID/VID/path tables and WebHID detection/redirect flow are
+   UNCHANGED. Only the DOM rendering + styling below is new.
+   ========================================================================= */
+
+// --- Mouse device table (unchanged from source bundle) ---
+const mouseDeviceMap = [
+  { devicePath: "/SXS/X55/", pid: ["0x40a0","0x40a1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["X55_USB","X55_2.4G"] },
+  { devicePath: "/SXS/X66/", pid: ["0x40a0","0x40a1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["X66_USB","X66_2.4G"] },
+  { devicePath: "/SXS/X77/", pid: ["0x4000","0x4001"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["X77_USB","X77_2.4G"] },
+  { devicePath: "/ATTACKSHARK/", pid: ["0x4000","0x4001"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["X2PRO","X2PRO Wireless"] },
+  { devicePath: "/Epomaker_Nex_Lite/", pid: ["0x4000","0x4001"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["Epomaker Nex LITE","Epomaker Nex LITE 2.4G"] },
+  { devicePath: "/Fantech/Fantech_HELIOS_NEO_UX3V2S/", pid: ["0x40a0"], vid: ["0xb6a4"], manufactureName:["YXT"], productName:["Fantech HELIOS NEO UX3V2S"] },
+  { devicePath: "/EvoFox/EvoFox_Ghost_X_Pro/", pid: ["0x40c0","0x40c1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["EvoFox Ghost X Pro","EvoFox Ghost X Pro-2.4G"] },
+  { devicePath: "/EvoFox/EvoFox_Ghost_X/", pid: ["0x40b0","0x40c1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["EvoFox Ghost X","EvoFox Ghost X-2.4G"] },
+  { devicePath: "/g_clcker/OP99MASTER/", pid: ["0x40a0","0x40a1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["OP99 MASTER"] },
+  { devicePath: "/g_clcker/OP99/", pid: ["0x4080","0x4081"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["OP99"] },
+  { devicePath: "/LANGTU-M8-PRO/", pid: ["0x40c0","0x40c1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["M8 LED Pro USB","M8 LED Pro 2.4G","M8LED PRO USB","M8LED PRO 2.4G"] },
+  { devicePath: "/G6PRO/", pid: ["0x4000","0x4001"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["G6 PRO","G6 PRO_2.4G"] },
+  { devicePath: "/yxt/web/", pid: ["0x40c0","0x40c1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["EWEADN E7 V2 MAX","EWEADN E7 V2 MAX_2.4G"] },
+  { devicePath: "/g_clcker/SP109/", pid: ["0x40b0","0x40c1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["SP109_USB","SP109_2.4G"] },
+  { devicePath: "/mkespn/mkespn-W10/", pid: ["0x4000","0x4001"], vid: ["0xb6a4","0xb6a4"], manufactureName:["M100 Mouse"], productName:["W10"] },
+  { devicePath: "/mkespn/mkespn-W601/", pid: ["0x4080","0x4081"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["W601"] },
+  { devicePath: "/g_clcker/SP199/", pid: ["0x40b0","0x40c1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["SP199_USB","SP199_2.4G"], productName:["SP199_USB","SP199_2.4G"] },
+  { devicePath: "/Fantech/Fantech_CRYPTO_II_WIRELESS_WG7V2RD_Wired_USB/", pid: ["0x40a0","0x40a1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["Fantech CRYPTO II WIRELESS WG7V2RD Wired USB","Fantech CRYPTO II WIRELESS WG7V2RD 2.4GHz"] },
+  { devicePath: "/Fantech/Fantech_KANATA_WIRELESS_WG9RD_Wired_USB/", pid: ["0x40a0","0x40a1"], vid: ["0xb6a4","0xb6a4"], manufactureName:["YXT"], productName:["Fantech KANATA WIRELESS WG9RD Wired USB","Fantech KANATA WIRELESS WG9RD 2.4GHz","MHA KANATA WIRELESS Wired USB","MHA KANATA WIRELESS WG9RD 2.4GHz"] },
+];
+const mouseMap = { nameToPathMap: mouseDeviceMap };
+
+// --- Keyboard device table (unchanged from source bundle) ---
+const kbDeviceMap = [
+  { devicePath: "/kb/W909/", manufactureName:["YXT"], pid:["0x4100","0x4101"], vid:["0xb6a4","0xb6a4"], productName:["W909 Pro USB","W909 Pro 2.4G"] },
+  { devicePath: "/kb/W911/", manufactureName:["YXT"], pid:["0x4100","0x4101"], vid:["0xb6a4","0xb6a4"], productName:["W911 Pro USB","W911 Pro 2.4G"] },
+  { devicePath: "/kb/MK8N2/", manufactureName:["YXT"], pid:["0x4100"], vid:["0xb6a4"], productName:["MK8N2"] },
+  { devicePath: "/kb/public/", manufactureName:["YXT"], pid:["0x4100","0x4101"], vid:["0xb6a4","0xb6a4"], productName:["K100 Keyboard","USB Gaming KB","2.4G Gaming KB"] },
+];
+const kbMap = { nameToPathMap: kbDeviceMap };
+
+// Build HID filters from both tables (same effect as original's "A0" filters import)
+function buildHidFilters(){
+  const filters = [];
+  for (const table of [mouseMap, kbMap]) {
+    for (const entry of table.nameToPathMap) {
+      for (let i = 0; i < entry.pid.length; i++) {
+        filters.push({ vendorId: parseInt(entry.vid[i], 16), productId: parseInt(entry.pid[i], 16) });
+      }
+    }
+  }
+  return filters;
+}
+const HID_FILTERS = buildHidFilters();
+
+function hidSupported(){
+  return typeof navigator !== "undefined" && "hid" in navigator;
+}
+
+// Original's `l` function: resolve a device to its path and redirect.
+function resolveAndRedirect(productId, vendorId, productName, tables = [mouseMap, kbMap]) {
+  let path = "";
+  outer:
+  for (const table of tables) {
+    for (const entry of table.nameToPathMap) {
+      const nameMatch = entry.productName.findIndex((pn) => {
+        let combined = false;
+        for (const mfg of entry.manufactureName) {
+          if (`${mfg} ${pn}` === productName) { combined = true; break; }
+        }
+        return pn === productName || combined;
+      });
+      const pidIdx = entry.pid.findIndex((p) => productId === parseInt(p, 16));
+      if (nameMatch !== -1 && pidIdx !== -1 && vendorId === parseInt(entry.vid[pidIdx], 16)) {
+        path = entry.devicePath;
+        break outer;
+      }
+    }
+  }
+  if (path !== "") {
+    window.location.href = `${path}?productId=${productId}&vendorId=${vendorId}&productName=${encodeURIComponent(productName)}`;
+  }
+  return path !== "";
+}
+
+// --- UI wiring (new) ---
+const findState = document.getElementById("findState");
+const loadingState = document.getElementById("loadingState");
+const deviceList = document.getElementById("deviceList");
+const findBtn = document.getElementById("findBtn");
+const unknownBtn = document.getElementById("unknownBtn");
+const previewEntry = document.getElementById("previewEntry");
+const previewMouseBtn = document.getElementById("previewMouseBtn");
+const themeBtn = document.getElementById("themeBtn");
+
+function mouseGlyph(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="2" width="10" height="20" rx="5"/><line x1="12" y1="2" x2="12" y2="10"/></svg>`;
+}
+function kbGlyph(){
+  return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><line x1="6" y1="10" x2="6" y2="10.01"/><line x1="10" y1="10" x2="10" y2="10.01"/><line x1="14" y1="10" x2="14" y2="10.01"/><line x1="18" y1="10" x2="18" y2="10.01"/></svg>`;
+}
+
+function classifyDevice(productId, vendorId, productName){
+  for (const [table, kind] of [[mouseMap, "mouse"], [kbMap, "kb"]]) {
+    for (const entry of table.nameToPathMap) {
+      const pidIdx = entry.pid.findIndex((p) => productId === parseInt(p, 16));
+      if (pidIdx !== -1 && vendorId === parseInt(entry.vid[pidIdx], 16)) return kind;
+    }
+  }
+  return null;
+}
+
+async function refreshAuthorizedDevices(){
+  if (!hidSupported()) return;
+  const devices = await navigator.hid.getDevices();
+  deviceList.innerHTML = "";
+  if (devices.length === 0) { unknownBtn.hidden = true; return; }
+  devices.forEach((d) => {
+    const kind = classifyDevice(d.productId, d.vendorId, d.productName) || "mouse";
+    const card = document.createElement("div");
+    card.className = "device-card";
+    card.innerHTML = `
+      <span class="conn-dot conn-usb"></span>
+      <div class="glyph">${kind === "kb" ? kbGlyph() : mouseGlyph()}</div>
+      <div class="name">${d.productName}</div>`;
+    card.addEventListener("click", () => resolveAndRedirect(d.productId, d.vendorId, d.productName));
+    deviceList.appendChild(card);
+  });
+}
+
+findBtn.addEventListener("click", async () => {
+  if (!hidSupported()) { alert("WebHID isn't supported in this browser. Please use Chrome, Edge, or Opera."); return; }
+  const chosen = await navigator.hid.requestDevice({ filters: HID_FILTERS });
+  if (chosen.length !== 0) {
+    resolveAndRedirect(chosen[0].productId, chosen[0].vendorId, chosen[0].productName);
+  }
+});
+
+unknownBtn.addEventListener("click", async () => {
+  const chosen = await navigator.hid.requestDevice({ filters: HID_FILTERS });
+  if (chosen.length === 0) return;
+  const { productId, vendorId, productName } = chosen[0];
+  const kind = classifyDevice(productId, vendorId, productName);
+  if (!kind) return;
+  localStorage.removeItem("msStorageData");
+  sessionStorage.setItem("ignoreProductName", "1");
+  if (kind === "mouse") window.location.href = `/public/?productId=${productId}&vendorId=${vendorId}&productName=${encodeURIComponent(productName)}`;
+  if (kind === "kb") window.location.href = `/kb/public/?productId=${productId}&vendorId=${vendorId}&productName=${encodeURIComponent(productName)}`;
+});
+
+previewMouseBtn.addEventListener("click", () => {
+  sessionStorage.setItem("previewMode", "1");
+  sessionStorage.setItem("previewDeviceType", "mouse");
+  window.location.href = "/public/";
+});
+
+// Theme handling (mirrors original useDarkKEY logic)
+function applyTheme(isDark){
+  document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+}
+function initTheme(){
+  const key = localStorage.getItem("useDarkKEY");
+  if (key === "dark") applyTheme(true);
+  else if (key === "light") applyTheme(false);
+  else if (key === "auto") applyTheme(window.matchMedia("(prefers-color-scheme: dark)").matches);
+  else applyTheme(false);
+}
+themeBtn.addEventListener("click", () => {
+  const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+  const next = !isDark;
+  applyTheme(next);
+  localStorage.setItem("useDarkKEY", next ? "dark" : "light");
+});
+
+// Boot sequence (mirrors original onMounted branch)
+(async function boot(){
+  initTheme();
+  if (hidSupported()) {
+    loadingState.hidden = false; findState.hidden = true;
+    navigator.hid.addEventListener("connect", async () => {
+      await refreshAuthorizedDevices();
+    });
+    navigator.hid.addEventListener("disconnect", refreshAuthorizedDevices);
+    const existing = await navigator.hid.getDevices();
+    loadingState.hidden = true; findState.hidden = false;
+    if (existing.length !== 0) await refreshAuthorizedDevices();
+  } else {
+    findState.hidden = false;
+  }
+})();
+</script>
+</body>
+</html>
