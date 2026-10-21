@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Calculators</title>
+<style>
+  :root{
+    --bg:#f5f5f7;
+    --panel:#ffffff;
+    --text:#1d1d1f;
+    --sub:#6e6e73;
+    --accent:#0071e3;
+    --accent-soft:#e8f0fe;
+    --border:rgba(0,0,0,0.08);
+    --shadow:0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
+    --radius:20px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#000000;
+      --panel:#1c1c1e;
+      --text:#f5f5f7;
+      --sub:#a1a1a6;
+      --accent:#0a84ff;
+      --accent-soft:#132743;
+      --border:rgba(255,255,255,0.08);
+      --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.4);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#000000;
+    --panel:#1c1c1e;
+    --text:#f5f5f7;
+    --sub:#a1a1a6;
+    --accent:#0a84ff;
+    --accent-soft:#132743;
+    --border:rgba(255,255,255,0.08);
+    --shadow:0 1px 2px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.4);
+    color-scheme: dark;
+  }
+  *{box-sizing:border-box;}
+  html,body{height:100%;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--text);
+    font-family:-apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+    padding-top:env(safe-area-inset-top,0px);
+    padding-bottom:env(safe-area-inset-bottom,0px);
+    overflow-x:hidden;
+  }
+  .wrap{
+    max-width:1000px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+  header{
+    text-align:center;
+    margin-bottom:40px;
+    animation:dropIn .7s cubic-bezier(.22,1,.36,1) both;
+  }
+  @keyframes dropIn{
+    from{opacity:0; transform:translateY(-14px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+  h1{
+    font-size:clamp(32px,6vw,48px);
+    font-weight:700;
+    letter-spacing:-0.02em;
+    margin:0 0 8px;
+  }
+  header p{
+    color:var(--sub);
+    font-size:17px;
+    margin:0;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(140px,1fr));
+    gap:12px;
+    margin-bottom:28px;
+  }
+  .tile{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px 14px;
+    text-align:center;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+    transition:transform .35s cubic-bezier(.22,1,.36,1), box-shadow .35s;
+    user-select:none;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .tile:hover{transform:translateY(-3px) scale(1.02);}
+  .tile:active{transform:scale(0.96);}
+  .tile.active{
+    background:var(--accent);
+    color:#fff;
+  }
+  .tile .icon{font-size:26px; display:block; margin-bottom:6px;}
+  .tile .label{font-size:13px; font-weight:600;}
+
+  .stage{
+    position:relative;
+    min-height:420px;
+  }
+  .panel{
+    position:absolute;
+    inset:0;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+    padding:28px;
+    opacity:0;
+    transform:translateY(10px) scale(.985);
+    pointer-events:none;
+    transition:opacity .4s cubic-bezier(.22,1,.36,1), transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  .panel.show{
+    position:relative;
+    opacity:1;
+    transform:translateY(0) scale(1);
+    pointer-events:auto;
+  }
+  .panel h2{
+    margin:0 0 20px;
+    font-size:22px;
+    font-weight:700;
+    letter-spacing:-0.01em;
+  }
+  .field{margin-bottom:16px;}
+  .field label{
+    display:block;
+    font-size:13px;
+    color:var(--sub);
+    margin-bottom:6px;
+  }
+  input[type="number"], input[type="text"], select{
+    width:100%;
+    padding:12px 14px;
+    border-radius:12px;
+    border:1px solid var(--border);
+    background:var(--bg);
+    color:var(--text);
+    font-size:16px;
+    font-family:inherit;
+    transition:box-shadow .25s, border-color .25s;
+  }
+  input:focus, select:focus{
+    outline:none;
+    border-color:var(--accent);
+    box-shadow:0 0 0 4px var(--accent-soft);
+  }
+  .row{display:flex; gap:12px;}
+  .row > .field{flex:1;}
+  .result{
+    margin-top:20px;
+    padding:18px;
+    background:var(--accent-soft);
+    border-radius:14px;
+    font-size:15px;
+    color:var(--text);
+    transition:all .3s cubic-bezier(.22,1,.36,1);
+  }
+  .result .big{
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:-0.02em;
+    color:var(--accent);
+    display:block;
+    margin-bottom:4px;
+  }
+  /* basic calculator */
+  .calc-display{
+    background:var(--bg);
+    border-radius:14px;
+    padding:20px;
+    text-align:right;
+    font-size:40px;
+    font-weight:300;
+    margin-bottom:14px;
+    overflow-x:auto;
+    white-space:nowrap;
+    min-height:56px;
+  }
+  .keys{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+  }
+  .key{
+    padding:18px 0;
+    border-radius:14px;
+    border:none;
+    background:var(--bg);
+    color:var(--text);
+    font-size:20px;
+    cursor:pointer;
+    transition:transform .15s, background .15s;
+  }
+  .key:active{transform:scale(0.92);}
+  .key.op{background:var(--accent); color:#fff;}
+  .key.fn{background:var(--border); color:var(--text);}
+  .key.zero{grid-column:span 2;}
+
+  footer{
+    text-align:center;
+    color:var(--sub);
+    font-size:12px;
+    margin-top:40px;
+  }
+  .theme-toggle{
+    position:fixed;
+    top:calc(16px + env(safe-area-inset-top,0px));
+    right:16px;
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:999px;
+    width:40px;height:40px;
+    font-size:18px;
+    cursor:pointer;
+    box-shadow:var(--shadow);
+  }
+</style>
+</head>
+<body>
+<button class="theme-toggle" id="themeToggle" title="Toggle theme">🌓</button>
+<div class="wrap">
+  <header>
+    <h1>Calculators</h1>
+    <p>Everything you need, in one quiet place.</p>
+  </header>
+
+  <div class="grid" id="tileGrid"></div>
+
+  <div class="stage" id="stage"></div>
+
+  <footer>Built for quick, everyday math.</footer>
+</div>
+
+<script>
+const calcs = [
+  {id:'basic', icon:'🔢', label:'Basic'},
+  {id:'scientific', icon:'📐', label:'Scientific'},
+  {id:'percentage', icon:'%', label:'Percentage'},
+  {id:'tip', icon:'🍽️', label:'Tip'},
+  {id:'bmi', icon:'⚖️', label:'BMI'},
+  {id:'loan', icon:'🏦', label:'Loan'},
+  {id:'age', icon:'🎂', label:'Age'},
+  {id:'unit', icon:'📏', label:'Unit Convert'},
+  {id:'discount', icon:'🏷️', label:'Discount'},
+];
+
+const grid = document.getElementById('tileGrid');
+const stage = document.getElementById('stage');
+
+calcs.forEach(c=>{
+  const t = document.createElement('div');
+  t.className='tile';
+  t.dataset.id=c.id;
+  t.innerHTML = `<span class="icon">${c.icon}</span><span class="label">${c.label}</span>`;
+  t.addEventListener('click', ()=>select(c.id));
+  grid.appendChild(t);
+});
+
+function panelHTML(id){
+  switch(id){
+    case 'basic': return `
+      <h2>Basic Calculator</h2>
+      <div class="calc-display" id="basicDisplay">0</div>
+      <div class="keys" id="basicKeys"></div>`;
+    case 'scientific': return `
+      <h2>Scientific Calculator</h2>
+      <div class="calc-display" id="sciDisplay">0</div>
+      <div class="keys" id="sciKeys" style="grid-template-columns:repeat(5,1fr);"></div>`;
+    case 'percentage': return `
+      <h2>Percentage Calculator</h2>
+      <div class="field"><label>What is</label><input type="number" id="pctA" placeholder="e.g. 20"></div>
+      <div class="field"><label>% of</label><input type="number" id="pctB" placeholder="e.g. 150"></div>
+      <div class="result" id="pctResult"><span class="big">—</span></div>`;
+    case 'tip': return `
+      <h2>Tip Calculator</h2>
+      <div class="field"><label>Bill amount</label><input type="number" id="tipBill" placeholder="e.g. 48.50"></div>
+      <div class="row">
+        <div class="field"><label>Tip %</label><input type="number" id="tipPct" value="18"></div>
+        <div class="field"><label>Split between</label><input type="number" id="tipSplit" value="1"></div>
+      </div>
+      <div class="result" id="tipResult"><span class="big">—</span></div>`;
+    case 'bmi': return `
+      <h2>BMI Calculator</h2>
+      <div class="row">
+        <div class="field"><label>Weight (kg)</label><input type="number" id="bmiWeight" placeholder="70"></div>
+        <div class="field"><label>Height (cm)</label><input type="number" id="bmiHeight" placeholder="175"></div>
+      </div>
+      <div class="result" id="bmiResult"><span class="big">—</span></div>`;
+    case 'loan': return `
+      <h2>Loan / Mortgage Calculator</h2>
+      <div class="row">
+        <div class="field"><label>Loan amount</label><input type="number" id="loanAmt" placeholder="250000"></div>
+        <div class="field"><label>Annual rate %</label><input type="number" id="loanRate" placeholder="6.5"></div>
+      </div>
+      <div class="field"><label>Term (years)</label><input type="number" id="loanYears" placeholder="30"></div>
+      <div class="result" id="loanResult"><span class="big">—</span></div>`;
+    case 'age': return `
+      <h2>Age Calculator</h2>
+      <div class="field"><label>Date of birth</label><input type="text" id="ageDob" placeholder="YYYY-MM-DD"></div>
+      <div class="result" id="ageResult"><span class="big">—</span></div>`;
+    case 'unit': return `
+      <h2>Unit Converter</h2>
+      <div class="field">
+        <label>Category</label>
+        <select id="unitCategory">
+          <option value="length">Length</option>
+          <option value="weight">Weight</option>
+          <option value="temp">Temperature</option>
+        </select>
+      </div>
+      <div class="row">
+        <div class="field"><label>Value</label><input type="number" id="unitValue" placeholder="1"></div>
+        <div class="field"><label>From</label><select id="unitFrom"></select></div>
+        <div class="field"><label>To</label><select id="unitTo"></select></div>
+      </div>
+      <div class="result" id="unitResult"><span class="big">—</span></div>`;
+    case 'discount': return `
+      <h2>Discount Calculator</h2>
+      <div class="row">
+        <div class="field"><label>Original price</label><input type="number" id="discPrice" placeholder="100"></div>
+        <div class="field"><label>Discount %</label><input type="number" id="discPct" placeholder="25"></div>
+      </div>
+      <div class="result" id="discResult"><span class="big">—</span></div>`;
+  }
+}
+
+function select(id){
+  document.querySelectorAll('.tile').forEach(t=>t.classList.toggle('active', t.dataset.id===id));
+  stage.querySelectorAll('.panel').forEach(p=>p.remove());
+  const panel = document.createElement('div');
+  panel.className='panel';
+  panel.innerHTML = panelHTML(id);
+  stage.appendChild(panel);
+  requestAnimationFrame(()=>requestAnimationFrame(()=>panel.classList.add('show')));
+  initPanel(id);
+}
+
+function initPanel(id){
+  if(id==='basic') initBasic();
+  if(id==='scientific') initScientific();
+  if(id==='percentage') bindLive(['pctA','pctB'], updatePct);
+  if(id==='tip') bindLive(['tipBill','tipPct','tipSplit'], updateTip);
+  if(id==='bmi') bindLive(['bmiWeight','bmiHeight'], updateBmi);
+  if(id==='loan') bindLive(['loanAmt','loanRate','loanYears'], updateLoan);
+  if(id==='age') bindLive(['ageDob'], updateAge);
+  if(id==='unit') initUnit();
+  if(id==='discount') bindLive(['discPrice','discPct'], updateDiscount);
+}
+
+function bindLive(ids, fn){
+  ids.forEach(i=>{
+    const el = document.getElementById(i);
+    el.addEventListener('input', fn);
+  });
+  fn();
+}
+
+function fmt(n, d=2){
+  if(!isFinite(n)) return '—';
+  return n.toLocaleString(undefined, {maximumFractionDigits:d});
+}
+
+// Basic calculator
+let basicExpr = '';
+function initBasic(){
+  const keysEl = document.getElementById('basicKeys');
+  const layout = ['C','±','%','÷','7','8','9','×','4','5','6','−','1','2','3','+','0','.','='];
+  basicExpr='';
+  layout.forEach(k=>{
+    const b = document.createElement('button');
+    b.className = 'key' + (['÷','×','−','+','='].includes(k) ? ' op' : (['C','±','%'].includes(k) ? ' fn' : '')) + (k==='0' ? ' zero' : '');
+    b.textContent = k;
+    b.addEventListener('click', ()=>pressKey(k));
+    keysEl.appendChild(b);
+  });
+  updateBasicDisplay('0');
+}
+function updateBasicDisplay(v){ document.getElementById('basicDisplay').textContent = v; }
+function pressKey(k){
+  if(k==='C'){ basicExpr=''; updateBasicDisplay('0'); return; }
+  if(k==='='){
+    try{
+      let e = basicExpr.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+      let r = Function('"use strict";return ('+e+')')();
+      basicExpr = String(r);
+      updateBasicDisplay(fmt(r,6));
+    }catch(e){ updateBasicDisplay('Error'); basicExpr=''; }
+    return;
+  }
+  if(k==='±'){
+    if(basicExpr.startsWith('-')) basicExpr = basicExpr.slice(1);
+    else basicExpr = '-' + basicExpr;
+    updateBasicDisplay(basicExpr || '0');
+    return;
+  }
+  if(k==='%'){
+    try{
+      let e = basicExpr.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-');
+      let r = Function('"use strict";return ('+e+')')() / 100;
+      basicExpr = String(r);
+      updateBasicDisplay(fmt(r,6));
+    }catch(e){}
+    return;
+  }
+  basicExpr += k;
+  updateBasicDisplay(basicExpr);
+}
+
+// Scientific
+let sciExpr = '';
+let sciDeg = true;
+function initScientific(){
+  const keysEl = document.getElementById('sciKeys');
+  const layout = [
+    'deg','(',')','C','⌫',
+    'sin','cos','tan','x²','xʸ',
+    'log','ln','√','π','e',
+    '7','8','9','÷','%',
+    '4','5','6','×','1/x',
+    '1','2','3','−','±',
+    '0','.','=','+',''
+  ];
+  sciExpr='';
+  keysEl.innerHTML='';
+  layout.forEach(k=>{
+    if(k===''){ const sp=document.createElement('div'); keysEl.appendChild(sp); return; }
+    const b = document.createElement('button');
+    const isOp = ['÷','×','−','+','='].includes(k);
+    const isFn = ['C','⌫','(',')','deg','sin','cos','tan','x²','xʸ','log','ln','√','π','e','%','1/x','±'].includes(k);
+    b.className = 'key' + (isOp?' op':'') + (isFn?' fn':'');
+    b.style.fontSize = k.length>2 ? '14px':'18px';
+    b.textContent = k==='deg' ? (sciDeg?'DEG':'RAD') : k;
+    b.dataset.key = k;
+    b.addEventListener('click', ()=>pressSciKey(k, b));
+    keysEl.appendChild(b);
+  });
+  updateSciDisplay('0');
+}
+function updateSciDisplay(v){ document.getElementById('sciDisplay').textContent = v; }
+function evalSci(expr){
+  let e = expr
+    .replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-')
+    .replace(/π/g,'Math.PI')
+    .replace(/√\(/g,'Math.sqrt(')
+    .replace(/sin\(/g,(sciDeg?'sinD(':'Math.sin('))
+    .replace(/cos\(/g,(sciDeg?'cosD(':'Math.cos('))
+    .replace(/tan\(/g,(sciDeg?'tanD(':'Math.tan('))
+    .replace(/log\(/g,'Math.log10(')
+    .replace(/ln\(/g,'Math.log(')
+    .replace(/\be\b/g,'Math.E');
+  function sinD(x){return Math.sin(x*Math.PI/180);}
+  function cosD(x){return Math.cos(x*Math.PI/180);}
+  function tanD(x){return Math.tan(x*Math.PI/180);}
+  return Function('"use strict";'+'const sinD='+sinD.toString()+';const cosD='+cosD.toString()+';const tanD='+tanD.toString()+';return ('+e+')')();
+}
+function pressSciKey(k, btn){
+  if(k==='deg'){
+    sciDeg = !sciDeg;
+    btn.textContent = sciDeg?'DEG':'RAD';
+    return;
+  }
+  if(k==='C'){ sciExpr=''; updateSciDisplay('0'); return; }
+  if(k==='⌫'){ sciExpr = sciExpr.slice(0,-1); updateSciDisplay(sciExpr||'0'); return; }
+  if(k==='='){
+    try{
+      const r = evalSci(sciExpr);
+      sciExpr = String(r);
+      updateSciDisplay(fmt(r,8));
+    }catch(err){ updateSciDisplay('Error'); sciExpr=''; }
+    return;
+  }
+  if(k==='±'){
+    if(sciExpr.startsWith('-')) sciExpr = sciExpr.slice(1);
+    else sciExpr = '-' + sciExpr;
+    updateSciDisplay(sciExpr||'0');
+    return;
+  }
+  if(k==='x²'){ sciExpr += '**2'; updateSciDisplay(sciExpr); return; }
+  if(k==='xʸ'){ sciExpr += '**'; updateSciDisplay(sciExpr); return; }
+  if(k==='1/x'){ sciExpr = '1/('+sciExpr+')'; updateSciDisplay(sciExpr); return; }
+  if(k==='%'){
+    try{
+      const r = evalSci(sciExpr)/100;
+      sciExpr = String(r);
+      updateSciDisplay(fmt(r,8));
+    }catch(e){}
+    return;
+  }
+  if(['sin','cos','tan','log','ln','√'].includes(k)){
+    sciExpr += k+'(';
+    updateSciDisplay(sciExpr);
+    return;
+  }
+  sciExpr += k;
+  updateSciDisplay(sciExpr);
+}
+
+function updatePct(){
+  const a = parseFloat(document.getElementById('pctA').value);
+  const b = parseFloat(document.getElementById('pctB').value);
+  const el = document.getElementById('pctResult');
+  if(isNaN(a)||isNaN(b)){ el.innerHTML='<span class="big">—</span>'; return; }
+  const r = (a/100)*b;
+  el.innerHTML = `<span class="big">${fmt(r)}</span>${a}% of ${b} is ${fmt(r)}`;
+}
+
+function updateTip(){
+  const bill = parseFloat(document.getElementById('tipBill').value);
+  const pct = parseFloat(document.getElementById('tipPct').value);
+  const split = parseFloat(document.getElementById('tipSplit').value) || 1;
+  const el = document.getElementById('tipResult');
+  if(isNaN(bill)||isNaN(pct)){ el.innerHTML='<span class="big">—</span>'; return; }
+  const tip = bill*(pct/100);
+  const total = bill+tip;
+  el.innerHTML = `<span class="big">$${fmt(total/split)}</span>per person · tip $${fmt(tip/split)} · total $${fmt(total)}`;
+}
+
+function updateBmi(){
+  const w = parseFloat(document.getElementById('bmiWeight').value);
+  const h = parseFloat(document.getElementById('bmiHeight').value);
+  const el = document.getElementById('bmiResult');
+  if(isNaN(w)||isNaN(h)){ el.innerHTML='<span class="big">—</span>'; return; }
+  const m = h/100;
+  const bmi = w/(m*m);
+  let cat = bmi<18.5?'Underweight':bmi<25?'Healthy range':bmi<30?'Overweight':'Obese';
+  el.innerHTML = `<span class="big">${fmt(bmi,1)}</span>${cat}`;
+}
+
+function updateLoan(){
+  const p = parseFloat(document.getElementById('loanAmt').value);
+  const rate = parseFloat(document.getElementById('loanRate').value);
+  const years = parseFloat(document.getElementById('loanYears').value);
+  const el = document.getElementById('loanResult');
+  if(isNaN(p)||isNaN(rate)||isNaN(years)){ el.innerHTML='<span class="big">—</span>'; return; }
+  const r = (rate/100)/12;
+  const n = years*12;
+  const m = r===0 ? p/n : p * r * Math.pow(1+r,n) / (Math.pow(1+r,n)-1);
+  el.innerHTML = `<span class="big">$${fmt(m)}</span>monthly payment · total paid $${fmt(m*n)}`;
+}
+
+function updateAge(){
+  const v = document.getElementById('ageDob').value;
+  const el = document.getElementById('ageResult');
+  const d = new Date(v);
+  if(isNaN(d.getTime())){ el.innerHTML='<span class="big">—</span>'; return; }
+  const now = new Date();
+  let years = now.getFullYear()-d.getFullYear();
+  let months = now.getMonth()-d.getMonth();
+  let days = now.getDate()-d.getDate();
+  if(days<0){ months--; days += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+  if(months<0){ years--; months += 12; }
+  el.innerHTML = `<span class="big">${years} yrs</span>${months} months, ${days} days`;
+}
+
+const unitDefs = {
+  length: {m:1, km:1000, cm:0.01, mm:0.001, mi:1609.34, ft:0.3048, in:0.0254, yd:0.9144},
+  weight: {kg:1, g:0.001, lb:0.453592, oz:0.0283495, ton:1000},
+};
+function initUnit(){
+  const cat = document.getElementById('unitCategory');
+  const from = document.getElementById('unitFrom');
+  const to = document.getElementById('unitTo');
+  function populate(){
+    const c = cat.value;
+    from.innerHTML=''; to.innerHTML='';
+    if(c==='temp'){
+      ['C','F','K'].forEach(u=>{
+        from.innerHTML += `<option value="${u}">${u}</option>`;
+        to.innerHTML += `<option value="${u}">${u}</option>`;
+      });
+      to.value='F';
+    } else {
+      Object.keys(unitDefs[c]).forEach(u=>{
+        from.innerHTML += `<option value="${u}">${u}</option>`;
+        to.innerHTML += `<option value="${u}">${u}</option>`;
+      });
+      to.selectedIndex = 1;
+    }
+    updateUnit();
+  }
+  cat.addEventListener('change', populate);
+  [from,to].forEach(el=>el.addEventListener('change', updateUnit));
+  document.getElementById('unitValue').addEventListener('input', updateUnit);
+  populate();
+}
+function toCelsius(v,u){ return u==='C'?v : u==='F'?(v-32)*5/9 : v-273.15; }
+function fromCelsius(v,u){ return u==='C'?v : u==='F'?v*9/5+32 : v+273.15; }
+function updateUnit(){
+  const cat = document.getElementById('unitCategory').value;
+  const val = parseFloat(document.getElementById('unitValue').value);
+  const from = document.getElementById('unitFrom').value;
+  const to = document.getElementById('unitTo').value;
+  const el = document.getElementById('unitResult');
+  if(isNaN(val)){ el.innerHTML='<span class="big">—</span>'; return; }
+  let result;
+  if(cat==='temp'){
+    result = fromCelsius(toCelsius(val,from), to);
+  } else {
+    const defs = unitDefs[cat];
+    result = val * defs[from] / defs[to];
+  }
+  el.innerHTML = `<span class="big">${fmt(result,4)} ${to}</span>${val} ${from} = ${fmt(result,4)} ${to}`;
+}
+
+function updateDiscount(){
+  const price = parseFloat(document.getElementById('discPrice').value);
+  const pct = parseFloat(document.getElementById('discPct').value);
+  const el = document.getElementById('discResult');
+  if(isNaN(price)||isNaN(pct)){ el.innerHTML='<span class="big">—</span>'; return; }
+  const saved = price*(pct/100);
+  const final = price-saved;
+  el.innerHTML = `<span class="big">$${fmt(final)}</span>you save $${fmt(saved)}`;
+}
+
+// theme toggle
+const themeBtn = document.getElementById('themeToggle');
+themeBtn.addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  const next = cur==='dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+});
+
+// default select
+select('basic');
+</script>
+</body>
+</html>
