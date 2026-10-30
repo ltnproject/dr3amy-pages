@@ -1,0 +1,15 @@
+# Wrangler config for the Groq AI proxy Worker (Work/Code tab only)
+# Deploy with:  wrangler deploy --config wrangler-ai.toml
+#
+# Set your secret before deploying:
+#   wrangler secret put GROQ_API_KEY --config wrangler-ai.toml
+#
+# Optional overrides (uncomment to customise):
+# [vars]
+# PRIMARY_MODEL   = "openai/gpt-oss-120b"       # tried first
+# FALLBACK_MODEL  = "llama-3.3-70b-versatile"   # tried if the primary errors
+# BYOK_GUIDE_PATH = "/byok-guide.html"          # linked if both error
+
+name = "dr3amy-pages-ai"
+main = "worker-ai.js"
+compatibility_date = "2024-11-01"

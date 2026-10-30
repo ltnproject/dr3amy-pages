@@ -28,10 +28,18 @@
   window.__rigelWidget = true;
 
   // ── config ──────────────────────────────────────────────
+  // Chat tab — UNCHANGED, still the original backend/model.
   const RIGEL_API = "https://ltnproj-rigel-api.hf.space";
-  const RIGEL_CODE_API = "https://ltnproj-rigel-code-api.hf.space";
   const MODEL_LABEL = "Rigel 1o-mini";
-  const CODE_MODEL_LABEL = "Rigel 1 RC";
+
+  // Work (Code) tab — ONLY this tab was switched to Groq, via worker-ai.js.
+  // Replace the placeholder below with your deployed worker-ai.js URL,
+  // e.g. https://dr3amy-pages-ai.<your-subdomain>.workers.dev
+  // No query string — worker-ai.js only ever serves this one tab, and
+  // picks openai/gpt-oss-120b first, falls back to llama-3.3-70b-versatile,
+  // and as a last resort points the user to the BYOK guide below.
+  const RIGEL_CODE_API = "https://dr3amy-pages-ai.<YOUR-SUBDOMAIN>.workers.dev";
+  const CODE_MODEL_LABEL = "Rigel Work (Groq)";
   // GitHub OAuth entry point (same link the dashboard's sign-in button uses).
   const AUTH_URL = "https://dr3amy-pages.rachatapanapitakkun-mail2.workers.dev/auth/github";
   const PENDING_KEY = "rigel:pending";

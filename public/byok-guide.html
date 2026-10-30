@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bring your own API key — Dr3amy Pages</title>
+<meta name="description" content="How to use your own ChatGPT, Claude, OpenRouter, or Google AI Studio API key with Rigel Work when the free models are busy.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    min-height: 100vh;
+    background: #f0eef8;
+    color: #1a1628;
+    font-family: 'Inter', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: hidden;
+  }
+  .blobs { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .blob { position: absolute; border-radius: 50%; filter: blur(80px); opacity: .5; animation: drift 14s ease-in-out infinite alternate; }
+  .blob-1 { width: 480px; height: 480px; background: #c4b5fd; top: -100px; left: -80px; }
+  .blob-2 { width: 400px; height: 400px; background: #fbcfe8; top: 10%; right: -60px; animation-delay: -4s; }
+  .blob-3 { width: 320px; height: 320px; background: #a5f3fc; bottom: 10%; left: 15%; animation-delay: -8s; }
+  @keyframes drift { from { transform: translate(0,0) scale(1); } to { transform: translate(30px,20px) scale(1.06); } }
+
+  .glass {
+    background: rgba(255,255,255,.5);
+    backdrop-filter: blur(24px) saturate(1.6);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    border: 1px solid rgba(255,255,255,.7);
+    box-shadow: 0 4px 32px rgba(120,80,200,.08), inset 0 1px 0 rgba(255,255,255,.9);
+    border-radius: 20px;
+  }
+
+  main { position: relative; z-index: 1; max-width: 860px; margin: 0 auto; padding: 48px 22px 100px; }
+
+  a.back { display: inline-flex; align-items: center; gap: 6px; color: #6d4fc1; text-decoration: none; font-weight: 500; font-size: .92rem; }
+  a.back:hover { text-decoration: underline; }
+
+  h1 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: clamp(1.8rem, 4vw, 2.6rem); margin: 18px 0 10px; line-height: 1.15; }
+  .lede { font-size: 1.05rem; color: #433a5c; max-width: 62ch; line-height: 1.6; margin-bottom: 30px; }
+  .lede code { font-family: 'IBM Plex Mono', monospace; background: rgba(109,79,193,.1); padding: 1px 6px; border-radius: 5px; font-size: .92em; }
+
+  section { margin-top: 36px; }
+  h2 { font-family: 'Fraunces', Georgia, serif; font-weight: 500; font-size: 1.4rem; margin-bottom: 6px; }
+  .sub { color: #5c5276; font-size: .95rem; margin-bottom: 18px; }
+
+  .providers { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 16px; }
+  .card { padding: 20px; }
+  .card h3 { font-size: 1.05rem; margin-bottom: 4px; }
+  .card .pill { display: inline-block; font-family: 'IBM Plex Mono', monospace; font-size: .72rem; color: #6d4fc1; background: rgba(109,79,193,.1); padding: 2px 8px; border-radius: 999px; margin-bottom: 10px; }
+  .card ol { margin: 10px 0 12px 18px; font-size: .9rem; line-height: 1.6; color: #322b47; }
+  .card a.keylink { font-size: .86rem; font-weight: 600; color: #6d4fc1; text-decoration: none; }
+  .card a.keylink:hover { text-decoration: underline; }
+  .card .note { font-size: .78rem; color: #78708f; margin-top: 8px; line-height: 1.5; }
+
+  pre {
+    background: #1a1628; color: #e9e4fb; font-family: 'IBM Plex Mono', monospace;
+    font-size: .82rem; line-height: 1.55; padding: 18px; border-radius: 14px;
+    overflow-x: auto; margin: 14px 0;
+  }
+  pre .c { color: #9a92b8; }
+  .steps { counter-reset: step; list-style: none; margin-top: 10px; }
+  .steps li { position: relative; padding-left: 38px; margin-bottom: 14px; font-size: .95rem; line-height: 1.55; color: #322b47; }
+  .steps li::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: 0; top: -1px;
+    width: 26px; height: 26px; border-radius: 50%;
+    background: #6d4fc1; color: #fff; font-weight: 600; font-size: .8rem;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .warn { padding: 16px 18px; font-size: .88rem; color: #6b3a0a; background: rgba(251,191,36,.18); border: 1px solid rgba(251,191,36,.4); border-radius: 14px; margin-top: 18px; }
+  footer { margin-top: 56px; font-size: .82rem; color: #78708f; text-align: center; }
+</style>
+</head>
+<body>
+<div class="blobs"><div class="blob blob-1"></div><div class="blob blob-2"></div><div class="blob blob-3"></div></div>
+
+<main>
+  <a class="back" href="/">← Dr3amy Pages</a>
+  <h1>Bring your own API key</h1>
+  <p class="lede">
+    Rigel's Work (Code) tab runs on free, shared Groq models. When both the primary model
+    (<code>openai/gpt-oss-120b</code>) and its backup (<code>llama-3.3-70b-versatile</code>) are
+    unavailable — usually a rate limit during busy periods — Rigel will say so and link here.
+    This page shows you how to get your own key from a few providers and wire it into your own
+    copy of the proxy Worker, so you're never blocked by shared capacity.
+  </p>
+
+  <section>
+    <h2>1. Get a key</h2>
+    <p class="sub">Pick whichever provider you already use, or whichever is cheapest for your usage. Any one of these is enough.</p>
+    <div class="providers">
+      <div class="card glass">
+        <h3>ChatGPT API</h3>
+        <span class="pill">OpenAI</span>
+        <ol>
+          <li>Sign in at platform.openai.com</li>
+          <li>Open API keys, create a new secret key</li>
+          <li>Add billing — the API is pay-as-you-go, separate from a ChatGPT Plus subscription</li>
+        </ol>
+        <a class="keylink" href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">platform.openai.com/api-keys →</a>
+      </div>
+      <div class="card glass">
+        <h3>Claude API</h3>
+        <span class="pill">Anthropic</span>
+        <ol>
+          <li>Sign in at console.anthropic.com</li>
+          <li>Open API Keys, create a key</li>
+          <li>Add credit under Billing to activate it</li>
+        </ol>
+        <a class="keylink" href="https://console.anthropic.com/settings/keys" target="_blank" rel="noopener noreferrer">console.anthropic.com/settings/keys →</a>
+      </div>
+      <div class="card glass">
+        <h3>OpenRouter</h3>
+        <span class="pill">Multi-model router</span>
+        <ol>
+          <li>Sign in at openrouter.ai</li>
+          <li>Open Keys, create a key</li>
+          <li>One key gives you access to dozens of models, including free-tier ones</li>
+        </ol>
+        <a class="keylink" href="https://openrouter.ai/keys" target="_blank" rel="noopener noreferrer">openrouter.ai/keys →</a>
+      </div>
+      <div class="card glass">
+        <h3>Google AI Studio</h3>
+        <span class="pill">Gemini</span>
+        <ol>
+          <li>Sign in at aistudio.google.com</li>
+          <li>Open Get API key, create a key</li>
+          <li>Has a free tier with daily rate limits</li>
+        </ol>
+        <a class="keylink" href="https://aistudio.google.com/app/apikey" target="_blank" rel="noopener noreferrer">aistudio.google.com/app/apikey →</a>
+        <p class="note">Gemini's API expects the key as a query parameter or an <code>x-goog-api-key</code> header, not a Bearer token — see the note below.</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>2. Wire it into your own Worker</h2>
+    <p class="sub">Fork the repo, deploy a second small Worker with your key as a secret, then point the widget at it. Never put a key directly in client-side code.</p>
+    <ol class="steps">
+      <li>In your fork, copy <code>worker-ai.js</code> to e.g. <code>worker-byok.js</code> and set <code>UPSTREAM_URL</code> to your provider's chat-completions endpoint.</li>
+      <li>Deploy it with its own <code>wrangler.toml</code> and store your key as a secret — <strong>never</strong> hardcode it:
+        <pre>wrangler secret put API_KEY --config wrangler-byok.toml</pre>
+      </li>
+      <li>Point <code>RIGEL_CODE_API</code> in <code>rigel-widget.js</code> at your new Worker's URL.</li>
+    </ol>
+
+    <pre><span class="c">// minimal proxy shape — same pattern as the site's existing worker.js</span>
+const ALLOWED_ORIGIN = "https://dr3amy.creepers.pro";
+
+export default {
+  async fetch(request, env) {
+    <span class="c">// ...origin / referer checks, same as worker-ai.js...</span>
+
+    const response = await fetch(env.UPSTREAM_URL, {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${env.API_KEY}`,
+        "Content-Type": "application/json"
+      },
+      body: await request.text()
+    });
+
+    return new Response(response.body, {
+      status: response.status,
+      headers: {
+        "Content-Type": response.headers.get("Content-Type") || "application/json",
+        "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+        "Vary": "Origin"
+      }
+    });
+  }
+};</pre>
+
+    <div class="warn">
+      <strong>Google AI Studio is the exception.</strong> Gemini's REST API doesn't take an
+      <code>Authorization: Bearer</code> header — it wants the key as <code>?key=...</code> on the
+      URL or an <code>x-goog-api-key</code> header, and the request/response shape differs from the
+      OpenAI-style format Groq, OpenAI and OpenRouter share. If you pick Gemini, adjust the
+      <code>fetch</code> call accordingly rather than reusing the template above as-is.
+    </div>
+  </section>
+
+  <footer>Rigel points here automatically when the free Work models are both unavailable.</footer>
+</main>
+</body>
+</html>
