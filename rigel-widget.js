@@ -38,7 +38,7 @@
   // No query string — worker-ai.js only ever serves this one tab, and
   // picks openai/gpt-oss-120b first, falls back to llama-3.3-70b-versatile,
   // and as a last resort points the user to the BYOK guide below.
-  const RIGEL_CODE_API = "https://api.ltnproject.qzz.io";
+  const RIGEL_CODE_API = "https://rigel-api.rachatapanapitakkun-mail2.workers.dev";
   const CODE_MODEL_LABEL = "Rigel Work (Groq)";
   // GitHub OAuth entry point (same link the dashboard's sign-in button uses).
   const AUTH_URL = "https://dr3amy-pages.rachatapanapitakkun-mail2.workers.dev/auth/github";
