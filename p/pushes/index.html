@@ -1,0 +1,91 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Facebook Embedded Post</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 30px 15px;
+
+            /* Background gradient */
+            background: linear-gradient(
+                135deg,
+                #141e30,
+                #243b55,
+                #4568dc
+            );
+
+            font-family: Arial, sans-serif;
+        }
+
+        .embed-container {
+            width: 100%;
+            max-width: 540px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            text-align: center;
+        }
+
+        .embed-container iframe {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            height: 749px;
+            margin: auto;
+            border: none;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        @media (max-width: 550px) {
+            body {
+                padding: 15px 8px;
+            }
+
+            .embed-container {
+                padding: 8px;
+            }
+
+            .embed-container iframe {
+                height: 749px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="embed-container">
+
+        <iframe
+            src="https://www.facebook.com/plugins/post.php?href=https%3A%2F%2Fwww.facebook.com%2Fepstudyroom%2Fposts%2Fpfbid0qLXLZk7DHrBR8qbo5X9xY35jnM2nwBuf5GNfwMXyQTRFd5pCTj8wpBdQBUfvqF94l&show_text=true&width=500"
+            width="500"
+            height="749"
+            style="border:none;overflow:hidden"
+            scrolling="no"
+            frameborder="0"
+            allowfullscreen="true"
+            allow="autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share">
+        </iframe>
+
+    </div>
+
+</body>
+</html>
