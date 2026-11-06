@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reduce Plastic · Waste Data Explained</title>
+<style>
+:root{--bg:#fafaf7;--card:#fff;--ink:#14231a;--mute:#5c6c62;--line:#e4e9e2;--g:#1f7a4a;--g2:#e3f2e8;--a:#d9822b;--b:#2a68b0;--r:#c4452f;--sh:0 1px 2px rgba(20,35,26,.05),0 6px 20px rgba(20,35,26,.05)}
+@media(prefers-color-scheme:dark){:root{--bg:#0e1712;--card:#15221a;--ink:#e9f1ec;--mute:#9db1a4;--line:#243329;--g:#5cc383;--g2:#1b3326;--a:#f0a64a;--b:#6aa9e8;--r:#ef7a64;--sh:none}}
+*{box-sizing:border-box}html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.75 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+a{color:var(--b)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+nav{position:sticky;top:0;z-index:9;background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:6px;height:56px;overflow-x:auto;white-space:nowrap}
+nav b{margin-right:auto;color:var(--g);font-size:15px;padding-right:14px}
+nav a{color:var(--mute);text-decoration:none;font-size:14px;padding:6px 12px;border-radius:99px}
+nav a:hover,nav a.on{background:var(--g2);color:var(--ink)}
+.hero{padding:72px 0 16px}
+.eyebrow{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--g);font-weight:700}
+h1{font-size:clamp(32px,5.5vw,50px);line-height:1.04;margin:10px 0 16px;letter-spacing:-.02em}
+.hero p{font-size:16px;color:var(--mute);max-width:640px;margin:0}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-top:36px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--sh)}
+.kpi b{display:block;font-size:28px;line-height:1.1;color:var(--g);letter-spacing:-.02em}
+.kpi span{font-size:14px;color:var(--mute)}
+section{padding:48px 0 8px}
+.plain{background:var(--g2);border-radius:12px;padding:12px 16px;font-size:14px;margin:0 0 18px;max-width:680px}.plain b{color:var(--g)}
+.fact{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;margin:18px 0}.fact div{border-left:3px solid var(--a);padding:4px 0 4px 14px;font-size:14px}.fact b{display:block;color:var(--a);font-size:13px;letter-spacing:.04em;text-transform:uppercase}
+.k{font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--g);font-weight:700}
+h2{font-size:25px;margin:4px 0 8px;letter-spacing:-.01em}
+.lead{color:var(--mute);max-width:640px;margin:0 0 16px;font-size:15px}
+h3{font-size:15.5px;margin:0 0 6px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px;box-shadow:var(--sh)}
+.card p{margin:0;color:var(--mute);font-size:14px}
+.num{font-size:26px;font-weight:800;color:var(--g);letter-spacing:-.02em;line-height:1.15}
+.pill{display:inline-block;font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;background:var(--g2);color:var(--g);margin-bottom:10px}
+.so{display:block;font-size:13px;color:var(--mute);margin-top:8px}
+.split{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:720px){.split{grid-template-columns:1fr}}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;box-shadow:var(--sh)}
+summary{cursor:pointer;padding:16px 20px;font-weight:600;list-style:none;display:flex;justify-content:space-between;gap:12px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";color:var(--g);font-size:20px;line-height:1}
+details[open] summary::after{content:"–"}
+details .in{padding:0 20px 16px;color:var(--mute);font-size:14px}
+details .in ul{margin:6px 0 0;padding-left:20px}
+.tabs{display:inline-flex;background:var(--g2);border-radius:99px;padding:4px;margin-bottom:16px}
+.tabs button{font:inherit;font-size:14px;border:0;background:none;color:var(--ink);padding:7px 16px;border-radius:99px;cursor:pointer}
+.tabs button[aria-pressed=true]{background:var(--g);color:#fff}
+.row{margin:16px 0}.row .l{display:flex;justify-content:space-between;font-size:14px;margin-bottom:6px}
+.stack{display:flex;height:36px;border-radius:10px;overflow:hidden;gap:2px}
+.stack div{display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;transition:width .5s}
+.leg{display:flex;gap:16px;flex-wrap:wrap;font-size:13.5px;color:var(--mute);margin-top:10px}
+.leg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px}
+.ctr{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:14px 0}
+.ctr div{background:var(--g2);border-radius:12px;padding:14px}
+.ctr b{display:block;font-size:26px;font-variant-numeric:tabular-nums;color:var(--g)}
+.ctr span{font-size:13px;color:var(--mute)}
+.calc{font:13.5px/1.7 ui-monospace,Menlo,monospace;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;overflow-x:auto;white-space:pre}
+.note{border-left:4px solid var(--a);background:var(--card);padding:14px 18px;border-radius:0 12px 12px 0;font-size:14.5px;margin-top:16px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;counter-reset:s}
+.steps div{counter-increment:s;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;font-size:15px}
+.steps div::before{content:counter(s);display:block;width:28px;height:28px;line-height:28px;text-align:center;border-radius:50%;background:var(--g);color:#fff;font-weight:700;margin-bottom:8px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}
+.tw{overflow-x:auto}
+th,td{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+th{color:var(--mute);font-weight:600;font-size:13px}
+footer{margin-top:64px;border-top:1px solid var(--line);padding:30px 0 50px;color:var(--mute);font-size:13.5px;text-align:center}
+</style>
+</head>
+<body>
+<nav><div class="wrap"><b>♻ Ethical Earth Alliance</b>
+<a href="#global">Global</a><a href="#plastic">Plastic</a><a href="#report">2026 Report</a><a href="#thailand">Thailand</a><a href="#orgs">Organizations</a><a href="#solutions">Solutions</a><a href="#method">Methodology</a><a href="#notes">Data notes</a></div></nav>
+
+<header class="hero"><div class="wrap">
+<div class="eyebrow">The Ethical Earth Alliance</div>
+<h1>Reduce plastic.<br>Understand waste.</h1>
+<p>What the numbers say about waste worldwide and in Thailand, why plastic matters, and what is already working. Figures come from our project slides, with newer official data alongside.</p>
+</div></header>
+
+<main class="wrap">
+
+<section id="global"><div class="k">01 · Global</div><h2>The global waste picture</h2>
+<p class="lead">Waste grows faster than most countries can collect, sort and process it. The pressure is highest where consumption is highest.</p>
+<p class="plain"><b>In plain words:</b> that is roughly 250 kg of waste for every person on Earth, every year. Rich countries produce far more than their share.</p>
+<div class="grid">
+<div class="card"><div class="num">2B+ tons</div><h3>Solid waste per year</h3><p>Enough to fill more than 800,000 Olympic-sized swimming pools.</p></div>
+<div class="card"><div class="num">3.4B tons</div><h3>Projected for 2050</h3><p>Annual waste expected by 2050 (World Bank), a large rise from today.</p></div>
+<div class="card"><div class="num">16% → 34%</div><h3>The income gap</h3><p>High-income countries have 16% of the world’s people but generate 34% of its waste.</p></div>
+</div>
+<div class="split" style="margin-top:14px">
+<div class="card"><span class="pill">E-waste</span><div class="num">50M+ tons</div><p>Old phones, computers and TVs. Under 20% is properly recycled, so valuable metals and hazardous materials are often lost or leaked.</p></div>
+<div class="card"><span class="pill">Landfills</span><div class="num">25× CO₂</div><p>In many countries over half of waste goes to landfill, releasing methane, a greenhouse gas 25 times more potent than CO₂.</p></div>
+</div></section>
+
+<section id="plastic"><div class="k">02 · Plastic</div><h2>The problem of plastic waste</h2>
+<p class="lead">Plastic waste is discarded plastic that accumulates in the environment. Global production now exceeds 414 million metric tons a year, and some of it ends up in rivers and oceans.</p>
+<p class="plain"><b>In plain words:</b> plastic doesn’t rot away. It breaks into smaller and smaller pieces that stay in water, soil and even our food.</p>
+<div class="grid">
+<div class="card"><span class="pill">Type 1</span><h3>Single-use plastics</h3><p>Used briefly, then thrown away.</p><span class="so">Example: plastic bags</span></div>
+<div class="card"><span class="pill">Type 2</span><h3>Macroplastics</h3><p>Large items that persist and entangle wildlife.</p><span class="so">Example: discarded fishing nets and gear</span></div>
+<div class="card"><span class="pill">Type 3</span><h3>Microplastics</h3><p>Tiny fragments and fibres that spread widely.</p><span class="so">Example: nylon and polyester</span></div>
+</div>
+<h3 style="margin:28px 0 12px">Why it matters</h3>
+<details open><summary>Human health</summary><div class="in">Plastics can release toxic chemicals into the environment. Microplastics can enter the food chain and may pose serious risks to human health.</div></details>
+<details><summary>Marine life</summary><div class="in">Plastic in the ocean threatens animals through:<ul><li>Ingestion, mistaking plastic for food</li><li>Entanglement in nets and debris</li><li>Habitat destruction</li></ul></div></details>
+<details><summary>Economy</summary><div class="in">Costs include cleanup efforts and losses in the tourism and fishing industries.</div></details>
+<details><summary>Policy</summary><div class="in">Many governments are cutting plastic waste by banning single-use plastics and rewarding recycling.</div></details>
+</section>
+
+<section id="report"><div class="k">New · June 2026</div><h2>Latest research: plastic and nature</h2>
+<p class="lead">The World Economic Forum’s June 2026 report, <i>Plastic Pollution and Biodiversity: a Global Overview</i>, draws on field studies in nine places (Colombia, Costa Rica, Ecuador, Indonesia, Nigeria, Peru, the Philippines, Viet Nam and Maharashtra, India).</p>
+<p class="plain"><b>The big idea:</b> plastic is not just a waste problem. It harms wildlife, food, fishing, farming and the climate, so fixing it helps nature and the economy together.</p>
+<div class="grid">
+<div class="card"><div class="num">130M t</div><h3>Plastic waste pollutes land, air and water each year</h3><p>Could more than double to about 280 Mt by 2040, like dumping a garbage truck into nature every second.</p></div>
+<div class="card"><div class="num">10%</div><h3>Of all plastic ever made has been recycled</h3><p>Production grew from 2 Mt in 1950 to 460 Mt in 2019. The rest sits in landfills, dumps or nature.</p></div>
+<div class="card"><div class="num">4,000+</div><h3>Species affected</h3><p>From tiny zooplankton to whales, through entanglement and swallowing plastic.</p></div>
+<div class="card"><div class="num">$0.5–2.5T</div><h3>Yearly loss in ocean benefits</h3><p>One study links 75–150 Mt of ocean plastic to this loss in fishing, tourism and other marine services.</p></div>
+</div>
+<div class="fact">
+<div><b>Climate</b>Plastic emits 2.7 billion tonnes of greenhouse gases a year, heading to 4.2 billion by 2040.</div>
+<div><b>Hidden journey</b>In Colombia, plastic from highland cities travels 1,000 km down a river to harm coral reefs and mangroves.</div>
+<div><b>Mangroves</b>Store four times more carbon per hectare than tropical forests, but plastic smothers their roots.</div>
+<div><b>Unsung heroes</b>Informal waste pickers collect and sort nearly two-thirds of recycled plastic worldwide.</div>
+</div>
+<h3 style="margin:22px 0 10px">How plastic harms nature</h3>
+<details open><summary>1 · Physical harm</summary><div class="in">Animals get tangled in nets and bags, or swallow plastic. This affects over 4,000 species.</div></details>
+<details><summary>2 · Damaged habitats</summary><div class="in">Plastic suffocates mangrove roots, raises disease risk in coral reefs and contaminates sea turtle nesting sites.</div></details>
+<details><summary>3 · Chemical pollution</summary><div class="in">Chemicals can disrupt reproduction in animals and reduce soil fertility and crop yields.</div></details>
+<h3 style="margin:22px 0 10px">Risks and opportunities</h3>
+<div class="grid">
+<div class="card"><span class="pill">Business risk</span><p>Plastic-related liability cases could reach $100B a year by 2030, with mandatory producer-responsibility schemes adding another $100B. Only 12% of companies have biodiversity targets, versus 78% for climate.</p></div>
+<div class="card"><span class="pill">Opportunity</span><p>91% of plastic waste is burned, buried or thrown away, wasting $80–120B of packaging value a year. Better design could lift economically recyclable plastic from 22% to 54%.</p></div>
+<div class="card"><span class="pill">What works</span><p>Cash-for-plastic rewards in the Philippines changed behaviour better than fines. Indigenous communities in Raja Ampat, Indonesia, limit fishing so ecosystems recover.</p></div>
+</div>
+<p class="so" style="margin-top:12px">Source: World Economic Forum, Global Plastic Action Partnership, June 2026. The report notes country studies vary in method, so treat findings as patterns rather than exact universal figures.</p>
+</section>
+
+<section id="thailand"><div class="k">03 · Thailand</div><h2>Thailand’s waste in numbers</h2>
+<p class="lead">Thailand generates over 27 million tonnes of municipal solid waste a year. Plastic pollution is among the highest in Southeast Asia and the national recycling rate is low, so waste management is a priority for sustainable development.</p>
+<p class="plain"><b>In plain words:</b> of every 100 kg of waste in 2024, about 38 kg was disposed of properly, 39 kg was reused or recovered, and 23 kg was not managed well. Use the tabs to compare years.</p>
+<div class="card">
+<div class="tabs"><button id="t1" aria-pressed="true">PCD 2022</button><button id="t2" aria-pressed="false">PCD 2024</button><button id="t3" aria-pressed="false">Our slides</button></div>
+<div id="tp"></div></div>
+<div class="grid" style="margin-top:14px">
+<div class="card"><div class="num">75%</div><h3>Reduction target</h3><p>The National Waste Management Master Plan aims for 75% waste reduction by 2030.</p></div>
+<div class="card"><div class="num">+8%</div><h3>Landfill diversion</h3><p>Improvement since 2018, driven by government-led zero-waste initiatives.</p></div>
+<div class="card"><div class="num">12%</div><h3>Plastic share (2024)</h3><p>Of Thailand’s municipal waste, mostly single-use plastics.</p></div>
+</div>
+<div class="note"><b>What’s new:</b> A draft Sustainable Packaging Management Act went to public comment in February 2025, with enactment targeted for 2027. Challenges named in our slides: rapid urbanization, insufficient recycling infrastructure and limited public awareness.</div>
+</section>
+
+<section id="orgs"><div class="k">04 · Who is acting</div><h2>Organizations and initiatives</h2>
+<p class="lead">Progress needs government, business, NGOs and communities working together.</p>
+<div class="grid">
+<div class="card"><h3>Pollution Control Department (PCD)</h3><p>Under the Ministry of Natural Resources and Environment. Sets standards, monitors pollution and enforces waste regulations nationwide.</p></div>
+<div class="card"><h3>TIPMSE</h3><p>Non-profit promoting sustainable packaging and recycling. Builds recycling infrastructure with the private sector and teaches proper sorting.</p></div>
+<div class="card"><h3>Thailand Environment Institute</h3><p>Drives policy reform and innovation, and supports community programs such as Trash Banks.</p></div>
+<div class="card"><h3>PTTGC, TAT, Ecoalf</h3><p>Upcycle ocean waste into products.</p></div>
+</div>
+<h3 style="margin:28px 0 12px">The Ocean Cleanup (founder: Boyan Slat)</h3>
+<div class="grid">
+<div class="card"><div class="num">90%</div><p>Goal: remove 90% of floating ocean plastic by 2040 and stop plastic reaching the sea via rivers.</p></div>
+<div class="card"><div class="num">50M kg</div><p>Trash removed by March 2026.</p></div>
+<div class="card"><div class="num">20</div><p>Interceptors operating in 9 countries.</p></div>
+<div class="card"><div class="num">5 sec</div><p>System 03 can clean an area the size of a football field.</p></div>
+</div>
+<p class="so" style="margin-top:10px">Also: over 345,000 kg removed from the Great Pacific Garbage Patch by 2024.</p>
+</section>
+
+<section id="solutions"><div class="k">05 · Solutions</div><h2>What works</h2>
+<p class="lead">Thailand’s 4Rs framework, plus producer rules, community banks and new technology.</p>
+<p class="plain"><b>In plain words:</b> the simplest rule is use less, reuse more, then sort what is left so it can be recycled.</p>
+<div class="grid">
+<div class="card"><span class="pill">Reduce</span><p>PCD promotes cutting household waste at the source.</p></div>
+<div class="card"><span class="pill">Reuse</span><p>Extend product lifecycles by reusing materials.</p></div>
+<div class="card"><span class="pill">Recycle</span><p>The Green Leaf program supports community recycling networks.</p></div>
+<div class="card"><span class="pill">Recover</span><p>Waste-to-energy plants recover value from non-recyclables.</p></div>
+</div>
+<div style="margin-top:14px">
+<details><summary>Extended Producer Responsibility (EPR)</summary><div class="in">Manufacturers and importers must manage products at end of life. PCD has piloted EPR for packaging, electronics and batteries, pushing companies to fund collection and recycling.</div></details>
+<details><summary>Trash Banks (ธนาคารขยะ)</summary><div class="in">Villages collect and sell recyclables. Supported by the Ministry of Interior and NGOs, they cut landfill waste and give communities income.</div></details>
+<details><summary>Innovation</summary><div class="in">Biodegradable plastics, plastic-eating bacteria and circular-economy models. Waste-to-energy and recycling are also key.</div></details>
+</div>
+<h3 style="margin:26px 0 12px">Stopping trash before it reaches the ocean</h3>
+<div class="steps"><div>Use refillable bottles</div><div>Use secure bins</div><div>Clean up local spots</div><div>Support plastic-free choices</div></div>
+</section>
+
+<section id="method"><div class="k">06 · Methodology</div><h2>Ocean plastic counter</h2>
+<p class="lead">A live illustration of plastic entering the ocean, calculated from published estimates.</p>
+<div class="card"><h3>Since you opened this page</h3>
+<div class="ctr"><div><b id="ck">0</b><span>kilograms</span></div><div><b id="cb">0</b><span>bottle equivalents</span></div><div><b id="ct">0.00</b><span>garbage trucks (7 t)</span></div><div><b id="ce">0.00</b><span>elephants (6 t)</span></div></div>
+<div class="calc">11,000,000 t × 1,000 kg      = 11,000,000,000 kg/year
+11,000,000,000 ÷ 31,557,600 s = 348.57 kg/s
+348.57 kg × 50 bottles/kg     = ~17,428 bottles/s</div>
+<p class="so">Mid-range estimate: 11 million tonnes per year. Range across studies: about 8 to 14 million.</p></div>
+<h3 style="margin:24px 0 12px">Sources and conversions</h3>
+<div class="card tw"><table>
+<tr><th>Item</th><th>Detail</th></tr>
+<tr><td>Jambeck et al. (2015)</td><td><i>Science</i> 347(6223): 4.8–12.7 Mt entered the ocean in 2010. <a href="https://www.science.org/doi/10.1126/science.1260352">Study</a></td></tr>
+<tr><td>Borrelle et al. (2020)</td><td><i>Science</i> 369(6510). <a href="https://www.science.org/doi/10.1126/science.aba3656">Study</a></td></tr>
+<tr><td>OECD (2022)</td><td>Global Plastics Outlook: production of 460 Mt. <a href="https://www.oecd.org/environment/global-plastics-outlook-de747aef-en.htm">Report</a></td></tr>
+<tr><td>UNEP</td><td>Equivalent of 2,000 garbage trucks of plastic dumped daily. <a href="https://www.unep.org/plastic-pollution">Overview</a></td></tr>
+<tr><td>1 kg ≈ 50 bottles</td><td>Plastic Bank (2023), rounded down from 56.39. <a href="https://plasticbank.com/blog/understanding-plastic-banks-equivalent-bottle-impact-metric/">Method</a></td></tr>
+<tr><td>Blue whale ≈ 100 t</td><td>Midpoint of 72–135 t. <a href="https://www.nhm.ac.uk/bluewhale/ocean/record-breaker/">NHM</a></td></tr>
+<tr><td>Elephant ≈ 6 t; truck ≈ 7 t</td><td>Average adult male savanna elephant; conservative mixed-waste estimate. <a href="https://ielc.libguides.com/sdzg/factsheets/african_elephant">SDZWA</a></td></tr>
+</table></div></section>
+
+<section id="notes"><div class="k">07 · Data notes</div><h2>Check before you cite</h2>
+<p class="lead">Some figures in the source slides conflict with each other or with newer data.</p>
+<details open><summary>Ocean plastic “19-23 metric tons”</summary><div class="in">Slide 5 omits “million”. It is also far above the 11 Mt used in the counter. Studies measure different things, so use one source consistently.</div></details>
+<details><summary>Why 11M, 19–23M and 130M tonnes all appear</summary><div class="in">They measure different things. 11M is the ocean-entry estimate in the counter. 130M (WEF 2026) is all plastic waste that pollutes land, air and water. Compare like with like.</div></details>
+<details><summary>Recycling rate: below 20% or 43%?</summary><div class="in">English slides say under 20% (19%). A Thai slide says 43%. Definitions of “recycled” differ between sources.</div></details>
+<details><summary>Annual waste and disposal</summary><div class="in">Slides say 27 and 27.8 million tonnes and 32% properly disposed. PCD reports 25.7 Mt (2022) and 27.2 Mt (2024), with 38% properly disposed in both years.</div></details>
+<details><summary>Unsourced Thai-slide statistics</summary><div class="in">The slides list 61% compostable organic waste and 78% landfill diversion with no source.</div></details>
+</section>
+</main>
+<footer><div class="wrap">Built from “Reduce Plastic: For a Better and Improved Place” by The Ethical Earth Alliance. Updated Thai figures from PCD-based public reports.</div></footer>
+
+<script>
+const T={t1:{h:"2022 · 25.7 million tonnes",s:[["Utilized",35,"var(--b)"],["Properly disposed",38,"var(--g)"],["Improperly managed",27,"var(--r)"]]},
+t2:{h:"2024 · 27.2 million tonnes (74,500 t/day)",s:[["Utilized",39,"var(--b)"],["Properly disposed",38,"var(--g)"],["Improperly managed",23,"var(--r)"]]},
+t3:{h:"Our slides · ~27.8 million tonnes",s:[["Properly disposed",32,"var(--g)"],["Recycling rate",19,"var(--b)"]]}};
+function tab(k){const d=T[k],p=document.getElementById("tp"),full=k!=="t3";
+p.innerHTML=`<h3>${d.h}</h3><div class="row"><div class="stack">${d.s.map(x=>`<div style="width:${full?x[1]:x[1]}%;background:${x[2]}">${x[1]}%</div>`).join("")}</div><div class="leg">${d.s.map(x=>`<span><i style="background:${x[2]}"></i>${x[0]}</span>`).join("")}</div></div>`+(full?`<p class="so">Share of municipal solid waste by management route. Source: Pollution Control Department.</p>`:`<p class="so">Not shown as parts of one whole: the two slide figures measure different things.</p>`);
+["t1","t2","t3"].forEach(i=>document.getElementById(i).setAttribute("aria-pressed",i===k))}
+["t1","t2","t3"].forEach(i=>document.getElementById(i).onclick=()=>tab(i));tab("t1");
+const R=11e9/31557600,t0=Date.now(),f=(n,d)=>n.toLocaleString("en-US",{maximumFractionDigits:d,minimumFractionDigits:d});
+setInterval(()=>{const k=R*(Date.now()-t0)/1000;ck.textContent=f(k,0);cb.textContent=f(k*50,0);ct.textContent=f(k/7000,2);ce.textContent=f(k/6000,2)},100);
+const L=[...document.querySelectorAll("nav a")];
+new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)L.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-40% 0px -55% 0px"}).observe&&document.querySelectorAll("section").forEach(s=>new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)L.forEach(a=>a.classList.toggle("on",a.getAttribute("href")==="#"+s.id))}),{rootMargin:"-40% 0px -55% 0px"}).observe(s));
+</script>
+</body>
+</html>
