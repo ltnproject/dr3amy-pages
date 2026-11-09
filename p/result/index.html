@@ -12,6 +12,7 @@
       --glass-border: rgba(255,255,255,0.14);
       --accent: #e040fb;
       --accent2: #00e5ff;
+      --danger: #ff5252;
       --text: #fff;
       --text-sub: rgba(255,255,255,0.55);
       --radius: 18px;
@@ -20,154 +21,192 @@
       min-height: 100vh;
       font-family: 'Inter', sans-serif;
       background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-      color: var(--text);
-      overflow-x: hidden;
+      color: var(--text); overflow-x: hidden;
     }
     body::before, body::after {
       content: ''; position: fixed; border-radius: 50%;
       filter: blur(90px); opacity: 0.2; pointer-events: none; z-index: 0;
     }
-    body::before { width: 650px; height: 650px; background: radial-gradient(circle, #e040fb, transparent 70%); top: -180px; left: -180px; }
-    body::after  { width: 500px; height: 500px; background: radial-gradient(circle, #00e5ff, transparent 70%); bottom: -120px; right: -120px; }
+    body::before { width: 650px; height: 650px; background: radial-gradient(circle,#e040fb,transparent 70%); top:-180px; left:-180px; }
+    body::after  { width: 500px; height: 500px; background: radial-gradient(circle,#00e5ff,transparent 70%); bottom:-120px; right:-120px; }
 
+    /* ── Header ── */
     header {
       position: relative; z-index: 10;
-      display: flex; align-items: center; gap: 16px;
-      padding: 22px 32px;
+      display: flex; align-items: center; gap: 14px;
+      padding: 20px 28px;
       background: rgba(255,255,255,0.08);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--glass-border);
     }
-    header img { height: 44px; object-fit: contain; }
-    header .brand .name { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.03em; }
-    header .brand .sub  { font-size: 0.72rem; color: var(--text-sub); letter-spacing: 0.1em; margin-top: 2px; }
-
-    /* Refresh btn top right */
-    header .refresh-btn {
-      margin-left: auto;
-      padding: 8px 18px; border-radius: 10px;
+    header img { height: 42px; object-fit: contain; }
+    header .brand .name { font-size: 1.15rem; font-weight: 800; letter-spacing: 0.03em; }
+    header .brand .sub  { font-size: 0.7rem; color: var(--text-sub); letter-spacing: 0.1em; margin-top: 2px; }
+    header .hdr-actions { margin-left: auto; display: flex; gap: 8px; }
+    .hdr-btn {
+      padding: 8px 16px; border-radius: 10px;
       border: 1.5px solid var(--glass-border);
       background: rgba(255,255,255,0.08); color: #fff;
-      font-family: inherit; font-size: 0.82rem; font-weight: 600;
-      cursor: pointer; transition: background .15s;
+      font-family: inherit; font-size: 0.8rem; font-weight: 600;
+      cursor: pointer; transition: background .15s; white-space: nowrap;
     }
-    header .refresh-btn:hover { background: rgba(255,255,255,0.16); }
+    .hdr-btn:hover { background: rgba(255,255,255,0.16); }
+    .hdr-btn.danger { border-color: rgba(255,82,82,0.4); color: var(--danger); }
+    .hdr-btn.danger:hover { background: rgba(255,82,82,0.12); }
 
-    main {
-      position: relative; z-index: 5;
-      max-width: 740px; margin: 0 auto;
-      padding: 44px 20px 80px;
-    }
+    /* ── Main ── */
+    main { position: relative; z-index: 5; max-width: 760px; margin: 0 auto; padding: 40px 20px 80px; }
 
-    /* Title */
-    .title-card {
-      text-align: center; margin-bottom: 36px;
-    }
-    .eyebrow {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
-      color: var(--accent2); text-transform: uppercase; display: block; margin-bottom: 10px;
-    }
+    .title-card { text-align: center; margin-bottom: 32px; }
+    .eyebrow { font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em; color: var(--accent2); text-transform: uppercase; display: block; margin-bottom: 10px; }
     .title-card h1 {
-      font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; line-height: 1.1;
-      background: linear-gradient(90deg, #fff 0%, var(--accent2) 60%, var(--accent) 100%);
+      font-size: clamp(1.7rem,5vw,2.6rem); font-weight: 900; line-height: 1.1;
+      background: linear-gradient(90deg,#fff 0%,var(--accent2) 60%,var(--accent) 100%);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 8px;
+      margin-bottom: 6px;
     }
-    .title-card p { font-size: 0.88rem; color: var(--text-sub); }
+    .title-card p { font-size: 0.86rem; color: var(--text-sub); }
 
-    /* Stats row */
-    .stats-row {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
-    }
+    /* ── Stats ── */
+    .stats-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 28px; }
     .stat-card {
       background: var(--glass-bg);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 20px 16px; text-align: center;
+      border: 1px solid var(--glass-border); border-radius: var(--radius);
+      padding: 18px 14px; text-align: center;
     }
-    .stat-card .s-num { font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; }
-    .stat-card .s-label { font-size: 0.72rem; color: var(--text-sub); margin-top: 5px; font-weight: 500; letter-spacing: 0.06em; }
+    .stat-card .s-num { font-size: 1.9rem; font-weight: 900; color: var(--accent); line-height: 1; }
+    .stat-card .s-label { font-size: 0.7rem; color: var(--text-sub); margin-top: 5px; font-weight: 500; }
 
-    /* Podium */
-    .podium {
-      display: flex; align-items: flex-end; justify-content: center; gap: 10px;
-      margin-bottom: 36px; padding: 0 10px;
-    }
-    .podium-item {
-      flex: 1; max-width: 180px; text-align: center;
-      display: flex; flex-direction: column; align-items: center;
-    }
-    .pod-emoji { font-size: 2.4rem; margin-bottom: 6px; }
-    .pod-name  { font-size: 0.75rem; font-weight: 700; line-height: 1.3; margin-bottom: 6px; color: rgba(255,255,255,0.9); }
-    .pod-votes { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
-    .pod-block {
-      width: 100%; border-radius: 12px 12px 0 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; font-weight: 900;
-    }
-    .pod-block.gold   { background: linear-gradient(180deg,#ffd700,#b8860b); min-height: 110px; color: #3d2b00; }
-    .pod-block.silver { background: linear-gradient(180deg,#c0c0c0,#808080); min-height: 80px;  color: #2a2a2a; }
-    .pod-block.bronze { background: linear-gradient(180deg,#cd7f32,#8b4513); min-height: 60px;  color: #2a1000; }
-    .pod-votes.gold   { color: #ffd700; }
-    .pod-votes.silver { color: #c0c0c0; }
-    .pod-votes.bronze { color: #cd7f32; }
+    /* ── Podium ── */
+    .podium { display: flex; align-items: flex-end; justify-content: center; gap: 10px; margin-bottom: 32px; padding: 0 10px; }
+    .podium-item { flex: 1; max-width: 180px; text-align: center; display: flex; flex-direction: column; align-items: center; }
+    .pod-emoji { font-size: 2.2rem; margin-bottom: 5px; }
+    .pod-name  { font-size: 0.72rem; font-weight: 700; line-height: 1.3; margin-bottom: 5px; }
+    .pod-votes { font-size: 1rem; font-weight: 800; margin-bottom: 7px; }
+    .pod-block { width: 100%; border-radius: 12px 12px 0 0; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 900; }
+    .pod-block.gold   { background: linear-gradient(180deg,#ffd700,#b8860b); min-height: 110px; color:#3d2b00; }
+    .pod-block.silver { background: linear-gradient(180deg,#c0c0c0,#808080); min-height: 80px;  color:#2a2a2a; }
+    .pod-block.bronze { background: linear-gradient(180deg,#cd7f32,#8b4513); min-height: 60px;  color:#2a1000; }
+    .pod-votes.gold   { color:#ffd700; }
+    .pod-votes.silver { color:#c0c0c0; }
+    .pod-votes.bronze { color:#cd7f32; }
 
-    /* Full list */
+    /* ── Tabs ── */
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; }
+    .tab-btn {
+      padding: 9px 20px; border-radius: 10px;
+      border: 1.5px solid var(--glass-border);
+      background: rgba(255,255,255,0.06); color: var(--text-sub);
+      font-family: inherit; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: all .15s;
+    }
+    .tab-btn.active { border-color: var(--accent); background: rgba(224,64,251,0.15); color: #fff; }
+
+    /* ── List card ── */
     .list-card {
       background: var(--glass-bg);
       backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 24px 20px;
+      border: 1px solid var(--glass-border); border-radius: var(--radius);
+      padding: 22px 18px;
     }
-    .list-label {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--accent);
-      margin-bottom: 16px; display: block;
-    }
+    .list-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; display: block; }
 
-    .result-row {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 10px;
-    }
-    .r-rank {
-      width: 26px; text-align: right;
-      font-size: 0.75rem; font-weight: 700; color: var(--text-sub); flex-shrink: 0;
-    }
-    .r-emoji { font-size: 1.2rem; flex-shrink: 0; }
-    .r-name  { font-size: 0.88rem; font-weight: 600; flex: 1; min-width: 0; }
+    /* Theme result row */
+    .result-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .r-rank  { width: 24px; text-align: right; font-size: 0.72rem; font-weight: 700; color: var(--text-sub); flex-shrink: 0; }
+    .r-emoji { font-size: 1.15rem; flex-shrink: 0; }
+    .r-name  { font-size: 0.85rem; font-weight: 600; flex: 1; min-width: 0; }
     .r-bar-wrap { flex: 2; min-width: 0; }
-    .r-bar {
-      height: 8px; border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width .6s ease;
-      min-width: 4px;
+    .r-bar   { height: 7px; border-radius: 999px; background: linear-gradient(90deg,var(--accent),var(--accent2)); min-width: 3px; transition: width .5s ease; }
+    .r-count { width: 32px; text-align: right; font-size: 0.85rem; font-weight: 800; color: var(--accent); flex-shrink: 0; }
+
+    /* Class submission row */
+    .class-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px 14px; border-radius: 13px;
+      border: 1.5px solid var(--glass-border);
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 9px;
     }
-    .r-count {
-      width: 36px; text-align: right;
-      font-size: 0.88rem; font-weight: 800; color: var(--accent); flex-shrink: 0;
+    .cls-label { font-size: 0.95rem; font-weight: 700; flex: 1; }
+    .cls-total { font-size: 0.82rem; color: var(--text-sub); }
+    .cls-actions { display: flex; gap: 6px; margin-left: auto; }
+    .icon-btn {
+      width: 32px; height: 32px; border-radius: 8px;
+      border: 1px solid var(--glass-border);
+      background: rgba(255,255,255,0.08); color: #fff;
+      font-size: 0.9rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .14s;
     }
+    .icon-btn:hover { background: rgba(255,255,255,0.18); }
+    .icon-btn.del:hover { background: rgba(255,82,82,0.2); border-color: rgba(255,82,82,0.4); }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(0,0,0,0.65); backdrop-filter: blur(4px);
+      align-items: center; justify-content: center; padding: 20px;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #1e1540; border: 1px solid var(--glass-border);
+      border-radius: 20px; padding: 28px 24px; width: 100%; max-width: 540px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal h2 { font-size: 1.1rem; font-weight: 800; margin-bottom: 4px; }
+    .modal .m-sub { font-size: 0.8rem; color: var(--text-sub); margin-bottom: 20px; }
+
+    /* Edit rows inside modal */
+    .edit-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 12px; border-radius: 11px;
+      border: 1.5px solid rgba(255,255,255,0.1);
+      background: rgba(255,255,255,0.05);
+      margin-bottom: 8px;
+    }
+    .edit-row .e-emoji { font-size: 1.1rem; flex-shrink: 0; }
+    .edit-row .e-name  { font-size: 0.82rem; font-weight: 600; flex: 1; }
+    .edit-input {
+      width: 60px; height: 32px; text-align: center;
+      background: rgba(255,255,255,0.08); border: 1px solid var(--glass-border);
+      border-radius: 8px; color: #fff; font-family: inherit;
+      font-size: 0.95rem; font-weight: 700; outline: none;
+      -moz-appearance: textfield;
+    }
+    .edit-input::-webkit-outer-spin-button,
+    .edit-input::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .edit-input:focus { border-color: var(--accent); }
+
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+    .modal-btn {
+      flex: 1; padding: 13px; border-radius: 12px; border: none;
+      font-family: inherit; font-size: 0.88rem; font-weight: 700; cursor: pointer;
+      transition: opacity .15s;
+    }
+    .modal-btn:hover { opacity: 0.85; }
+    .modal-btn.primary { background: linear-gradient(135deg,var(--accent),#7b1fa2); color: #fff; }
+    .modal-btn.ghost   { background: rgba(255,255,255,0.09); color: #fff; border: 1.5px solid var(--glass-border); }
+    .modal-btn.danger  { background: rgba(255,82,82,0.15); color: var(--danger); border: 1.5px solid rgba(255,82,82,0.35); }
+
+    /* Confirm modal */
+    .confirm-modal { max-width: 380px; text-align: center; }
+    .confirm-modal .c-emoji { font-size: 2.5rem; margin-bottom: 12px; }
+    .confirm-modal p { font-size: 0.9rem; color: var(--text-sub); margin-bottom: 22px; }
 
     /* Loading / empty */
-    .center-msg {
-      text-align: center; padding: 60px 20px; color: var(--text-sub); font-size: 0.95rem;
-    }
-    .spinner {
-      width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.1);
-      border-top-color: var(--accent); border-radius: 50%;
-      animation: spin .7s linear infinite; margin: 0 auto 16px;
-    }
+    .center-msg { text-align: center; padding: 50px 20px; color: var(--text-sub); font-size: 0.9rem; }
+    .spinner { width: 32px; height: 32px; border: 3px solid rgba(255,255,255,0.1); border-top-color: var(--accent); border-radius: 50%; animation: spin .7s linear infinite; margin: 0 auto 14px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
     @media (max-width: 480px) {
-      header { padding: 14px 16px; }
-      main { padding: 24px 12px 60px; }
-      .stats-row { grid-template-columns: repeat(3,1fr); gap: 8px; }
-      .stat-card { padding: 14px 10px; }
+      header { padding: 12px 14px; }
+      main { padding: 22px 12px 60px; }
+      .stats-row { gap: 8px; }
+      .stat-card { padding: 12px 8px; }
       .stat-card .s-num { font-size: 1.5rem; }
       .podium { gap: 6px; }
-      .pod-emoji { font-size: 1.8rem; }
     }
   </style>
 </head>
@@ -177,9 +216,12 @@
   <img src="https://drk.qzz.io/newera/logo.png" alt="New Era Logo" onerror="this.style.display='none'" />
   <div class="brand">
     <span class="name">NEW ERA</span>
-    <span class="sub">INTERNATIONAL COURSE · VOTE RESULTS</span>
+    <span class="sub">INTERNATIONAL COURSE · RESULTS</span>
   </div>
-  <button class="refresh-btn" id="refreshBtn">↻ Refresh</button>
+  <div class="hdr-actions">
+    <button class="hdr-btn" id="refreshBtn">↻ Refresh</button>
+    <button class="hdr-btn danger" id="deleteAllBtn">🗑 Delete All</button>
+  </div>
 </header>
 
 <main>
@@ -192,16 +234,60 @@
   <div class="stats-row">
     <div class="stat-card"><div class="s-num" id="statClasses">—</div><div class="s-label">Classes submitted</div></div>
     <div class="stat-card"><div class="s-num" id="statVotes">—</div><div class="s-label">Total votes</div></div>
-    <div class="stat-card"><div class="s-num" id="statLeader" style="font-size:1.3rem">—</div><div class="s-label">Leading theme</div></div>
+    <div class="stat-card"><div class="s-num" id="statLeader" style="font-size:1.1rem;line-height:1.2">—</div><div class="s-label">Leading theme</div></div>
   </div>
 
   <div id="podiumWrap" class="podium" style="display:none"></div>
 
+  <div class="tabs">
+    <button class="tab-btn active" data-tab="themes">📊 By Theme</button>
+    <button class="tab-btn" data-tab="classes">🏫 By Class</button>
+  </div>
+
   <div class="list-card">
-    <span class="list-label">All themes ranked</span>
+    <span class="list-label" id="listLabel">All themes ranked</span>
     <div id="resultList"><div class="center-msg"><div class="spinner"></div>Loading…</div></div>
   </div>
 </main>
+
+<!-- Edit Modal -->
+<div class="modal-overlay" id="editOverlay">
+  <div class="modal">
+    <h2>✏️ Edit Class Entry</h2>
+    <div class="m-sub" id="editSubtitle"></div>
+    <div id="editRows"></div>
+    <div class="modal-actions">
+      <button class="modal-btn ghost" id="editCancelBtn">Cancel</button>
+      <button class="modal-btn primary" id="editSaveBtn">Save changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete (single) -->
+<div class="modal-overlay" id="deleteOverlay">
+  <div class="modal confirm-modal">
+    <div class="c-emoji">🗑️</div>
+    <h2>Delete entry?</h2>
+    <p id="deleteMsg">This will permanently remove this class entry.</p>
+    <div class="modal-actions">
+      <button class="modal-btn ghost" id="deleteCancelBtn">Cancel</button>
+      <button class="modal-btn danger" id="deleteConfirmBtn">Delete</button>
+    </div>
+  </div>
+</div>
+
+<!-- Confirm Delete All -->
+<div class="modal-overlay" id="deleteAllOverlay">
+  <div class="modal confirm-modal">
+    <div class="c-emoji">⚠️</div>
+    <h2>Delete ALL results?</h2>
+    <p>This will permanently erase every class submission. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="modal-btn ghost" id="deleteAllCancelBtn">Cancel</button>
+      <button class="modal-btn danger" id="deleteAllConfirmBtn">Delete everything</button>
+    </div>
+  </div>
+</div>
 
 <script>
   const SUPABASE_URL = 'https://wtvtttmxkziresbjhhpy.supabase.co';
@@ -238,407 +324,231 @@
     { emoji: '📖',  name: 'Manga & Manhwa (One Piece)' },
   ];
 
+  // ── State ────────────────────────────────────────────────────────────────
+  let allRows = [];
+  let activeTab = 'themes';
+  let pendingDeleteKey = null;
+  let editKey = null;
+  let editInputs = [];
+
+  const headers = { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` };
+
+  // ── Fetch ────────────────────────────────────────────────────────────────
   async function load() {
     document.getElementById('resultList').innerHTML =
       '<div class="center-msg"><div class="spinner"></div>Loading…</div>';
     document.getElementById('podiumWrap').style.display = 'none';
-
     try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/teacher_counts?select=counts,total`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
-      const rows = await res.json();
-
-      if (!Array.isArray(rows) || rows.length === 0) {
-        document.getElementById('resultList').innerHTML =
-          '<div class="center-msg">No data yet. Submit some classes first.</div>';
-        return;
-      }
-
-      // Aggregate
-      const totals = THEMES.map(() => 0);
-      let grandTotal = 0;
-      rows.forEach(r => {
-        const c = r.counts || [];
-        THEMES.forEach((_, i) => { totals[i] += (c[i] || 0); });
-        grandTotal += (r.total || 0);
-      });
-
-      // Sort
-      const ranked = THEMES.map((t, i) => ({ ...t, votes: totals[i], idx: i }))
-        .sort((a, b) => b.votes - a.votes);
-
-      const max = ranked[0].votes || 1;
-
-      // Stats
-      document.getElementById('statClasses').textContent = rows.length;
-      document.getElementById('statVotes').textContent   = grandTotal;
-      document.getElementById('statLeader').textContent  = ranked[0].emoji + ' ' + ranked[0].name.split(' ')[0];
-
-      // Podium (top 3)
-      const podium = document.getElementById('podiumWrap');
-      podium.innerHTML = '';
-      const order  = [ranked[1], ranked[0], ranked[2]]; // 2nd, 1st, 3rd
-      const styles = ['silver', 'gold', 'bronze'];
-      const medals = ['🥈', '🥇', '🥉'];
-      order.forEach((t, pi) => {
-        if (!t) return;
-        const item = document.createElement('div');
-        item.className = 'podium-item';
-        item.innerHTML = `
-          <div class="pod-emoji">${t.emoji}</div>
-          <div class="pod-name">${t.name}</div>
-          <div class="pod-votes ${styles[pi]}">${t.votes}</div>
-          <div class="pod-block ${styles[pi]}">${medals[pi]}</div>`;
-        podium.appendChild(item);
-      });
-      podium.style.display = 'flex';
-
-      // Full list
-      const list = document.getElementById('resultList');
-      list.innerHTML = '';
-      ranked.forEach((t, ri) => {
-        const pct = max > 0 ? (t.votes / max) * 100 : 0;
-        const row = document.createElement('div');
-        row.className = 'result-row';
-        row.innerHTML = `
-          <span class="r-rank">${ri + 1}</span>
-          <span class="r-emoji">${t.emoji}</span>
-          <span class="r-name">${t.name}</span>
-          <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
-          <span class="r-count">${t.votes}</span>`;
-        list.appendChild(row);
-      });
-
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/teacher_counts?select=*&order=submitted_at.desc`, { headers });
+      allRows = await res.json();
+      if (!Array.isArray(allRows)) allRows = [];
+      render();
     } catch (e) {
-      console.error(e);
       document.getElementById('resultList').innerHTML =
         `<div class="center-msg">Failed to load — ${e.message}</div>`;
     }
   }
 
-  document.getElementById('refreshBtn').addEventListener('click', load);
-  load();
-</script>
-</body>
-</html> <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>New Era – Course Vote Results</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
-  <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    :root {
-      --glass-bg: rgba(255,255,255,0.08);
-      --glass-border: rgba(255,255,255,0.14);
-      --accent: #e040fb;
-      --accent2: #00e5ff;
-      --text: #fff;
-      --text-sub: rgba(255,255,255,0.55);
-      --radius: 18px;
-    }
-    body {
-      min-height: 100vh;
-      font-family: 'Inter', sans-serif;
-      background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-    body::before, body::after {
-      content: ''; position: fixed; border-radius: 50%;
-      filter: blur(90px); opacity: 0.2; pointer-events: none; z-index: 0;
-    }
-    body::before { width: 650px; height: 650px; background: radial-gradient(circle, #e040fb, transparent 70%); top: -180px; left: -180px; }
-    body::after  { width: 500px; height: 500px; background: radial-gradient(circle, #00e5ff, transparent 70%); bottom: -120px; right: -120px; }
-
-    header {
-      position: relative; z-index: 10;
-      display: flex; align-items: center; gap: 16px;
-      padding: 22px 32px;
-      background: rgba(255,255,255,0.08);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border-bottom: 1px solid var(--glass-border);
-    }
-    header img { height: 44px; object-fit: contain; }
-    header .brand .name { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.03em; }
-    header .brand .sub  { font-size: 0.72rem; color: var(--text-sub); letter-spacing: 0.1em; margin-top: 2px; }
-
-    /* Refresh btn top right */
-    header .refresh-btn {
-      margin-left: auto;
-      padding: 8px 18px; border-radius: 10px;
-      border: 1.5px solid var(--glass-border);
-      background: rgba(255,255,255,0.08); color: #fff;
-      font-family: inherit; font-size: 0.82rem; font-weight: 600;
-      cursor: pointer; transition: background .15s;
-    }
-    header .refresh-btn:hover { background: rgba(255,255,255,0.16); }
-
-    main {
-      position: relative; z-index: 5;
-      max-width: 740px; margin: 0 auto;
-      padding: 44px 20px 80px;
-    }
-
-    /* Title */
-    .title-card {
-      text-align: center; margin-bottom: 36px;
-    }
-    .eyebrow {
-      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
-      color: var(--accent2); text-transform: uppercase; display: block; margin-bottom: 10px;
-    }
-    .title-card h1 {
-      font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; line-height: 1.1;
-      background: linear-gradient(90deg, #fff 0%, var(--accent2) 60%, var(--accent) 100%);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
-      margin-bottom: 8px;
-    }
-    .title-card p { font-size: 0.88rem; color: var(--text-sub); }
-
-    /* Stats row */
-    .stats-row {
-      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
-    }
-    .stat-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 20px 16px; text-align: center;
-    }
-    .stat-card .s-num { font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; }
-    .stat-card .s-label { font-size: 0.72rem; color: var(--text-sub); margin-top: 5px; font-weight: 500; letter-spacing: 0.06em; }
-
-    /* Podium */
-    .podium {
-      display: flex; align-items: flex-end; justify-content: center; gap: 10px;
-      margin-bottom: 36px; padding: 0 10px;
-    }
-    .podium-item {
-      flex: 1; max-width: 180px; text-align: center;
-      display: flex; flex-direction: column; align-items: center;
-    }
-    .pod-emoji { font-size: 2.4rem; margin-bottom: 6px; }
-    .pod-name  { font-size: 0.75rem; font-weight: 700; line-height: 1.3; margin-bottom: 6px; color: rgba(255,255,255,0.9); }
-    .pod-votes { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
-    .pod-block {
-      width: 100%; border-radius: 12px 12px 0 0;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; font-weight: 900;
-    }
-    .pod-block.gold   { background: linear-gradient(180deg,#ffd700,#b8860b); min-height: 110px; color: #3d2b00; }
-    .pod-block.silver { background: linear-gradient(180deg,#c0c0c0,#808080); min-height: 80px;  color: #2a2a2a; }
-    .pod-block.bronze { background: linear-gradient(180deg,#cd7f32,#8b4513); min-height: 60px;  color: #2a1000; }
-    .pod-votes.gold   { color: #ffd700; }
-    .pod-votes.silver { color: #c0c0c0; }
-    .pod-votes.bronze { color: #cd7f32; }
-
-    /* Full list */
-    .list-card {
-      background: var(--glass-bg);
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius);
-      padding: 24px 20px;
-    }
-    .list-label {
-      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--accent);
-      margin-bottom: 16px; display: block;
-    }
-
-    .result-row {
-      display: flex; align-items: center; gap: 12px;
-      margin-bottom: 10px;
-    }
-    .r-rank {
-      width: 26px; text-align: right;
-      font-size: 0.75rem; font-weight: 700; color: var(--text-sub); flex-shrink: 0;
-    }
-    .r-emoji { font-size: 1.2rem; flex-shrink: 0; }
-    .r-name  { font-size: 0.88rem; font-weight: 600; flex: 1; min-width: 0; }
-    .r-bar-wrap { flex: 2; min-width: 0; }
-    .r-bar {
-      height: 8px; border-radius: 999px;
-      background: linear-gradient(90deg, var(--accent), var(--accent2));
-      transition: width .6s ease;
-      min-width: 4px;
-    }
-    .r-count {
-      width: 36px; text-align: right;
-      font-size: 0.88rem; font-weight: 800; color: var(--accent); flex-shrink: 0;
-    }
-
-    /* Loading / empty */
-    .center-msg {
-      text-align: center; padding: 60px 20px; color: var(--text-sub); font-size: 0.95rem;
-    }
-    .spinner {
-      width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.1);
-      border-top-color: var(--accent); border-radius: 50%;
-      animation: spin .7s linear infinite; margin: 0 auto 16px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    @media (max-width: 480px) {
-      header { padding: 14px 16px; }
-      main { padding: 24px 12px 60px; }
-      .stats-row { grid-template-columns: repeat(3,1fr); gap: 8px; }
-      .stat-card { padding: 14px 10px; }
-      .stat-card .s-num { font-size: 1.5rem; }
-      .podium { gap: 6px; }
-      .pod-emoji { font-size: 1.8rem; }
-    }
-  </style>
-</head>
-<body>
-
-<header>
-  <img src="https://drk.qzz.io/newera/logo.png" alt="New Era Logo" onerror="this.style.display='none'" />
-  <div class="brand">
-    <span class="name">NEW ERA</span>
-    <span class="sub">INTERNATIONAL COURSE · VOTE RESULTS</span>
-  </div>
-  <button class="refresh-btn" id="refreshBtn">↻ Refresh</button>
-</header>
-
-<main>
-  <div class="title-card">
-    <span class="eyebrow">Live Results</span>
-    <h1>Course Vote Results</h1>
-    <p>Totals across all submitted classes</p>
-  </div>
-
-  <div class="stats-row">
-    <div class="stat-card"><div class="s-num" id="statClasses">—</div><div class="s-label">Classes submitted</div></div>
-    <div class="stat-card"><div class="s-num" id="statVotes">—</div><div class="s-label">Total votes</div></div>
-    <div class="stat-card"><div class="s-num" id="statLeader" style="font-size:1.3rem">—</div><div class="s-label">Leading theme</div></div>
-  </div>
-
-  <div id="podiumWrap" class="podium" style="display:none"></div>
-
-  <div class="list-card">
-    <span class="list-label">All themes ranked</span>
-    <div id="resultList"><div class="center-msg"><div class="spinner"></div>Loading…</div></div>
-  </div>
-</main>
-
-<script>
-  const SUPABASE_URL = 'https://wtvtttmxkziresbjhhpy.supabase.co';
-  const SUPABASE_KEY = 'sb_publishable_K9isQRR9r8WzBm-o-mhsGA_B3zCF9O3';
-
-  const THEMES = [
-    { emoji: '🏎️',  name: 'Racing Cars' },
-    { emoji: '🎤',  name: 'K-pop' },
-    { emoji: '🔥',  name: 'Free Fire' },
-    { emoji: '🦕',  name: 'Dinosaurs' },
-    { emoji: '🚗',  name: 'Cars' },
-    { emoji: '🐉',  name: 'Dragon Ball' },
-    { emoji: '🦸',  name: 'Superheroes' },
-    { emoji: '👷',  name: 'Occupations' },
-    { emoji: '👸',  name: 'Princes & Princesses' },
-    { emoji: '🐘',  name: 'Animals' },
-    { emoji: '🃏',  name: 'Alice in Wonderland' },
-    { emoji: '🐠',  name: 'Under the Sea' },
-    { emoji: '🚀',  name: 'Space Adventure' },
-    { emoji: '🏴‍☠️', name: 'Pirates' },
-    { emoji: '⛩️',  name: 'Anime' },
-    { emoji: '🍄',  name: 'Super Mario' },
-    { emoji: '🦁',  name: 'Zoo' },
-    { emoji: '👻',  name: 'Ghosts' },
-    { emoji: '🕸️',  name: 'Marvel' },
-    { emoji: '⚽',  name: 'Sports' },
-    { emoji: '🐦',  name: 'Bluey' },
-    { emoji: '💍',  name: 'The Lord of the Rings' },
-    { emoji: '🧟',  name: 'Zombies' },
-    { emoji: '💥',  name: 'My Hero Academia' },
-    { emoji: '🤖',  name: 'Doraemon' },
-    { emoji: '🧙',  name: 'Fantasy' },
-    { emoji: '🦄',  name: 'My Little Pony' },
-    { emoji: '📖',  name: 'Manga & Manhwa (One Piece)' },
-  ];
-
-  async function load() {
-    document.getElementById('resultList').innerHTML =
-      '<div class="center-msg"><div class="spinner"></div>Loading…</div>';
-    document.getElementById('podiumWrap').style.display = 'none';
-
-    try {
-      const res = await fetch(`${SUPABASE_URL}/rest/v1/teacher_counts?select=counts,total`, {
-        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
-      });
-      const rows = await res.json();
-
-      if (!Array.isArray(rows) || rows.length === 0) {
-        document.getElementById('resultList').innerHTML =
-          '<div class="center-msg">No data yet. Submit some classes first.</div>';
-        return;
-      }
-
-      // Aggregate
-      const totals = THEMES.map(() => 0);
-      let grandTotal = 0;
-      rows.forEach(r => {
-        const c = r.counts || [];
-        THEMES.forEach((_, i) => { totals[i] += (c[i] || 0); });
-        grandTotal += (r.total || 0);
-      });
-
-      // Sort
-      const ranked = THEMES.map((t, i) => ({ ...t, votes: totals[i], idx: i }))
-        .sort((a, b) => b.votes - a.votes);
-
-      const max = ranked[0].votes || 1;
-
-      // Stats
-      document.getElementById('statClasses').textContent = rows.length;
-      document.getElementById('statVotes').textContent   = grandTotal;
-      document.getElementById('statLeader').textContent  = ranked[0].emoji + ' ' + ranked[0].name.split(' ')[0];
-
-      // Podium (top 3)
-      const podium = document.getElementById('podiumWrap');
-      podium.innerHTML = '';
-      const order  = [ranked[1], ranked[0], ranked[2]]; // 2nd, 1st, 3rd
-      const styles = ['silver', 'gold', 'bronze'];
-      const medals = ['🥈', '🥇', '🥉'];
-      order.forEach((t, pi) => {
-        if (!t) return;
-        const item = document.createElement('div');
-        item.className = 'podium-item';
-        item.innerHTML = `
-          <div class="pod-emoji">${t.emoji}</div>
-          <div class="pod-name">${t.name}</div>
-          <div class="pod-votes ${styles[pi]}">${t.votes}</div>
-          <div class="pod-block ${styles[pi]}">${medals[pi]}</div>`;
-        podium.appendChild(item);
-      });
-      podium.style.display = 'flex';
-
-      // Full list
-      const list = document.getElementById('resultList');
-      list.innerHTML = '';
-      ranked.forEach((t, ri) => {
-        const pct = max > 0 ? (t.votes / max) * 100 : 0;
-        const row = document.createElement('div');
-        row.className = 'result-row';
-        row.innerHTML = `
-          <span class="r-rank">${ri + 1}</span>
-          <span class="r-emoji">${t.emoji}</span>
-          <span class="r-name">${t.name}</span>
-          <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
-          <span class="r-count">${t.votes}</span>`;
-        list.appendChild(row);
-      });
-
-    } catch (e) {
-      console.error(e);
-      document.getElementById('resultList').innerHTML =
-        `<div class="center-msg">Failed to load — ${e.message}</div>`;
-    }
+  // ── Render ───────────────────────────────────────────────────────────────
+  function render() {
+    updateStats();
+    updatePodium();
+    if (activeTab === 'themes') renderThemes();
+    else renderClasses();
   }
+
+  function updateStats() {
+    let grand = 0;
+    const totals = THEMES.map(() => 0);
+    allRows.forEach(r => {
+      grand += r.total || 0;
+      (r.counts || []).forEach((v, i) => { totals[i] += v || 0; });
+    });
+    const best = THEMES.map((t, i) => ({ ...t, votes: totals[i] })).sort((a, b) => b.votes - a.votes)[0];
+    document.getElementById('statClasses').textContent = allRows.length;
+    document.getElementById('statVotes').textContent   = grand;
+    document.getElementById('statLeader').textContent  = allRows.length ? best.emoji + ' ' + best.name.split(' ')[0] : '—';
+  }
+
+  function updatePodium() {
+    const totals = THEMES.map(() => 0);
+    allRows.forEach(r => (r.counts || []).forEach((v, i) => { totals[i] += v || 0; }));
+    const ranked = THEMES.map((t, i) => ({ ...t, votes: totals[i] })).sort((a, b) => b.votes - a.votes);
+    const podium = document.getElementById('podiumWrap');
+    if (!allRows.length) { podium.style.display = 'none'; return; }
+    podium.innerHTML = '';
+    const order  = [ranked[1], ranked[0], ranked[2]];
+    const styles = ['silver', 'gold', 'bronze'];
+    const medals = ['🥈', '🥇', '🥉'];
+    order.forEach((t, pi) => {
+      if (!t) return;
+      const item = document.createElement('div');
+      item.className = 'podium-item';
+      item.innerHTML = `
+        <div class="pod-emoji">${t.emoji}</div>
+        <div class="pod-name">${t.name}</div>
+        <div class="pod-votes ${styles[pi]}">${t.votes}</div>
+        <div class="pod-block ${styles[pi]}">${medals[pi]}</div>`;
+      podium.appendChild(item);
+    });
+    podium.style.display = 'flex';
+  }
+
+  function renderThemes() {
+    document.getElementById('listLabel').textContent = 'All themes ranked';
+    const totals = THEMES.map(() => 0);
+    allRows.forEach(r => (r.counts || []).forEach((v, i) => { totals[i] += v || 0; }));
+    const ranked = THEMES.map((t, i) => ({ ...t, votes: totals[i] })).sort((a, b) => b.votes - a.votes);
+    const max = ranked[0]?.votes || 1;
+    const list = document.getElementById('resultList');
+    if (!allRows.length) { list.innerHTML = '<div class="center-msg">No data yet.</div>'; return; }
+    list.innerHTML = '';
+    ranked.forEach((t, ri) => {
+      const pct = (t.votes / max) * 100;
+      const row = document.createElement('div');
+      row.className = 'result-row';
+      row.innerHTML = `
+        <span class="r-rank">${ri + 1}</span>
+        <span class="r-emoji">${t.emoji}</span>
+        <span class="r-name">${t.name}</span>
+        <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
+        <span class="r-count">${t.votes}</span>`;
+      list.appendChild(row);
+    });
+  }
+
+  function renderClasses() {
+    document.getElementById('listLabel').textContent = 'Submitted classes';
+    const list = document.getElementById('resultList');
+    if (!allRows.length) { list.innerHTML = '<div class="center-msg">No classes submitted yet.</div>'; return; }
+    list.innerHTML = '';
+    allRows.forEach(r => {
+      const row = document.createElement('div');
+      row.className = 'class-row';
+      row.innerHTML = `
+        <span class="cls-label">${r.label || r.class_key}</span>
+        <span class="cls-total">${r.total || 0} votes</span>
+        <div class="cls-actions">
+          <button class="icon-btn" title="Edit" data-key="${r.class_key}">✏️</button>
+          <button class="icon-btn del" title="Delete" data-key="${r.class_key}">🗑️</button>
+        </div>`;
+      row.querySelector('.icon-btn:not(.del)').addEventListener('click', () => openEdit(r.class_key));
+      row.querySelector('.icon-btn.del').addEventListener('click', () => openDelete(r.class_key));
+      list.appendChild(row);
+    });
+  }
+
+  // ── Tabs ─────────────────────────────────────────────────────────────────
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeTab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      render();
+    });
+  });
+
+  // ── Edit ─────────────────────────────────────────────────────────────────
+  function openEdit(key) {
+    const row = allRows.find(r => r.class_key === key);
+    if (!row) return;
+    editKey = key;
+    editInputs = [];
+    document.getElementById('editSubtitle').textContent = `Class ${row.label || key}`;
+    const container = document.getElementById('editRows');
+    container.innerHTML = '';
+    THEMES.forEach((t, i) => {
+      const div = document.createElement('div');
+      div.className = 'edit-row';
+      const inp = document.createElement('input');
+      inp.type = 'number'; inp.className = 'edit-input';
+      inp.min = 0; inp.max = 999; inp.value = (row.counts || [])[i] || 0;
+      div.innerHTML = `<span class="e-emoji">${t.emoji}</span><span class="e-name">${t.name}</span>`;
+      div.appendChild(inp);
+      container.appendChild(div);
+      editInputs.push(inp);
+    });
+    document.getElementById('editOverlay').classList.add('open');
+  }
+
+  document.getElementById('editCancelBtn').addEventListener('click', () => {
+    document.getElementById('editOverlay').classList.remove('open');
+  });
+
+  document.getElementById('editSaveBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('editSaveBtn');
+    btn.disabled = true; btn.textContent = 'Saving…';
+    const counts = editInputs.map(inp => Math.max(0, parseInt(inp.value, 10) || 0));
+    const total  = counts.reduce((a, b) => a + b, 0);
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/teacher_counts?class_key=eq.${editKey}`, {
+        method: 'PATCH',
+        headers: { ...headers, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ counts, total, submitted_at: new Date().toISOString() })
+      });
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      document.getElementById('editOverlay').classList.remove('open');
+      await load();
+    } catch (e) { alert('Save failed: ' + e.message); }
+    btn.disabled = false; btn.textContent = 'Save changes';
+  });
+
+  // ── Delete single ─────────────────────────────────────────────────────────
+  function openDelete(key) {
+    pendingDeleteKey = key;
+    const row = allRows.find(r => r.class_key === key);
+    document.getElementById('deleteMsg').textContent =
+      `This will permanently remove class ${row?.label || key}.`;
+    document.getElementById('deleteOverlay').classList.add('open');
+  }
+
+  document.getElementById('deleteCancelBtn').addEventListener('click', () => {
+    document.getElementById('deleteOverlay').classList.remove('open');
+  });
+
+  document.getElementById('deleteConfirmBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('deleteConfirmBtn');
+    btn.disabled = true; btn.textContent = 'Deleting…';
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/teacher_counts?class_key=eq.${pendingDeleteKey}`,
+        { method: 'DELETE', headers: { ...headers, 'Prefer': 'return=minimal' } }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      document.getElementById('deleteOverlay').classList.remove('open');
+      await load();
+    } catch (e) { alert('Delete failed: ' + e.message); }
+    btn.disabled = false; btn.textContent = 'Delete';
+  });
+
+  // ── Delete all ────────────────────────────────────────────────────────────
+  document.getElementById('deleteAllBtn').addEventListener('click', () => {
+    document.getElementById('deleteAllOverlay').classList.add('open');
+  });
+  document.getElementById('deleteAllCancelBtn').addEventListener('click', () => {
+    document.getElementById('deleteAllOverlay').classList.remove('open');
+  });
+  document.getElementById('deleteAllConfirmBtn').addEventListener('click', async () => {
+    const btn = document.getElementById('deleteAllConfirmBtn');
+    btn.disabled = true; btn.textContent = 'Deleting…';
+    try {
+      const res = await fetch(
+        `${SUPABASE_URL}/rest/v1/teacher_counts?total=gte.0`,
+        { method: 'DELETE', headers: { ...headers, 'Prefer': 'return=minimal' } }
+      );
+      if (!res.ok) throw new Error(`HTTP ${res.status}`);
+      document.getElementById('deleteAllOverlay').classList.remove('open');
+      await load();
+    } catch (e) { alert('Delete all failed: ' + e.message); }
+    btn.disabled = false; btn.textContent = 'Delete everything';
+  });
+
+  // ── Close overlays on backdrop click ─────────────────────────────────────
+  ['editOverlay','deleteOverlay','deleteAllOverlay'].forEach(id => {
+    document.getElementById(id).addEventListener('click', e => {
+      if (e.target === e.currentTarget) e.currentTarget.classList.remove('open');
+    });
+  });
 
   document.getElementById('refreshBtn').addEventListener('click', load);
   load();
