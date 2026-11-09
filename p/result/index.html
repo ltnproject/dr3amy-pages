@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Era – Course Vote Results</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --glass-bg: rgba(255,255,255,0.08);
+      --glass-border: rgba(255,255,255,0.14);
+      --accent: #e040fb;
+      --accent2: #00e5ff;
+      --text: #fff;
+      --text-sub: rgba(255,255,255,0.55);
+      --radius: 18px;
+    }
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    body::before, body::after {
+      content: ''; position: fixed; border-radius: 50%;
+      filter: blur(90px); opacity: 0.2; pointer-events: none; z-index: 0;
+    }
+    body::before { width: 650px; height: 650px; background: radial-gradient(circle, #e040fb, transparent 70%); top: -180px; left: -180px; }
+    body::after  { width: 500px; height: 500px; background: radial-gradient(circle, #00e5ff, transparent 70%); bottom: -120px; right: -120px; }
+
+    header {
+      position: relative; z-index: 10;
+      display: flex; align-items: center; gap: 16px;
+      padding: 22px 32px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    header img { height: 44px; object-fit: contain; }
+    header .brand .name { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.03em; }
+    header .brand .sub  { font-size: 0.72rem; color: var(--text-sub); letter-spacing: 0.1em; margin-top: 2px; }
+
+    /* Refresh btn top right */
+    header .refresh-btn {
+      margin-left: auto;
+      padding: 8px 18px; border-radius: 10px;
+      border: 1.5px solid var(--glass-border);
+      background: rgba(255,255,255,0.08); color: #fff;
+      font-family: inherit; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: background .15s;
+    }
+    header .refresh-btn:hover { background: rgba(255,255,255,0.16); }
+
+    main {
+      position: relative; z-index: 5;
+      max-width: 740px; margin: 0 auto;
+      padding: 44px 20px 80px;
+    }
+
+    /* Title */
+    .title-card {
+      text-align: center; margin-bottom: 36px;
+    }
+    .eyebrow {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--accent2); text-transform: uppercase; display: block; margin-bottom: 10px;
+    }
+    .title-card h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; line-height: 1.1;
+      background: linear-gradient(90deg, #fff 0%, var(--accent2) 60%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 8px;
+    }
+    .title-card p { font-size: 0.88rem; color: var(--text-sub); }
+
+    /* Stats row */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 20px 16px; text-align: center;
+    }
+    .stat-card .s-num { font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; }
+    .stat-card .s-label { font-size: 0.72rem; color: var(--text-sub); margin-top: 5px; font-weight: 500; letter-spacing: 0.06em; }
+
+    /* Podium */
+    .podium {
+      display: flex; align-items: flex-end; justify-content: center; gap: 10px;
+      margin-bottom: 36px; padding: 0 10px;
+    }
+    .podium-item {
+      flex: 1; max-width: 180px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .pod-emoji { font-size: 2.4rem; margin-bottom: 6px; }
+    .pod-name  { font-size: 0.75rem; font-weight: 700; line-height: 1.3; margin-bottom: 6px; color: rgba(255,255,255,0.9); }
+    .pod-votes { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+    .pod-block {
+      width: 100%; border-radius: 12px 12px 0 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: 900;
+    }
+    .pod-block.gold   { background: linear-gradient(180deg,#ffd700,#b8860b); min-height: 110px; color: #3d2b00; }
+    .pod-block.silver { background: linear-gradient(180deg,#c0c0c0,#808080); min-height: 80px;  color: #2a2a2a; }
+    .pod-block.bronze { background: linear-gradient(180deg,#cd7f32,#8b4513); min-height: 60px;  color: #2a1000; }
+    .pod-votes.gold   { color: #ffd700; }
+    .pod-votes.silver { color: #c0c0c0; }
+    .pod-votes.bronze { color: #cd7f32; }
+
+    /* Full list */
+    .list-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+    }
+    .list-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 16px; display: block;
+    }
+
+    .result-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .r-rank {
+      width: 26px; text-align: right;
+      font-size: 0.75rem; font-weight: 700; color: var(--text-sub); flex-shrink: 0;
+    }
+    .r-emoji { font-size: 1.2rem; flex-shrink: 0; }
+    .r-name  { font-size: 0.88rem; font-weight: 600; flex: 1; min-width: 0; }
+    .r-bar-wrap { flex: 2; min-width: 0; }
+    .r-bar {
+      height: 8px; border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .6s ease;
+      min-width: 4px;
+    }
+    .r-count {
+      width: 36px; text-align: right;
+      font-size: 0.88rem; font-weight: 800; color: var(--accent); flex-shrink: 0;
+    }
+
+    /* Loading / empty */
+    .center-msg {
+      text-align: center; padding: 60px 20px; color: var(--text-sub); font-size: 0.95rem;
+    }
+    .spinner {
+      width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin .7s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 480px) {
+      header { padding: 14px 16px; }
+      main { padding: 24px 12px 60px; }
+      .stats-row { grid-template-columns: repeat(3,1fr); gap: 8px; }
+      .stat-card { padding: 14px 10px; }
+      .stat-card .s-num { font-size: 1.5rem; }
+      .podium { gap: 6px; }
+      .pod-emoji { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="https://drk.qzz.io/newera/logo.png" alt="New Era Logo" onerror="this.style.display='none'" />
+  <div class="brand">
+    <span class="name">NEW ERA</span>
+    <span class="sub">INTERNATIONAL COURSE · VOTE RESULTS</span>
+  </div>
+  <button class="refresh-btn" id="refreshBtn">↻ Refresh</button>
+</header>
+
+<main>
+  <div class="title-card">
+    <span class="eyebrow">Live Results</span>
+    <h1>Course Vote Results</h1>
+    <p>Totals across all submitted classes</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="s-num" id="statClasses">—</div><div class="s-label">Classes submitted</div></div>
+    <div class="stat-card"><div class="s-num" id="statVotes">—</div><div class="s-label">Total votes</div></div>
+    <div class="stat-card"><div class="s-num" id="statLeader" style="font-size:1.3rem">—</div><div class="s-label">Leading theme</div></div>
+  </div>
+
+  <div id="podiumWrap" class="podium" style="display:none"></div>
+
+  <div class="list-card">
+    <span class="list-label">All themes ranked</span>
+    <div id="resultList"><div class="center-msg"><div class="spinner"></div>Loading…</div></div>
+  </div>
+</main>
+
+<script>
+  const SUPABASE_URL = 'https://wtvtttmxkziresbjhhpy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_K9isQRR9r8WzBm-o-mhsGA_B3zCF9O3';
+
+  const THEMES = [
+    { emoji: '🏎️',  name: 'Racing Cars' },
+    { emoji: '🎤',  name: 'K-pop' },
+    { emoji: '🔥',  name: 'Free Fire' },
+    { emoji: '🦕',  name: 'Dinosaurs' },
+    { emoji: '🚗',  name: 'Cars' },
+    { emoji: '🐉',  name: 'Dragon Ball' },
+    { emoji: '🦸',  name: 'Superheroes' },
+    { emoji: '👷',  name: 'Occupations' },
+    { emoji: '👸',  name: 'Princes & Princesses' },
+    { emoji: '🐘',  name: 'Animals' },
+    { emoji: '🃏',  name: 'Alice in Wonderland' },
+    { emoji: '🐠',  name: 'Under the Sea' },
+    { emoji: '🚀',  name: 'Space Adventure' },
+    { emoji: '🏴‍☠️', name: 'Pirates' },
+    { emoji: '⛩️',  name: 'Anime' },
+    { emoji: '🍄',  name: 'Super Mario' },
+    { emoji: '🦁',  name: 'Zoo' },
+    { emoji: '👻',  name: 'Ghosts' },
+    { emoji: '🕸️',  name: 'Marvel' },
+    { emoji: '⚽',  name: 'Sports' },
+    { emoji: '🐦',  name: 'Bluey' },
+    { emoji: '💍',  name: 'The Lord of the Rings' },
+    { emoji: '🧟',  name: 'Zombies' },
+    { emoji: '💥',  name: 'My Hero Academia' },
+    { emoji: '🤖',  name: 'Doraemon' },
+    { emoji: '🧙',  name: 'Fantasy' },
+    { emoji: '🦄',  name: 'My Little Pony' },
+    { emoji: '📖',  name: 'Manga & Manhwa (One Piece)' },
+  ];
+
+  async function load() {
+    document.getElementById('resultList').innerHTML =
+      '<div class="center-msg"><div class="spinner"></div>Loading…</div>';
+    document.getElementById('podiumWrap').style.display = 'none';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/teacher_counts?select=counts,total`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const rows = await res.json();
+
+      if (!Array.isArray(rows) || rows.length === 0) {
+        document.getElementById('resultList').innerHTML =
+          '<div class="center-msg">No data yet. Submit some classes first.</div>';
+        return;
+      }
+
+      // Aggregate
+      const totals = THEMES.map(() => 0);
+      let grandTotal = 0;
+      rows.forEach(r => {
+        const c = r.counts || [];
+        THEMES.forEach((_, i) => { totals[i] += (c[i] || 0); });
+        grandTotal += (r.total || 0);
+      });
+
+      // Sort
+      const ranked = THEMES.map((t, i) => ({ ...t, votes: totals[i], idx: i }))
+        .sort((a, b) => b.votes - a.votes);
+
+      const max = ranked[0].votes || 1;
+
+      // Stats
+      document.getElementById('statClasses').textContent = rows.length;
+      document.getElementById('statVotes').textContent   = grandTotal;
+      document.getElementById('statLeader').textContent  = ranked[0].emoji + ' ' + ranked[0].name.split(' ')[0];
+
+      // Podium (top 3)
+      const podium = document.getElementById('podiumWrap');
+      podium.innerHTML = '';
+      const order  = [ranked[1], ranked[0], ranked[2]]; // 2nd, 1st, 3rd
+      const styles = ['silver', 'gold', 'bronze'];
+      const medals = ['🥈', '🥇', '🥉'];
+      order.forEach((t, pi) => {
+        if (!t) return;
+        const item = document.createElement('div');
+        item.className = 'podium-item';
+        item.innerHTML = `
+          <div class="pod-emoji">${t.emoji}</div>
+          <div class="pod-name">${t.name}</div>
+          <div class="pod-votes ${styles[pi]}">${t.votes}</div>
+          <div class="pod-block ${styles[pi]}">${medals[pi]}</div>`;
+        podium.appendChild(item);
+      });
+      podium.style.display = 'flex';
+
+      // Full list
+      const list = document.getElementById('resultList');
+      list.innerHTML = '';
+      ranked.forEach((t, ri) => {
+        const pct = max > 0 ? (t.votes / max) * 100 : 0;
+        const row = document.createElement('div');
+        row.className = 'result-row';
+        row.innerHTML = `
+          <span class="r-rank">${ri + 1}</span>
+          <span class="r-emoji">${t.emoji}</span>
+          <span class="r-name">${t.name}</span>
+          <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
+          <span class="r-count">${t.votes}</span>`;
+        list.appendChild(row);
+      });
+
+    } catch (e) {
+      console.error(e);
+      document.getElementById('resultList').innerHTML =
+        `<div class="center-msg">Failed to load — ${e.message}</div>`;
+    }
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', load);
+  load();
+</script>
+</body>
+</html> <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>New Era – Course Vote Results</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --glass-bg: rgba(255,255,255,0.08);
+      --glass-border: rgba(255,255,255,0.14);
+      --accent: #e040fb;
+      --accent2: #00e5ff;
+      --text: #fff;
+      --text-sub: rgba(255,255,255,0.55);
+      --radius: 18px;
+    }
+    body {
+      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(160deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+    body::before, body::after {
+      content: ''; position: fixed; border-radius: 50%;
+      filter: blur(90px); opacity: 0.2; pointer-events: none; z-index: 0;
+    }
+    body::before { width: 650px; height: 650px; background: radial-gradient(circle, #e040fb, transparent 70%); top: -180px; left: -180px; }
+    body::after  { width: 500px; height: 500px; background: radial-gradient(circle, #00e5ff, transparent 70%); bottom: -120px; right: -120px; }
+
+    header {
+      position: relative; z-index: 10;
+      display: flex; align-items: center; gap: 16px;
+      padding: 22px 32px;
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--glass-border);
+    }
+    header img { height: 44px; object-fit: contain; }
+    header .brand .name { font-size: 1.2rem; font-weight: 800; letter-spacing: 0.03em; }
+    header .brand .sub  { font-size: 0.72rem; color: var(--text-sub); letter-spacing: 0.1em; margin-top: 2px; }
+
+    /* Refresh btn top right */
+    header .refresh-btn {
+      margin-left: auto;
+      padding: 8px 18px; border-radius: 10px;
+      border: 1.5px solid var(--glass-border);
+      background: rgba(255,255,255,0.08); color: #fff;
+      font-family: inherit; font-size: 0.82rem; font-weight: 600;
+      cursor: pointer; transition: background .15s;
+    }
+    header .refresh-btn:hover { background: rgba(255,255,255,0.16); }
+
+    main {
+      position: relative; z-index: 5;
+      max-width: 740px; margin: 0 auto;
+      padding: 44px 20px 80px;
+    }
+
+    /* Title */
+    .title-card {
+      text-align: center; margin-bottom: 36px;
+    }
+    .eyebrow {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.2em;
+      color: var(--accent2); text-transform: uppercase; display: block; margin-bottom: 10px;
+    }
+    .title-card h1 {
+      font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; line-height: 1.1;
+      background: linear-gradient(90deg, #fff 0%, var(--accent2) 60%, var(--accent) 100%);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+      margin-bottom: 8px;
+    }
+    .title-card p { font-size: 0.88rem; color: var(--text-sub); }
+
+    /* Stats row */
+    .stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 32px;
+    }
+    .stat-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 20px 16px; text-align: center;
+    }
+    .stat-card .s-num { font-size: 2rem; font-weight: 900; color: var(--accent); line-height: 1; }
+    .stat-card .s-label { font-size: 0.72rem; color: var(--text-sub); margin-top: 5px; font-weight: 500; letter-spacing: 0.06em; }
+
+    /* Podium */
+    .podium {
+      display: flex; align-items: flex-end; justify-content: center; gap: 10px;
+      margin-bottom: 36px; padding: 0 10px;
+    }
+    .podium-item {
+      flex: 1; max-width: 180px; text-align: center;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .pod-emoji { font-size: 2.4rem; margin-bottom: 6px; }
+    .pod-name  { font-size: 0.75rem; font-weight: 700; line-height: 1.3; margin-bottom: 6px; color: rgba(255,255,255,0.9); }
+    .pod-votes { font-size: 1.1rem; font-weight: 800; margin-bottom: 8px; }
+    .pod-block {
+      width: 100%; border-radius: 12px 12px 0 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: 900;
+    }
+    .pod-block.gold   { background: linear-gradient(180deg,#ffd700,#b8860b); min-height: 110px; color: #3d2b00; }
+    .pod-block.silver { background: linear-gradient(180deg,#c0c0c0,#808080); min-height: 80px;  color: #2a2a2a; }
+    .pod-block.bronze { background: linear-gradient(180deg,#cd7f32,#8b4513); min-height: 60px;  color: #2a1000; }
+    .pod-votes.gold   { color: #ffd700; }
+    .pod-votes.silver { color: #c0c0c0; }
+    .pod-votes.bronze { color: #cd7f32; }
+
+    /* Full list */
+    .list-card {
+      background: var(--glass-bg);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+    }
+    .list-label {
+      font-size: 0.72rem; font-weight: 700; letter-spacing: 0.14em;
+      text-transform: uppercase; color: var(--accent);
+      margin-bottom: 16px; display: block;
+    }
+
+    .result-row {
+      display: flex; align-items: center; gap: 12px;
+      margin-bottom: 10px;
+    }
+    .r-rank {
+      width: 26px; text-align: right;
+      font-size: 0.75rem; font-weight: 700; color: var(--text-sub); flex-shrink: 0;
+    }
+    .r-emoji { font-size: 1.2rem; flex-shrink: 0; }
+    .r-name  { font-size: 0.88rem; font-weight: 600; flex: 1; min-width: 0; }
+    .r-bar-wrap { flex: 2; min-width: 0; }
+    .r-bar {
+      height: 8px; border-radius: 999px;
+      background: linear-gradient(90deg, var(--accent), var(--accent2));
+      transition: width .6s ease;
+      min-width: 4px;
+    }
+    .r-count {
+      width: 36px; text-align: right;
+      font-size: 0.88rem; font-weight: 800; color: var(--accent); flex-shrink: 0;
+    }
+
+    /* Loading / empty */
+    .center-msg {
+      text-align: center; padding: 60px 20px; color: var(--text-sub); font-size: 0.95rem;
+    }
+    .spinner {
+      width: 36px; height: 36px; border: 3px solid rgba(255,255,255,0.1);
+      border-top-color: var(--accent); border-radius: 50%;
+      animation: spin .7s linear infinite; margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 480px) {
+      header { padding: 14px 16px; }
+      main { padding: 24px 12px 60px; }
+      .stats-row { grid-template-columns: repeat(3,1fr); gap: 8px; }
+      .stat-card { padding: 14px 10px; }
+      .stat-card .s-num { font-size: 1.5rem; }
+      .podium { gap: 6px; }
+      .pod-emoji { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <img src="https://drk.qzz.io/newera/logo.png" alt="New Era Logo" onerror="this.style.display='none'" />
+  <div class="brand">
+    <span class="name">NEW ERA</span>
+    <span class="sub">INTERNATIONAL COURSE · VOTE RESULTS</span>
+  </div>
+  <button class="refresh-btn" id="refreshBtn">↻ Refresh</button>
+</header>
+
+<main>
+  <div class="title-card">
+    <span class="eyebrow">Live Results</span>
+    <h1>Course Vote Results</h1>
+    <p>Totals across all submitted classes</p>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-card"><div class="s-num" id="statClasses">—</div><div class="s-label">Classes submitted</div></div>
+    <div class="stat-card"><div class="s-num" id="statVotes">—</div><div class="s-label">Total votes</div></div>
+    <div class="stat-card"><div class="s-num" id="statLeader" style="font-size:1.3rem">—</div><div class="s-label">Leading theme</div></div>
+  </div>
+
+  <div id="podiumWrap" class="podium" style="display:none"></div>
+
+  <div class="list-card">
+    <span class="list-label">All themes ranked</span>
+    <div id="resultList"><div class="center-msg"><div class="spinner"></div>Loading…</div></div>
+  </div>
+</main>
+
+<script>
+  const SUPABASE_URL = 'https://wtvtttmxkziresbjhhpy.supabase.co';
+  const SUPABASE_KEY = 'sb_publishable_K9isQRR9r8WzBm-o-mhsGA_B3zCF9O3';
+
+  const THEMES = [
+    { emoji: '🏎️',  name: 'Racing Cars' },
+    { emoji: '🎤',  name: 'K-pop' },
+    { emoji: '🔥',  name: 'Free Fire' },
+    { emoji: '🦕',  name: 'Dinosaurs' },
+    { emoji: '🚗',  name: 'Cars' },
+    { emoji: '🐉',  name: 'Dragon Ball' },
+    { emoji: '🦸',  name: 'Superheroes' },
+    { emoji: '👷',  name: 'Occupations' },
+    { emoji: '👸',  name: 'Princes & Princesses' },
+    { emoji: '🐘',  name: 'Animals' },
+    { emoji: '🃏',  name: 'Alice in Wonderland' },
+    { emoji: '🐠',  name: 'Under the Sea' },
+    { emoji: '🚀',  name: 'Space Adventure' },
+    { emoji: '🏴‍☠️', name: 'Pirates' },
+    { emoji: '⛩️',  name: 'Anime' },
+    { emoji: '🍄',  name: 'Super Mario' },
+    { emoji: '🦁',  name: 'Zoo' },
+    { emoji: '👻',  name: 'Ghosts' },
+    { emoji: '🕸️',  name: 'Marvel' },
+    { emoji: '⚽',  name: 'Sports' },
+    { emoji: '🐦',  name: 'Bluey' },
+    { emoji: '💍',  name: 'The Lord of the Rings' },
+    { emoji: '🧟',  name: 'Zombies' },
+    { emoji: '💥',  name: 'My Hero Academia' },
+    { emoji: '🤖',  name: 'Doraemon' },
+    { emoji: '🧙',  name: 'Fantasy' },
+    { emoji: '🦄',  name: 'My Little Pony' },
+    { emoji: '📖',  name: 'Manga & Manhwa (One Piece)' },
+  ];
+
+  async function load() {
+    document.getElementById('resultList').innerHTML =
+      '<div class="center-msg"><div class="spinner"></div>Loading…</div>';
+    document.getElementById('podiumWrap').style.display = 'none';
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/teacher_counts?select=counts,total`, {
+        headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` }
+      });
+      const rows = await res.json();
+
+      if (!Array.isArray(rows) || rows.length === 0) {
+        document.getElementById('resultList').innerHTML =
+          '<div class="center-msg">No data yet. Submit some classes first.</div>';
+        return;
+      }
+
+      // Aggregate
+      const totals = THEMES.map(() => 0);
+      let grandTotal = 0;
+      rows.forEach(r => {
+        const c = r.counts || [];
+        THEMES.forEach((_, i) => { totals[i] += (c[i] || 0); });
+        grandTotal += (r.total || 0);
+      });
+
+      // Sort
+      const ranked = THEMES.map((t, i) => ({ ...t, votes: totals[i], idx: i }))
+        .sort((a, b) => b.votes - a.votes);
+
+      const max = ranked[0].votes || 1;
+
+      // Stats
+      document.getElementById('statClasses').textContent = rows.length;
+      document.getElementById('statVotes').textContent   = grandTotal;
+      document.getElementById('statLeader').textContent  = ranked[0].emoji + ' ' + ranked[0].name.split(' ')[0];
+
+      // Podium (top 3)
+      const podium = document.getElementById('podiumWrap');
+      podium.innerHTML = '';
+      const order  = [ranked[1], ranked[0], ranked[2]]; // 2nd, 1st, 3rd
+      const styles = ['silver', 'gold', 'bronze'];
+      const medals = ['🥈', '🥇', '🥉'];
+      order.forEach((t, pi) => {
+        if (!t) return;
+        const item = document.createElement('div');
+        item.className = 'podium-item';
+        item.innerHTML = `
+          <div class="pod-emoji">${t.emoji}</div>
+          <div class="pod-name">${t.name}</div>
+          <div class="pod-votes ${styles[pi]}">${t.votes}</div>
+          <div class="pod-block ${styles[pi]}">${medals[pi]}</div>`;
+        podium.appendChild(item);
+      });
+      podium.style.display = 'flex';
+
+      // Full list
+      const list = document.getElementById('resultList');
+      list.innerHTML = '';
+      ranked.forEach((t, ri) => {
+        const pct = max > 0 ? (t.votes / max) * 100 : 0;
+        const row = document.createElement('div');
+        row.className = 'result-row';
+        row.innerHTML = `
+          <span class="r-rank">${ri + 1}</span>
+          <span class="r-emoji">${t.emoji}</span>
+          <span class="r-name">${t.name}</span>
+          <div class="r-bar-wrap"><div class="r-bar" style="width:${pct}%"></div></div>
+          <span class="r-count">${t.votes}</span>`;
+        list.appendChild(row);
+      });
+
+    } catch (e) {
+      console.error(e);
+      document.getElementById('resultList').innerHTML =
+        `<div class="center-msg">Failed to load — ${e.message}</div>`;
+    }
+  }
+
+  document.getElementById('refreshBtn').addEventListener('click', load);
+  load();
+</script>
+</body>
+</html>
