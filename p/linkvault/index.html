@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LinkVault — Website Library</title>
+<style>
+:root {
+  --bg:#0b0e14;
+  --card:#151a24;
+  --border:#252d3b;
+  --text:#f1f3fa;
+  --muted:#8993a7;
+  --accent:#8978ff;
+}
+* { box-sizing:border-box; }
+body {
+  margin:0;
+  padding:35px 20px;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,sans-serif;
+}
+main { max-width:1050px; margin:auto; }
+header {
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:45px;
+}
+.brand { display:flex; gap:12px; align-items:center; }
+.logo {
+  width:42px;height:42px;border-radius:13px;
+  background:linear-gradient(135deg,#a18aff,#586dff);
+  display:grid;place-items:center;font-size:22px;
+}
+h1 { font-size:21px;margin:0; }
+.subtitle { color:var(--muted);font-size:13px; }
+.hero h2 { font-size:36px;margin-bottom:5px;letter-spacing:-1px; }
+.hero p { color:var(--muted);margin-top:0; }
+.panel {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:17px;padding:18px;margin:25px 0;
+}
+.form {
+  display:grid;
+  grid-template-columns:1fr 1.5fr auto;
+  gap:10px;
+}
+input {
+  background:#0c1018;color:white;
+  border:1px solid var(--border);
+  padding:13px;border-radius:10px;
+  outline:none;width:100%;min-width:0;
+}
+input:focus { border-color:var(--accent); }
+button {
+  border:0;border-radius:10px;padding:12px 17px;
+  color:white;background:var(--accent);
+  cursor:pointer;font-weight:600;
+}
+button:hover { filter:brightness(1.15); }
+.secondary { background:#252c3b; }
+.danger { background:#48232d;color:#ff8798; }
+.toolbar {
+  display:flex;gap:10px;align-items:center;
+  justify-content:space-between;margin:30px 0 17px;
+}
+.toolbar input { max-width:300px; }
+.count { color:var(--muted);font-size:13px; }
+.grid {
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(220px,1fr));
+  gap:15px;
+}
+.site {
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:16px;padding:17px;
+  min-height:155px;
+  transition:.2s;
+  position:relative;
+}
+.site:hover {
+  transform:translateY(-3px);
+  border-color:#7163d9;
+}
+.site-main { cursor:pointer; }
+.favicon {
+  width:39px;height:39px;border-radius:12px;
+  background:#252b3a;display:grid;place-items:center;
+  margin-bottom:14px;overflow:hidden;font-size:20px;
+}
+.favicon img { width:100%;height:100%;object-fit:cover; }
+.site h3 { margin:0 0 4px;font-size:16px; }
+.site p {
+  margin:0;color:var(--muted);font-size:12px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+.actions { display:flex;gap:7px;margin-top:15px; }
+.actions button { padding:7px 10px;font-size:11px; }
+.empty {
+  text-align:center;color:var(--muted);
+  padding:65px 15px;border:1px dashed var(--border);
+  border-radius:16px;grid-column:1/-1;
+}
+.footer {
+  color:var(--muted);font-size:12px;
+  text-align:center;margin-top:40px;
+}
+@media(max-width:600px) {
+  .form { grid-template-columns:1fr; }
+  header { align-items:flex-start; }
+  .toolbar { align-items:stretch;flex-direction:column; }
+  .toolbar input { max-width:none; }
+}
+</style>
+</head>
+<body>
+<main>
+
+<header>
+  <div class="brand">
+    <div class="logo">↗</div>
+    <div>
+      <h1>LinkVault</h1>
+      <div class="subtitle">Your personal website library</div>
+    </div>
+  </div>
+  <span class="subtitle">LOCAL STORAGE</span>
+</header>
+
+<section class="hero">
+  <h2>Your internet. Organized.</h2>
+  <p>Save your favorite websites. Access them whenever you want.</p>
+</section>
+
+<section class="panel">
+  <h3 id="formTitle">＋ Add a website</h3>
+  <form class="form" id="siteForm">
+    <input id="siteName" placeholder="Website name" required>
+    <input id="siteUrl" placeholder="https://example.com" required>
+    <button type="submit" id="saveBtn">Save website</button>
+  </form>
+</section>
+
+<div class="toolbar">
+  <input id="search" placeholder="⌕ Search your library...">
+  <div class="count" id="count">0 websites saved</div>
+</div>
+
+<section class="grid" id="grid"></section>
+
+<section class="panel" style="display:flex;gap:10px;flex-wrap:wrap">
+  <button class="secondary" onclick="exportData()">↓ Export backup</button>
+  <button class="secondary" onclick="document.getElementById('importFile').click()">↑ Import backup</button>
+  <input type="file" id="importFile" accept=".json" hidden>
+</section>
+
+<div class="footer">
+  LinkVault · Your links stay in this browser.
+</div>
+</main>
+
+<script>
+const STORAGE_KEY = "linkvault_websites_v1";
+
+let sites = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+let editingId = null;
+
+const $ = id => document.getElementById(id);
+
+function save() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(sites));
+  render();
+}
+
+function normalizeUrl(value) {
+  let url = value.trim();
+  if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+
+  try {
+    const parsed = new URL(url);
+    if (!["http:", "https:"].includes(parsed.protocol)) return null;
+    return parsed.href;
+  } catch {
+    return null;
+  }
+}
+
+function getDomain(url) {
+  try { return new URL(url).hostname; }
+  catch { return url; }
+}
+
+function render() {
+  const query = $("search").value.toLowerCase();
+
+  const filtered = sites.filter(site =>
+    site.name.toLowerCase().includes(query) ||
+    site.url.toLowerCase().includes(query)
+  );
+
+  $("count").textContent =
+    `${sites.length} website${sites.length === 1 ? "" : "s"} saved`;
+
+  if (!filtered.length) {
+    $("grid").innerHTML = `
+      <div class="empty">
+        <div style="font-size:35px">◈</div>
+        <h3>${sites.length ? "No results found" : "Your library is empty"}</h3>
+        <p>Add your first website above.</p>
+      </div>`;
+    return;
+  }
+
+  $("grid").innerHTML = filtered.map(site => {
+    const domain = getDomain(site.url);
+    const favicon =
+      "https://www.google.com/s2/favicons?domain=" +
+      encodeURIComponent(domain) + "&sz=128";
+
+    return `
+      <article class="site">
+        <div class="site-main" onclick="openSite('${site.id}')">
+          <div class="favicon">
+            <img src="${favicon}"
+                 onerror="this.style.display='none'"
+                 alt="">
+          </div>
+          <h3>${escapeHTML(site.name)}</h3>
+          <p>${escapeHTML(domain)}</p>
+        </div>
+        <div class="actions">
+          <button onclick="openSite('${site.id}')">↗ Open</button>
+          <button class="secondary"
+            onclick="editSite('${site.id}')">Edit</button>
+          <button class="danger"
+            onclick="deleteSite('${site.id}')">×</button>
+        </div>
+      </article>`;
+  }).join("");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  })[char]);
+}
+
+$("siteForm").addEventListener("submit", event => {
+  event.preventDefault();
+
+  const name = $("siteName").value.trim();
+  const url = normalizeUrl($("siteUrl").value);
+
+  if (!url) {
+    alert("Please enter a valid website URL.");
+    return;
+  }
+
+  if (editingId) {
+    const site = sites.find(s => s.id === editingId);
+    if (site) {
+      site.name = name;
+      site.url = url;
+    }
+  } else {
+    sites.unshift({
+      id: crypto.randomUUID(),
+      name,
+      url,
+      createdAt: Date.now()
+    });
+  }
+
+  resetForm();
+  save();
+});
+
+function openSite(id) {
+  const site = sites.find(s => s.id === id);
+  if (site) window.open(site.url, "_blank", "noopener,noreferrer");
+}
+
+function editSite(id) {
+  const site = sites.find(s => s.id === id);
+  if (!site) return;
+
+  editingId = id;
+  $("siteName").value = site.name;
+  $("siteUrl").value = site.url;
+  $("formTitle").textContent = "✎ Edit website";
+  $("saveBtn").textContent = "Update website";
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function deleteSite(id) {
+  if (!confirm("Delete this saved website?")) return;
+  sites = sites.filter(s => s.id !== id);
+  if (editingId === id) resetForm();
+  save();
+}
+
+function resetForm() {
+  editingId = null;
+  $("siteForm").reset();
+  $("formTitle").textContent = "＋ Add a website";
+  $("saveBtn").textContent = "Save website";
+}
+
+$("search").addEventListener("input", render);
+
+function exportData() {
+  const blob = new Blob(
+    [JSON.stringify(sites, null, 2)],
+    { type: "application/json" }
+  );
+
+  const link = document.createElement("a");
+  link.href = URL.createObjectURL(blob);
+  link.download = "linkvault-backup.json";
+  link.click();
+  URL.revokeObjectURL(link.href);
+}
+
+$("importFile").addEventListener("change", async event => {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  try {
+    const data = JSON.parse(await file.text());
+
+    if (!Array.isArray(data)) throw new Error("Invalid format");
+
+    const imported = data
+      .filter(s => s && typeof s.name === "string" &&
+                   typeof s.url === "string" &&
+                   normalizeUrl(s.url))
+      .map(s => ({
+        id: crypto.randomUUID(),
+        name: s.name.slice(0, 100),
+        url: normalizeUrl(s.url),
+        createdAt: s.createdAt || Date.now()
+      }));
+
+    if (confirm(`Import ${imported.length} websites?`)) {
+      sites = [...imported, ...sites];
+      save();
+    }
+  } catch {
+    alert("Could not import this backup.");
+  }
+
+  event.target.value = "";
+});
+
+render();
+</script>
+</body>
+</html>
